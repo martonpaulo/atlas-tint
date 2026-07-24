@@ -1,0 +1,3 @@
+{
+  "extends": "@atlas-tint/config/tsconfig.base.json"
+}

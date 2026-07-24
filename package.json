@@ -1,0 +1,28 @@
+{
+  "name": "atlas-tint",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm -r dev",
+    "build": "pnpm -r build",
+    "check-types": "pnpm -r check-types",
+    "dev:web": "pnpm --filter web dev",
+    "check": "biome check --write ."
+  },
+  "dependencies": {
+    "@atlas-tint/env": "workspace:*",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@atlas-tint/config": "workspace:*",
+    "@biomejs/biome": "^2.5.2",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  },
+  "packageManager": "pnpm@11.4.0"
+}
