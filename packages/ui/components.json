@@ -1,24 +1,24 @@
 {
-  "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "base-lyra",
-  "rsc": false,
-  "tsx": true,
-  "tailwind": {
-    "config": "",
-    "css": "src/styles/globals.css",
-    "baseColor": "neutral",
-    "cssVariables": true,
-    "prefix": ""
-  },
-  "iconLibrary": "lucide",
-  "aliases": {
-    "components": "@atlas-tint/ui/components",
-    "utils": "@atlas-tint/ui/lib/utils",
-    "hooks": "@atlas-tint/ui/hooks",
-    "lib": "@atlas-tint/ui/lib",
-    "ui": "@atlas-tint/ui/components"
-  },
-  "menuColor": "default",
-  "menuAccent": "subtle",
-  "registries": {}
+	"$schema": "https://ui.shadcn.com/schema.json",
+	"style": "base-lyra",
+	"rsc": false,
+	"tsx": true,
+	"tailwind": {
+		"config": "",
+		"css": "src/styles/globals.css",
+		"baseColor": "neutral",
+		"cssVariables": true,
+		"prefix": ""
+	},
+	"iconLibrary": "lucide",
+	"aliases": {
+		"components": "@atlas-tint/ui/components",
+		"utils": "@atlas-tint/ui/lib/utils",
+		"hooks": "@atlas-tint/ui/hooks",
+		"lib": "@atlas-tint/ui/lib",
+		"ui": "@atlas-tint/ui/components"
+	},
+	"menuColor": "default",
+	"menuAccent": "subtle",
+	"registries": {}
 }

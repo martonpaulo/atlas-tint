@@ -1,0 +1,2828 @@
+{
+	"id": "world",
+	"name": "World sovereign states",
+	"shortName": "World",
+	"description": "195 sovereign states: 193 UN members, the Holy See, and the State of Palestine.",
+	"primaryTotal": 195,
+	"defaultProjection": "equal-earth",
+	"projections": [
+		"equal-earth",
+		"natural-earth",
+		"robinson",
+		"mercator"
+	],
+	"entities": [
+		{
+			"id": "world-dz",
+			"geometryId": "DZ",
+			"name": "Algeria",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"DZ"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ao",
+			"geometryId": "AO",
+			"name": "Angola",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"AO"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-bj",
+			"geometryId": "BJ",
+			"name": "Benin",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"BJ"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-bw",
+			"geometryId": "BW",
+			"name": "Botswana",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"BW"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-bf",
+			"geometryId": "BF",
+			"name": "Burkina Faso",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"BF"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-bi",
+			"geometryId": "BI",
+			"name": "Burundi",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"BI"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-cv",
+			"geometryId": "CV",
+			"name": "Cabo Verde",
+			"localNames": [],
+			"aliases": [
+				"Cape Verde"
+			],
+			"codes": [
+				"CV"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-cm",
+			"geometryId": "CM",
+			"name": "Cameroon",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"CM"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-cf",
+			"geometryId": "CF",
+			"name": "Central African Republic",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"CF"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-td",
+			"geometryId": "TD",
+			"name": "Chad",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"TD"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-km",
+			"geometryId": "KM",
+			"name": "Comoros",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"KM"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-cg",
+			"geometryId": "CG",
+			"name": "Republic of the Congo",
+			"localNames": [],
+			"aliases": [
+				"Congo",
+				"Congo-Brazzaville"
+			],
+			"codes": [
+				"CG"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-cd",
+			"geometryId": "CD",
+			"name": "Democratic Republic of the Congo",
+			"localNames": [],
+			"aliases": [
+				"DR Congo",
+				"Congo-Kinshasa"
+			],
+			"codes": [
+				"CD"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ci",
+			"geometryId": "CI",
+			"name": "Côte d’Ivoire",
+			"localNames": [],
+			"aliases": [
+				"Ivory Coast"
+			],
+			"codes": [
+				"CI"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-dj",
+			"geometryId": "DJ",
+			"name": "Djibouti",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"DJ"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-eg",
+			"geometryId": "EG",
+			"name": "Egypt",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"EG"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-gq",
+			"geometryId": "GQ",
+			"name": "Equatorial Guinea",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"GQ"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-er",
+			"geometryId": "ER",
+			"name": "Eritrea",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"ER"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-sz",
+			"geometryId": "SZ",
+			"name": "Eswatini",
+			"localNames": [],
+			"aliases": [
+				"Swaziland"
+			],
+			"codes": [
+				"SZ"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-et",
+			"geometryId": "ET",
+			"name": "Ethiopia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"ET"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ga",
+			"geometryId": "GA",
+			"name": "Gabon",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"GA"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-gm",
+			"geometryId": "GM",
+			"name": "The Gambia",
+			"localNames": [],
+			"aliases": [
+				"Gambia"
+			],
+			"codes": [
+				"GM"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-gh",
+			"geometryId": "GH",
+			"name": "Ghana",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"GH"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-gn",
+			"geometryId": "GN",
+			"name": "Guinea",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"GN"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-gw",
+			"geometryId": "GW",
+			"name": "Guinea-Bissau",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"GW"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ke",
+			"geometryId": "KE",
+			"name": "Kenya",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"KE"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ls",
+			"geometryId": "LS",
+			"name": "Lesotho",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"LS"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-lr",
+			"geometryId": "LR",
+			"name": "Liberia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"LR"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ly",
+			"geometryId": "LY",
+			"name": "Libya",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"LY"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-mg",
+			"geometryId": "MG",
+			"name": "Madagascar",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MG"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-mw",
+			"geometryId": "MW",
+			"name": "Malawi",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MW"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ml",
+			"geometryId": "ML",
+			"name": "Mali",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"ML"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-mr",
+			"geometryId": "MR",
+			"name": "Mauritania",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MR"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-mu",
+			"geometryId": "MU",
+			"name": "Mauritius",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MU"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ma",
+			"geometryId": "MA",
+			"name": "Morocco",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MA"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-mz",
+			"geometryId": "MZ",
+			"name": "Mozambique",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MZ"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-na",
+			"geometryId": "NA",
+			"name": "Namibia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"NA"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ne",
+			"geometryId": "NE",
+			"name": "Niger",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"NE"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ng",
+			"geometryId": "NG",
+			"name": "Nigeria",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"NG"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-rw",
+			"geometryId": "RW",
+			"name": "Rwanda",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"RW"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-st",
+			"geometryId": "ST",
+			"name": "São Tomé and Príncipe",
+			"localNames": [],
+			"aliases": [
+				"Sao Tome and Principe"
+			],
+			"codes": [
+				"ST"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-sn",
+			"geometryId": "SN",
+			"name": "Senegal",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SN"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-sc",
+			"geometryId": "SC",
+			"name": "Seychelles",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SC"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-sl",
+			"geometryId": "SL",
+			"name": "Sierra Leone",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SL"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-so",
+			"geometryId": "SO",
+			"name": "Somalia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SO"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-za",
+			"geometryId": "ZA",
+			"name": "South Africa",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"ZA"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ss",
+			"geometryId": "SS",
+			"name": "South Sudan",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SS"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-sd",
+			"geometryId": "SD",
+			"name": "Sudan",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SD"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-tz",
+			"geometryId": "TZ",
+			"name": "Tanzania",
+			"localNames": [],
+			"aliases": [
+				"United Republic of Tanzania"
+			],
+			"codes": [
+				"TZ"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-tg",
+			"geometryId": "TG",
+			"name": "Togo",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"TG"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-tn",
+			"geometryId": "TN",
+			"name": "Tunisia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"TN"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ug",
+			"geometryId": "UG",
+			"name": "Uganda",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"UG"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-zm",
+			"geometryId": "ZM",
+			"name": "Zambia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"ZM"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-zw",
+			"geometryId": "ZW",
+			"name": "Zimbabwe",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"ZW"
+			],
+			"groupId": "Africa",
+			"groupName": "Africa",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-af",
+			"geometryId": "AF",
+			"name": "Afghanistan",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"AF"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-am",
+			"geometryId": "AM",
+			"name": "Armenia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"AM"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-az",
+			"geometryId": "AZ",
+			"name": "Azerbaijan",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"AZ"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-bh",
+			"geometryId": "BH",
+			"name": "Bahrain",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"BH"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-bd",
+			"geometryId": "BD",
+			"name": "Bangladesh",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"BD"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-bt",
+			"geometryId": "BT",
+			"name": "Bhutan",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"BT"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-bn",
+			"geometryId": "BN",
+			"name": "Brunei",
+			"localNames": [],
+			"aliases": [
+				"Brunei Darussalam"
+			],
+			"codes": [
+				"BN"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-kh",
+			"geometryId": "KH",
+			"name": "Cambodia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"KH"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-cn",
+			"geometryId": "CN",
+			"name": "China",
+			"localNames": [],
+			"aliases": [
+				"People’s Republic of China",
+				"PRC"
+			],
+			"codes": [
+				"CN"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-cy",
+			"geometryId": "CY",
+			"name": "Cyprus",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"CY"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ge",
+			"geometryId": "GE",
+			"name": "Georgia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"GE"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-in",
+			"geometryId": "IN",
+			"name": "India",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"IN"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-id",
+			"geometryId": "ID",
+			"name": "Indonesia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"ID"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ir",
+			"geometryId": "IR",
+			"name": "Iran",
+			"localNames": [],
+			"aliases": [
+				"Islamic Republic of Iran"
+			],
+			"codes": [
+				"IR"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-iq",
+			"geometryId": "IQ",
+			"name": "Iraq",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"IQ"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-il",
+			"geometryId": "IL",
+			"name": "Israel",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"IL"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-jp",
+			"geometryId": "JP",
+			"name": "Japan",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"JP"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-jo",
+			"geometryId": "JO",
+			"name": "Jordan",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"JO"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-kz",
+			"geometryId": "KZ",
+			"name": "Kazakhstan",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"KZ"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-kw",
+			"geometryId": "KW",
+			"name": "Kuwait",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"KW"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-kg",
+			"geometryId": "KG",
+			"name": "Kyrgyzstan",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"KG"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-la",
+			"geometryId": "LA",
+			"name": "Laos",
+			"localNames": [],
+			"aliases": [
+				"Lao People’s Democratic Republic",
+				"Lao PDR"
+			],
+			"codes": [
+				"LA"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-lb",
+			"geometryId": "LB",
+			"name": "Lebanon",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"LB"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-my",
+			"geometryId": "MY",
+			"name": "Malaysia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MY"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-mv",
+			"geometryId": "MV",
+			"name": "Maldives",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MV"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-mn",
+			"geometryId": "MN",
+			"name": "Mongolia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MN"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-mm",
+			"geometryId": "MM",
+			"name": "Myanmar",
+			"localNames": [],
+			"aliases": [
+				"Burma"
+			],
+			"codes": [
+				"MM"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-np",
+			"geometryId": "NP",
+			"name": "Nepal",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"NP"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-kp",
+			"geometryId": "KP",
+			"name": "North Korea",
+			"localNames": [],
+			"aliases": [
+				"Democratic People’s Republic of Korea",
+				"DPRK"
+			],
+			"codes": [
+				"KP"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-om",
+			"geometryId": "OM",
+			"name": "Oman",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"OM"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-pk",
+			"geometryId": "PK",
+			"name": "Pakistan",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"PK"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ps",
+			"geometryId": "PS",
+			"name": "State of Palestine",
+			"localNames": [],
+			"aliases": [
+				"Palestine"
+			],
+			"codes": [
+				"PS"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ph",
+			"geometryId": "PH",
+			"name": "Philippines",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"PH"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-qa",
+			"geometryId": "QA",
+			"name": "Qatar",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"QA"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-sa",
+			"geometryId": "SA",
+			"name": "Saudi Arabia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SA"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-sg",
+			"geometryId": "SG",
+			"name": "Singapore",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SG"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-kr",
+			"geometryId": "KR",
+			"name": "South Korea",
+			"localNames": [],
+			"aliases": [
+				"Republic of Korea"
+			],
+			"codes": [
+				"KR"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-lk",
+			"geometryId": "LK",
+			"name": "Sri Lanka",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"LK"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-sy",
+			"geometryId": "SY",
+			"name": "Syria",
+			"localNames": [],
+			"aliases": [
+				"Syrian Arab Republic"
+			],
+			"codes": [
+				"SY"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-tj",
+			"geometryId": "TJ",
+			"name": "Tajikistan",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"TJ"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-th",
+			"geometryId": "TH",
+			"name": "Thailand",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"TH"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-tl",
+			"geometryId": "TL",
+			"name": "Timor-Leste",
+			"localNames": [],
+			"aliases": [
+				"East Timor"
+			],
+			"codes": [
+				"TL"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-tr",
+			"geometryId": "TR",
+			"name": "Türkiye",
+			"localNames": [],
+			"aliases": [
+				"Turkey"
+			],
+			"codes": [
+				"TR"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-tm",
+			"geometryId": "TM",
+			"name": "Turkmenistan",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"TM"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ae",
+			"geometryId": "AE",
+			"name": "United Arab Emirates",
+			"localNames": [],
+			"aliases": [
+				"UAE"
+			],
+			"codes": [
+				"AE"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-uz",
+			"geometryId": "UZ",
+			"name": "Uzbekistan",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"UZ"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-vn",
+			"geometryId": "VN",
+			"name": "Vietnam",
+			"localNames": [],
+			"aliases": [
+				"Viet Nam"
+			],
+			"codes": [
+				"VN"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ye",
+			"geometryId": "YE",
+			"name": "Yemen",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"YE"
+			],
+			"groupId": "Asia",
+			"groupName": "Asia",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-al",
+			"geometryId": "AL",
+			"name": "Albania",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"AL"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ad",
+			"geometryId": "AD",
+			"name": "Andorra",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"AD"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-at",
+			"geometryId": "AT",
+			"name": "Austria",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"AT"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-by",
+			"geometryId": "BY",
+			"name": "Belarus",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"BY"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-be",
+			"geometryId": "BE",
+			"name": "Belgium",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"BE"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ba",
+			"geometryId": "BA",
+			"name": "Bosnia and Herzegovina",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"BA"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-bg",
+			"geometryId": "BG",
+			"name": "Bulgaria",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"BG"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-hr",
+			"geometryId": "HR",
+			"name": "Croatia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"HR"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-cz",
+			"geometryId": "CZ",
+			"name": "Czechia",
+			"localNames": [],
+			"aliases": [
+				"Czech Republic"
+			],
+			"codes": [
+				"CZ"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-dk",
+			"geometryId": "DK",
+			"name": "Denmark",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"DK"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ee",
+			"geometryId": "EE",
+			"name": "Estonia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"EE"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-fi",
+			"geometryId": "FI",
+			"name": "Finland",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"FI"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-fr",
+			"geometryId": "FR",
+			"name": "France",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"FR"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-de",
+			"geometryId": "DE",
+			"name": "Germany",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"DE"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-gr",
+			"geometryId": "GR",
+			"name": "Greece",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"GR"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-va",
+			"geometryId": "VA",
+			"name": "Holy See",
+			"localNames": [],
+			"aliases": [
+				"Vatican City",
+				"Vatican"
+			],
+			"codes": [
+				"VA"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-hu",
+			"geometryId": "HU",
+			"name": "Hungary",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"HU"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-is",
+			"geometryId": "IS",
+			"name": "Iceland",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"IS"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ie",
+			"geometryId": "IE",
+			"name": "Ireland",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"IE"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-it",
+			"geometryId": "IT",
+			"name": "Italy",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"IT"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-lv",
+			"geometryId": "LV",
+			"name": "Latvia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"LV"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-li",
+			"geometryId": "LI",
+			"name": "Liechtenstein",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"LI"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-lt",
+			"geometryId": "LT",
+			"name": "Lithuania",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"LT"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-lu",
+			"geometryId": "LU",
+			"name": "Luxembourg",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"LU"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-mt",
+			"geometryId": "MT",
+			"name": "Malta",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MT"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-md",
+			"geometryId": "MD",
+			"name": "Moldova",
+			"localNames": [],
+			"aliases": [
+				"Republic of Moldova"
+			],
+			"codes": [
+				"MD"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-mc",
+			"geometryId": "MC",
+			"name": "Monaco",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MC"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-me",
+			"geometryId": "ME",
+			"name": "Montenegro",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"ME"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-nl",
+			"geometryId": "NL",
+			"name": "Netherlands",
+			"localNames": [],
+			"aliases": [
+				"The Netherlands"
+			],
+			"codes": [
+				"NL"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-mk",
+			"geometryId": "MK",
+			"name": "North Macedonia",
+			"localNames": [],
+			"aliases": [
+				"Macedonia"
+			],
+			"codes": [
+				"MK"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-no",
+			"geometryId": "NO",
+			"name": "Norway",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"NO"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-pl",
+			"geometryId": "PL",
+			"name": "Poland",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"PL"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-pt",
+			"geometryId": "PT",
+			"name": "Portugal",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"PT"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ro",
+			"geometryId": "RO",
+			"name": "Romania",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"RO"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ru",
+			"geometryId": "RU",
+			"name": "Russia",
+			"localNames": [],
+			"aliases": [
+				"Russian Federation"
+			],
+			"codes": [
+				"RU"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-sm",
+			"geometryId": "SM",
+			"name": "San Marino",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SM"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-rs",
+			"geometryId": "RS",
+			"name": "Serbia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"RS"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-sk",
+			"geometryId": "SK",
+			"name": "Slovakia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SK"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-si",
+			"geometryId": "SI",
+			"name": "Slovenia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SI"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-es",
+			"geometryId": "ES",
+			"name": "Spain",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"ES"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-se",
+			"geometryId": "SE",
+			"name": "Sweden",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SE"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ch",
+			"geometryId": "CH",
+			"name": "Switzerland",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"CH"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ua",
+			"geometryId": "UA",
+			"name": "Ukraine",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"UA"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-gb",
+			"geometryId": "GB",
+			"name": "United Kingdom",
+			"localNames": [],
+			"aliases": [
+				"UK",
+				"Great Britain"
+			],
+			"codes": [
+				"GB"
+			],
+			"groupId": "Europe",
+			"groupName": "Europe",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ag",
+			"geometryId": "AG",
+			"name": "Antigua and Barbuda",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"AG"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-bs",
+			"geometryId": "BS",
+			"name": "The Bahamas",
+			"localNames": [],
+			"aliases": [
+				"Bahamas"
+			],
+			"codes": [
+				"BS"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-bb",
+			"geometryId": "BB",
+			"name": "Barbados",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"BB"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-bz",
+			"geometryId": "BZ",
+			"name": "Belize",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"BZ"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ca",
+			"geometryId": "CA",
+			"name": "Canada",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"CA"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-cr",
+			"geometryId": "CR",
+			"name": "Costa Rica",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"CR"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-cu",
+			"geometryId": "CU",
+			"name": "Cuba",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"CU"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-dm",
+			"geometryId": "DM",
+			"name": "Dominica",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"DM"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-do",
+			"geometryId": "DO",
+			"name": "Dominican Republic",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"DO"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-sv",
+			"geometryId": "SV",
+			"name": "El Salvador",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SV"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-gd",
+			"geometryId": "GD",
+			"name": "Grenada",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"GD"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-gt",
+			"geometryId": "GT",
+			"name": "Guatemala",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"GT"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ht",
+			"geometryId": "HT",
+			"name": "Haiti",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"HT"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-hn",
+			"geometryId": "HN",
+			"name": "Honduras",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"HN"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-jm",
+			"geometryId": "JM",
+			"name": "Jamaica",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"JM"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-mx",
+			"geometryId": "MX",
+			"name": "Mexico",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MX"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ni",
+			"geometryId": "NI",
+			"name": "Nicaragua",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"NI"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-pa",
+			"geometryId": "PA",
+			"name": "Panama",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"PA"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-kn",
+			"geometryId": "KN",
+			"name": "Saint Kitts and Nevis",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"KN"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-lc",
+			"geometryId": "LC",
+			"name": "Saint Lucia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"LC"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-vc",
+			"geometryId": "VC",
+			"name": "Saint Vincent and the Grenadines",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"VC"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-tt",
+			"geometryId": "TT",
+			"name": "Trinidad and Tobago",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"TT"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-us",
+			"geometryId": "US",
+			"name": "United States",
+			"localNames": [],
+			"aliases": [
+				"United States of America",
+				"USA",
+				"US"
+			],
+			"codes": [
+				"US"
+			],
+			"groupId": "North America",
+			"groupName": "North America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ar",
+			"geometryId": "AR",
+			"name": "Argentina",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"AR"
+			],
+			"groupId": "South America",
+			"groupName": "South America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-bo",
+			"geometryId": "BO",
+			"name": "Bolivia",
+			"localNames": [],
+			"aliases": [
+				"Plurinational State of Bolivia"
+			],
+			"codes": [
+				"BO"
+			],
+			"groupId": "South America",
+			"groupName": "South America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-br",
+			"geometryId": "BR",
+			"name": "Brazil",
+			"localNames": [],
+			"aliases": [
+				"Brasil"
+			],
+			"codes": [
+				"BR"
+			],
+			"groupId": "South America",
+			"groupName": "South America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-cl",
+			"geometryId": "CL",
+			"name": "Chile",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"CL"
+			],
+			"groupId": "South America",
+			"groupName": "South America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-co",
+			"geometryId": "CO",
+			"name": "Colombia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"CO"
+			],
+			"groupId": "South America",
+			"groupName": "South America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ec",
+			"geometryId": "EC",
+			"name": "Ecuador",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"EC"
+			],
+			"groupId": "South America",
+			"groupName": "South America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-gy",
+			"geometryId": "GY",
+			"name": "Guyana",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"GY"
+			],
+			"groupId": "South America",
+			"groupName": "South America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-py",
+			"geometryId": "PY",
+			"name": "Paraguay",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"PY"
+			],
+			"groupId": "South America",
+			"groupName": "South America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-pe",
+			"geometryId": "PE",
+			"name": "Peru",
+			"localNames": [],
+			"aliases": [
+				"Perú"
+			],
+			"codes": [
+				"PE"
+			],
+			"groupId": "South America",
+			"groupName": "South America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-sr",
+			"geometryId": "SR",
+			"name": "Suriname",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SR"
+			],
+			"groupId": "South America",
+			"groupName": "South America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-uy",
+			"geometryId": "UY",
+			"name": "Uruguay",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"UY"
+			],
+			"groupId": "South America",
+			"groupName": "South America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ve",
+			"geometryId": "VE",
+			"name": "Venezuela",
+			"localNames": [],
+			"aliases": [
+				"Bolivarian Republic of Venezuela"
+			],
+			"codes": [
+				"VE"
+			],
+			"groupId": "South America",
+			"groupName": "South America",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-au",
+			"geometryId": "AU",
+			"name": "Australia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"AU"
+			],
+			"groupId": "Oceania",
+			"groupName": "Oceania",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-fj",
+			"geometryId": "FJ",
+			"name": "Fiji",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"FJ"
+			],
+			"groupId": "Oceania",
+			"groupName": "Oceania",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ki",
+			"geometryId": "KI",
+			"name": "Kiribati",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"KI"
+			],
+			"groupId": "Oceania",
+			"groupName": "Oceania",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-mh",
+			"geometryId": "MH",
+			"name": "Marshall Islands",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MH"
+			],
+			"groupId": "Oceania",
+			"groupName": "Oceania",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-fm",
+			"geometryId": "FM",
+			"name": "Micronesia",
+			"localNames": [],
+			"aliases": [
+				"Federated States of Micronesia"
+			],
+			"codes": [
+				"FM"
+			],
+			"groupId": "Oceania",
+			"groupName": "Oceania",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-nr",
+			"geometryId": "NR",
+			"name": "Nauru",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"NR"
+			],
+			"groupId": "Oceania",
+			"groupName": "Oceania",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-nz",
+			"geometryId": "NZ",
+			"name": "New Zealand",
+			"localNames": [],
+			"aliases": [
+				"Aotearoa"
+			],
+			"codes": [
+				"NZ"
+			],
+			"groupId": "Oceania",
+			"groupName": "Oceania",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-pw",
+			"geometryId": "PW",
+			"name": "Palau",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"PW"
+			],
+			"groupId": "Oceania",
+			"groupName": "Oceania",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-pg",
+			"geometryId": "PG",
+			"name": "Papua New Guinea",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"PG"
+			],
+			"groupId": "Oceania",
+			"groupName": "Oceania",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-ws",
+			"geometryId": "WS",
+			"name": "Samoa",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"WS"
+			],
+			"groupId": "Oceania",
+			"groupName": "Oceania",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-sb",
+			"geometryId": "SB",
+			"name": "Solomon Islands",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SB"
+			],
+			"groupId": "Oceania",
+			"groupName": "Oceania",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-to",
+			"geometryId": "TO",
+			"name": "Tonga",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"TO"
+			],
+			"groupId": "Oceania",
+			"groupName": "Oceania",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-tv",
+			"geometryId": "TV",
+			"name": "Tuvalu",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"TV"
+			],
+			"groupId": "Oceania",
+			"groupName": "Oceania",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "world-vu",
+			"geometryId": "VU",
+			"name": "Vanuatu",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"VU"
+			],
+			"groupId": "Oceania",
+			"groupName": "Oceania",
+			"groupAliases": [],
+			"selectable": true
+		}
+	],
+	"parents": []
+}

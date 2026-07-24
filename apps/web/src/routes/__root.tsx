@@ -1,52 +1,51 @@
 import { Toaster } from "@atlas-tint/ui/components/sonner";
-import { HeadContent, Outlet, createRootRouteWithContext } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-
-import Header from "@/components/header";
+import {
+	createRootRouteWithContext,
+	HeadContent,
+	Outlet,
+} from "@tanstack/react-router";
 import { ThemeProvider } from "@/components/theme-provider";
 
 import "../index.css";
 
-export interface RouterAppContext {}
+export type RouterAppContext = Record<never, never>;
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
-  component: RootComponent,
-  head: () => ({
-    meta: [
-      {
-        title: "atlas-tint",
-      },
-      {
-        name: "description",
-        content: "atlas-tint is a web application",
-      },
-    ],
-    links: [
-      {
-        rel: "icon",
-        href: "/favicon.ico",
-      },
-    ],
-  }),
+	component: RootComponent,
+	head: () => ({
+		meta: [
+			{
+				title: "AtlasTint — local interactive atlas",
+			},
+			{
+				name: "description",
+				content:
+					"A private, local-first interactive SVG atlas for tracking geographic progress.",
+			},
+		],
+		links: [
+			{
+				rel: "icon",
+				href: "/favicon.svg",
+				type: "image/svg+xml",
+			},
+		],
+	}),
 });
 
 function RootComponent() {
-  return (
-    <>
-      <HeadContent />
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        disableTransitionOnChange
-        storageKey="vite-ui-theme"
-      >
-        <div className="grid grid-rows-[auto_1fr] h-svh">
-          <Header />
-          <Outlet />
-        </div>
-        <Toaster richColors />
-      </ThemeProvider>
-      <TanStackRouterDevtools position="bottom-left" />
-    </>
-  );
+	return (
+		<>
+			<HeadContent />
+			<ThemeProvider
+				attribute="class"
+				defaultTheme="system"
+				disableTransitionOnChange
+				storageKey="atlas-tint:theme"
+			>
+				<Outlet />
+				<Toaster richColors />
+			</ThemeProvider>
+		</>
+	);
 }

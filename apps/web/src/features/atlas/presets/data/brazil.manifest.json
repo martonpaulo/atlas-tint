@@ -1,0 +1,511 @@
+{
+	"id": "brazil",
+	"name": "Brazilian federative units",
+	"shortName": "Brazil",
+	"description": "26 states and the Federal District, grouped by the five official geographic regions.",
+	"primaryTotal": 27,
+	"defaultProjection": "mercator",
+	"projections": [
+		"mercator"
+	],
+	"entities": [
+		{
+			"id": "br-ac",
+			"geometryId": "AC",
+			"name": "Acre",
+			"localNames": [
+				"Acre"
+			],
+			"aliases": [],
+			"codes": [
+				"AC"
+			],
+			"groupId": "br-north",
+			"groupName": "North",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-ap",
+			"geometryId": "AP",
+			"name": "Amapá",
+			"localNames": [
+				"Amapá"
+			],
+			"aliases": [],
+			"codes": [
+				"AP"
+			],
+			"groupId": "br-north",
+			"groupName": "North",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-am",
+			"geometryId": "AM",
+			"name": "Amazonas",
+			"localNames": [
+				"Amazonas"
+			],
+			"aliases": [],
+			"codes": [
+				"AM"
+			],
+			"groupId": "br-north",
+			"groupName": "North",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-pa",
+			"geometryId": "PA",
+			"name": "Pará",
+			"localNames": [
+				"Pará"
+			],
+			"aliases": [],
+			"codes": [
+				"PA"
+			],
+			"groupId": "br-north",
+			"groupName": "North",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-ro",
+			"geometryId": "RO",
+			"name": "Rondônia",
+			"localNames": [
+				"Rondônia"
+			],
+			"aliases": [],
+			"codes": [
+				"RO"
+			],
+			"groupId": "br-north",
+			"groupName": "North",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-rr",
+			"geometryId": "RR",
+			"name": "Roraima",
+			"localNames": [
+				"Roraima"
+			],
+			"aliases": [],
+			"codes": [
+				"RR"
+			],
+			"groupId": "br-north",
+			"groupName": "North",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-to",
+			"geometryId": "TO",
+			"name": "Tocantins",
+			"localNames": [
+				"Tocantins"
+			],
+			"aliases": [],
+			"codes": [
+				"TO"
+			],
+			"groupId": "br-north",
+			"groupName": "North",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-al",
+			"geometryId": "AL",
+			"name": "Alagoas",
+			"localNames": [
+				"Alagoas"
+			],
+			"aliases": [],
+			"codes": [
+				"AL"
+			],
+			"groupId": "br-northeast",
+			"groupName": "Northeast",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-ba",
+			"geometryId": "BA",
+			"name": "Bahia",
+			"localNames": [
+				"Bahia"
+			],
+			"aliases": [],
+			"codes": [
+				"BA"
+			],
+			"groupId": "br-northeast",
+			"groupName": "Northeast",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-ce",
+			"geometryId": "CE",
+			"name": "Ceará",
+			"localNames": [
+				"Ceará"
+			],
+			"aliases": [],
+			"codes": [
+				"CE"
+			],
+			"groupId": "br-northeast",
+			"groupName": "Northeast",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-ma",
+			"geometryId": "MA",
+			"name": "Maranhão",
+			"localNames": [
+				"Maranhão"
+			],
+			"aliases": [],
+			"codes": [
+				"MA"
+			],
+			"groupId": "br-northeast",
+			"groupName": "Northeast",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-pb",
+			"geometryId": "PB",
+			"name": "Paraíba",
+			"localNames": [
+				"Paraíba"
+			],
+			"aliases": [],
+			"codes": [
+				"PB"
+			],
+			"groupId": "br-northeast",
+			"groupName": "Northeast",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-pe",
+			"geometryId": "PE",
+			"name": "Pernambuco",
+			"localNames": [
+				"Pernambuco"
+			],
+			"aliases": [],
+			"codes": [
+				"PE"
+			],
+			"groupId": "br-northeast",
+			"groupName": "Northeast",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-pi",
+			"geometryId": "PI",
+			"name": "Piauí",
+			"localNames": [
+				"Piauí"
+			],
+			"aliases": [],
+			"codes": [
+				"PI"
+			],
+			"groupId": "br-northeast",
+			"groupName": "Northeast",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-rn",
+			"geometryId": "RN",
+			"name": "Rio Grande do Norte",
+			"localNames": [
+				"Rio Grande do Norte"
+			],
+			"aliases": [],
+			"codes": [
+				"RN"
+			],
+			"groupId": "br-northeast",
+			"groupName": "Northeast",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-se",
+			"geometryId": "SE",
+			"name": "Sergipe",
+			"localNames": [
+				"Sergipe"
+			],
+			"aliases": [],
+			"codes": [
+				"SE"
+			],
+			"groupId": "br-northeast",
+			"groupName": "Northeast",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-df",
+			"geometryId": "DF",
+			"name": "Distrito Federal",
+			"localNames": [
+				"Distrito Federal"
+			],
+			"aliases": [
+				"Federal District"
+			],
+			"codes": [
+				"DF"
+			],
+			"groupId": "br-central-west",
+			"groupName": "Central-West",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-go",
+			"geometryId": "GO",
+			"name": "Goiás",
+			"localNames": [
+				"Goiás"
+			],
+			"aliases": [],
+			"codes": [
+				"GO"
+			],
+			"groupId": "br-central-west",
+			"groupName": "Central-West",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-mt",
+			"geometryId": "MT",
+			"name": "Mato Grosso",
+			"localNames": [
+				"Mato Grosso"
+			],
+			"aliases": [],
+			"codes": [
+				"MT"
+			],
+			"groupId": "br-central-west",
+			"groupName": "Central-West",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-ms",
+			"geometryId": "MS",
+			"name": "Mato Grosso do Sul",
+			"localNames": [
+				"Mato Grosso do Sul"
+			],
+			"aliases": [],
+			"codes": [
+				"MS"
+			],
+			"groupId": "br-central-west",
+			"groupName": "Central-West",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-es",
+			"geometryId": "ES",
+			"name": "Espírito Santo",
+			"localNames": [
+				"Espírito Santo"
+			],
+			"aliases": [],
+			"codes": [
+				"ES"
+			],
+			"groupId": "br-southeast",
+			"groupName": "Southeast",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-mg",
+			"geometryId": "MG",
+			"name": "Minas Gerais",
+			"localNames": [
+				"Minas Gerais"
+			],
+			"aliases": [],
+			"codes": [
+				"MG"
+			],
+			"groupId": "br-southeast",
+			"groupName": "Southeast",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-rj",
+			"geometryId": "RJ",
+			"name": "Rio de Janeiro",
+			"localNames": [
+				"Rio de Janeiro"
+			],
+			"aliases": [],
+			"codes": [
+				"RJ"
+			],
+			"groupId": "br-southeast",
+			"groupName": "Southeast",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-sp",
+			"geometryId": "SP",
+			"name": "São Paulo",
+			"localNames": [
+				"São Paulo"
+			],
+			"aliases": [],
+			"codes": [
+				"SP"
+			],
+			"groupId": "br-southeast",
+			"groupName": "Southeast",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-pr",
+			"geometryId": "PR",
+			"name": "Paraná",
+			"localNames": [
+				"Paraná"
+			],
+			"aliases": [],
+			"codes": [
+				"PR"
+			],
+			"groupId": "br-south",
+			"groupName": "South",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-rs",
+			"geometryId": "RS",
+			"name": "Rio Grande do Sul",
+			"localNames": [
+				"Rio Grande do Sul"
+			],
+			"aliases": [],
+			"codes": [
+				"RS"
+			],
+			"groupId": "br-south",
+			"groupName": "South",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "br-sc",
+			"geometryId": "SC",
+			"name": "Santa Catarina",
+			"localNames": [
+				"Santa Catarina"
+			],
+			"aliases": [],
+			"codes": [
+				"SC"
+			],
+			"groupId": "br-south",
+			"groupName": "South",
+			"groupAliases": [],
+			"selectable": true
+		}
+	],
+	"parents": [
+		{
+			"id": "br-north",
+			"name": "North",
+			"aliases": [],
+			"childIds": [
+				"br-ac",
+				"br-ap",
+				"br-am",
+				"br-pa",
+				"br-ro",
+				"br-rr",
+				"br-to"
+			]
+		},
+		{
+			"id": "br-northeast",
+			"name": "Northeast",
+			"aliases": [],
+			"childIds": [
+				"br-al",
+				"br-ba",
+				"br-ce",
+				"br-ma",
+				"br-pb",
+				"br-pe",
+				"br-pi",
+				"br-rn",
+				"br-se"
+			]
+		},
+		{
+			"id": "br-central-west",
+			"name": "Central-West",
+			"aliases": [],
+			"childIds": [
+				"br-df",
+				"br-go",
+				"br-mt",
+				"br-ms"
+			]
+		},
+		{
+			"id": "br-southeast",
+			"name": "Southeast",
+			"aliases": [],
+			"childIds": [
+				"br-es",
+				"br-mg",
+				"br-rj",
+				"br-sp"
+			]
+		},
+		{
+			"id": "br-south",
+			"name": "South",
+			"aliases": [],
+			"childIds": [
+				"br-pr",
+				"br-rs",
+				"br-sc"
+			]
+		}
+	]
+}

@@ -1,28 +1,42 @@
 {
-  "name": "atlas-tint",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "type": "module",
-  "scripts": {
-    "dev": "pnpm -r dev",
-    "build": "pnpm -r build",
-    "check-types": "pnpm -r check-types",
-    "dev:web": "pnpm --filter web dev",
-    "check": "biome check --write ."
-  },
-  "dependencies": {
-    "@atlas-tint/env": "workspace:*",
-    "dotenv": "catalog:",
-    "zod": "catalog:"
-  },
-  "devDependencies": {
-    "@atlas-tint/config": "workspace:*",
-    "@biomejs/biome": "^2.5.2",
-    "@types/node": "catalog:",
-    "typescript": "catalog:"
-  },
-  "packageManager": "pnpm@11.4.0"
+	"name": "atlas-tint",
+	"private": true,
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"type": "module",
+	"scripts": {
+		"dev": "pnpm -r dev",
+		"build": "pnpm -r build",
+		"check-types": "pnpm -r check-types",
+		"dev:web": "pnpm --filter web dev",
+		"format": "biome format .",
+		"format:fix": "biome format --write .",
+		"lint": "biome lint .",
+		"check": "biome check .",
+		"check:fix": "biome check --write .",
+		"test": "pnpm --filter web test",
+		"test:e2e": "pnpm --filter web test:e2e",
+		"geo:build": "node scripts/geo/build.mjs",
+		"geo:check": "node scripts/geo/check.mjs",
+		"validate": "pnpm format && pnpm lint && pnpm check-types && pnpm test && pnpm geo:check && pnpm test:e2e && pnpm build"
+	},
+	"dependencies": {
+		"@atlas-tint/env": "workspace:*",
+		"dotenv": "catalog:",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@atlas-tint/config": "workspace:*",
+		"@biomejs/biome": "^2.5.2",
+		"@types/node": "catalog:",
+		"d3-geo": "^3.1.1",
+		"shapefile": "^0.6.6",
+		"topojson-client": "^3.1.0",
+		"topojson-server": "^3.0.1",
+		"topojson-simplify": "^3.0.3",
+		"typescript": "catalog:"
+	},
+	"packageManager": "pnpm@11.4.0"
 }

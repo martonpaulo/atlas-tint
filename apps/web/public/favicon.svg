@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+	<title>AtlasTint</title>
+	<rect width="64" height="64" rx="14" fill="#a95432" />
+	<path d="m14 17 12-5 12 5 12-5v35l-12 5-12-5-12 5V17Z" fill="none" stroke="#fff7ed" stroke-linejoin="round" stroke-width="4" />
+	<path d="M26 12v35m12-30v35" fill="none" stroke="#fff7ed" stroke-width="4" />
+</svg>

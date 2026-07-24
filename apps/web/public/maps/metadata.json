@@ -1,0 +1,56 @@
+{
+	"pipelineVersion": 1,
+	"coordinateSystem": "WGS84-compatible geographic longitude/latitude",
+	"transformations": [
+		"map source identifiers to application-owned stable IDs",
+		"drop unused source properties",
+		"combine multi-part entities",
+		"extract external parent boundary meshes from shared child arcs",
+		"quantize and simplify shared TopoJSON arcs conservatively",
+		"remove simplified rings only when winding collapses into a globe-sized complement"
+	],
+	"sources": {
+		"world": {
+			"filename": "world.zip",
+			"url": "https://naciscdn.org/naturalearth/50m/cultural/ne_50m_admin_0_countries.zip",
+			"sha256": "5fed433373581fa648920435f937d95f2d3c0200e067409c6478dcdf1b853139",
+			"version": "Natural Earth Admin 0 Countries 5.1.1, 1:50m",
+			"license": "Natural Earth public domain"
+		},
+		"brazil": {
+			"filename": "brazil.zip",
+			"url": "https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/malhas_municipais/municipio_2024/Brasil/BR_UF_2024.zip",
+			"sha256": "be61a1e11bf86b265098b5a0b02eb836237421ad73354b1f0892fb6be4598866",
+			"version": "IBGE Malha Municipal Digital 2024 — Unidades da Federação",
+			"license": "Public IBGE geographic data; attribution required"
+		},
+		"spain": {
+			"filename": "spain.zip",
+			"url": "https://centrodedescargas.cnig.es/CentroDescargas/descargaDir",
+			"requestBody": "secDescDirLA=9000029&secuencial=9000029",
+			"sha256": "d2c5ee140e7f48b3a5fc177b7c2bb05b757472e349290d0d0065d9c562f891da",
+			"version": "IGN/CNIG BDDAE provincial enclosures, published 2026-02-12",
+			"license": "Derived work of BDLJE CC-BY 4.0 ign.es"
+		}
+	},
+	"results": [
+		{
+			"id": "world",
+			"entities": 195,
+			"parents": 0,
+			"threshold": 0.000001009033984700311
+		},
+		{
+			"id": "brazil",
+			"entities": 27,
+			"parents": 5,
+			"threshold": 1.5643807273517592e-8
+		},
+		{
+			"id": "spain",
+			"entities": 52,
+			"parents": 19,
+			"threshold": 2.851412583741265e-9
+		}
+	]
+}

@@ -1,0 +1,1158 @@
+{
+	"id": "spain",
+	"name": "Spanish provinces and autonomous cities",
+	"shortName": "Spain",
+	"description": "50 provinces plus Ceuta and Melilla, grouped by autonomous community or city.",
+	"primaryTotal": 52,
+	"defaultProjection": "mercator",
+	"projections": [
+		"mercator"
+	],
+	"entities": [
+		{
+			"id": "es-01",
+			"geometryId": "01",
+			"name": "Araba / Álava",
+			"localNames": [
+				"Araba",
+				"Álava"
+			],
+			"aliases": [
+				"Araba",
+				"Álava"
+			],
+			"codes": [
+				"01"
+			],
+			"groupId": "es-basque-country",
+			"groupName": "Basque Country",
+			"groupAliases": [
+				"Euskadi",
+				"País Vasco"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-02",
+			"geometryId": "02",
+			"name": "Albacete",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"02"
+			],
+			"groupId": "es-castile-la-mancha",
+			"groupName": "Castilla–La Mancha",
+			"groupAliases": [
+				"Castilla-La Mancha"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-03",
+			"geometryId": "03",
+			"name": "Alacant / Alicante",
+			"localNames": [
+				"Alacant",
+				"Alicante"
+			],
+			"aliases": [
+				"Alacant",
+				"Alicante"
+			],
+			"codes": [
+				"03"
+			],
+			"groupId": "es-valencian-community",
+			"groupName": "Valencian Community",
+			"groupAliases": [
+				"Comunitat Valenciana",
+				"Comunidad Valenciana"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-04",
+			"geometryId": "04",
+			"name": "Almería",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"04"
+			],
+			"groupId": "es-andalusia",
+			"groupName": "Andalusia",
+			"groupAliases": [
+				"Andalucía"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-05",
+			"geometryId": "05",
+			"name": "Ávila",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"05"
+			],
+			"groupId": "es-castile-and-leon",
+			"groupName": "Castile and León",
+			"groupAliases": [
+				"Castilla y León"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-06",
+			"geometryId": "06",
+			"name": "Badajoz",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"06"
+			],
+			"groupId": "es-extremadura",
+			"groupName": "Extremadura",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "es-07",
+			"geometryId": "07",
+			"name": "Illes Balears",
+			"localNames": [
+				"Islas Baleares",
+				"Balearic Islands"
+			],
+			"aliases": [
+				"Islas Baleares",
+				"Balearic Islands"
+			],
+			"codes": [
+				"07"
+			],
+			"groupId": "es-balearic-islands",
+			"groupName": "Balearic Islands",
+			"groupAliases": [
+				"Illes Balears",
+				"Islas Baleares"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-08",
+			"geometryId": "08",
+			"name": "Barcelona",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"08"
+			],
+			"groupId": "es-catalonia",
+			"groupName": "Catalonia",
+			"groupAliases": [
+				"Catalunya",
+				"Cataluña"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-09",
+			"geometryId": "09",
+			"name": "Burgos",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"09"
+			],
+			"groupId": "es-castile-and-leon",
+			"groupName": "Castile and León",
+			"groupAliases": [
+				"Castilla y León"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-10",
+			"geometryId": "10",
+			"name": "Cáceres",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"10"
+			],
+			"groupId": "es-extremadura",
+			"groupName": "Extremadura",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "es-11",
+			"geometryId": "11",
+			"name": "Cádiz",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"11"
+			],
+			"groupId": "es-andalusia",
+			"groupName": "Andalusia",
+			"groupAliases": [
+				"Andalucía"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-12",
+			"geometryId": "12",
+			"name": "Castelló / Castellón",
+			"localNames": [
+				"Castelló",
+				"Castellón"
+			],
+			"aliases": [
+				"Castelló",
+				"Castellón"
+			],
+			"codes": [
+				"12"
+			],
+			"groupId": "es-valencian-community",
+			"groupName": "Valencian Community",
+			"groupAliases": [
+				"Comunitat Valenciana",
+				"Comunidad Valenciana"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-13",
+			"geometryId": "13",
+			"name": "Ciudad Real",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"13"
+			],
+			"groupId": "es-castile-la-mancha",
+			"groupName": "Castilla–La Mancha",
+			"groupAliases": [
+				"Castilla-La Mancha"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-14",
+			"geometryId": "14",
+			"name": "Córdoba",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"14"
+			],
+			"groupId": "es-andalusia",
+			"groupName": "Andalusia",
+			"groupAliases": [
+				"Andalucía"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-15",
+			"geometryId": "15",
+			"name": "A Coruña",
+			"localNames": [
+				"La Coruña"
+			],
+			"aliases": [
+				"La Coruña"
+			],
+			"codes": [
+				"15"
+			],
+			"groupId": "es-galicia",
+			"groupName": "Galicia",
+			"groupAliases": [
+				"Galiza"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-16",
+			"geometryId": "16",
+			"name": "Cuenca",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"16"
+			],
+			"groupId": "es-castile-la-mancha",
+			"groupName": "Castilla–La Mancha",
+			"groupAliases": [
+				"Castilla-La Mancha"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-17",
+			"geometryId": "17",
+			"name": "Girona",
+			"localNames": [
+				"Gerona"
+			],
+			"aliases": [
+				"Gerona"
+			],
+			"codes": [
+				"17"
+			],
+			"groupId": "es-catalonia",
+			"groupName": "Catalonia",
+			"groupAliases": [
+				"Catalunya",
+				"Cataluña"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-18",
+			"geometryId": "18",
+			"name": "Granada",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"18"
+			],
+			"groupId": "es-andalusia",
+			"groupName": "Andalusia",
+			"groupAliases": [
+				"Andalucía"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-19",
+			"geometryId": "19",
+			"name": "Guadalajara",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"19"
+			],
+			"groupId": "es-castile-la-mancha",
+			"groupName": "Castilla–La Mancha",
+			"groupAliases": [
+				"Castilla-La Mancha"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-20",
+			"geometryId": "20",
+			"name": "Gipuzkoa",
+			"localNames": [
+				"Guipúzcoa"
+			],
+			"aliases": [
+				"Guipúzcoa"
+			],
+			"codes": [
+				"20"
+			],
+			"groupId": "es-basque-country",
+			"groupName": "Basque Country",
+			"groupAliases": [
+				"Euskadi",
+				"País Vasco"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-21",
+			"geometryId": "21",
+			"name": "Huelva",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"21"
+			],
+			"groupId": "es-andalusia",
+			"groupName": "Andalusia",
+			"groupAliases": [
+				"Andalucía"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-22",
+			"geometryId": "22",
+			"name": "Huesca",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"22"
+			],
+			"groupId": "es-aragon",
+			"groupName": "Aragon",
+			"groupAliases": [
+				"Aragón"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-23",
+			"geometryId": "23",
+			"name": "Jaén",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"23"
+			],
+			"groupId": "es-andalusia",
+			"groupName": "Andalusia",
+			"groupAliases": [
+				"Andalucía"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-24",
+			"geometryId": "24",
+			"name": "León",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"24"
+			],
+			"groupId": "es-castile-and-leon",
+			"groupName": "Castile and León",
+			"groupAliases": [
+				"Castilla y León"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-25",
+			"geometryId": "25",
+			"name": "Lleida",
+			"localNames": [
+				"Lérida"
+			],
+			"aliases": [
+				"Lérida"
+			],
+			"codes": [
+				"25"
+			],
+			"groupId": "es-catalonia",
+			"groupName": "Catalonia",
+			"groupAliases": [
+				"Catalunya",
+				"Cataluña"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-26",
+			"geometryId": "26",
+			"name": "La Rioja",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"26"
+			],
+			"groupId": "es-la-rioja",
+			"groupName": "La Rioja",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "es-27",
+			"geometryId": "27",
+			"name": "Lugo",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"27"
+			],
+			"groupId": "es-galicia",
+			"groupName": "Galicia",
+			"groupAliases": [
+				"Galiza"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-28",
+			"geometryId": "28",
+			"name": "Madrid",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"28"
+			],
+			"groupId": "es-madrid",
+			"groupName": "Community of Madrid",
+			"groupAliases": [
+				"Comunidad de Madrid",
+				"Madrid"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-29",
+			"geometryId": "29",
+			"name": "Málaga",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"29"
+			],
+			"groupId": "es-andalusia",
+			"groupName": "Andalusia",
+			"groupAliases": [
+				"Andalucía"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-30",
+			"geometryId": "30",
+			"name": "Murcia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"30"
+			],
+			"groupId": "es-murcia",
+			"groupName": "Region of Murcia",
+			"groupAliases": [
+				"Región de Murcia",
+				"Murcia"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-31",
+			"geometryId": "31",
+			"name": "Navarra / Nafarroa",
+			"localNames": [
+				"Navarra",
+				"Nafarroa"
+			],
+			"aliases": [
+				"Navarra",
+				"Nafarroa"
+			],
+			"codes": [
+				"31"
+			],
+			"groupId": "es-navarre",
+			"groupName": "Navarre",
+			"groupAliases": [
+				"Nafarroa",
+				"Navarra"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-32",
+			"geometryId": "32",
+			"name": "Ourense",
+			"localNames": [
+				"Orense"
+			],
+			"aliases": [
+				"Orense"
+			],
+			"codes": [
+				"32"
+			],
+			"groupId": "es-galicia",
+			"groupName": "Galicia",
+			"groupAliases": [
+				"Galiza"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-33",
+			"geometryId": "33",
+			"name": "Asturias",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"33"
+			],
+			"groupId": "es-asturias",
+			"groupName": "Asturias",
+			"groupAliases": [
+				"Principality of Asturias",
+				"Principado de Asturias"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-34",
+			"geometryId": "34",
+			"name": "Palencia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"34"
+			],
+			"groupId": "es-castile-and-leon",
+			"groupName": "Castile and León",
+			"groupAliases": [
+				"Castilla y León"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-35",
+			"geometryId": "35",
+			"name": "Las Palmas",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"35"
+			],
+			"groupId": "es-canary-islands",
+			"groupName": "Canary Islands",
+			"groupAliases": [
+				"Canarias",
+				"Islas Canarias"
+			],
+			"selectable": true,
+			"inset": "canary"
+		},
+		{
+			"id": "es-36",
+			"geometryId": "36",
+			"name": "Pontevedra",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"36"
+			],
+			"groupId": "es-galicia",
+			"groupName": "Galicia",
+			"groupAliases": [
+				"Galiza"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-37",
+			"geometryId": "37",
+			"name": "Salamanca",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"37"
+			],
+			"groupId": "es-castile-and-leon",
+			"groupName": "Castile and León",
+			"groupAliases": [
+				"Castilla y León"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-38",
+			"geometryId": "38",
+			"name": "Santa Cruz de Tenerife",
+			"localNames": [
+				"Tenerife"
+			],
+			"aliases": [
+				"Tenerife"
+			],
+			"codes": [
+				"38"
+			],
+			"groupId": "es-canary-islands",
+			"groupName": "Canary Islands",
+			"groupAliases": [
+				"Canarias",
+				"Islas Canarias"
+			],
+			"selectable": true,
+			"inset": "canary"
+		},
+		{
+			"id": "es-39",
+			"geometryId": "39",
+			"name": "Cantabria",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"39"
+			],
+			"groupId": "es-cantabria",
+			"groupName": "Cantabria",
+			"groupAliases": [],
+			"selectable": true
+		},
+		{
+			"id": "es-40",
+			"geometryId": "40",
+			"name": "Segovia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"40"
+			],
+			"groupId": "es-castile-and-leon",
+			"groupName": "Castile and León",
+			"groupAliases": [
+				"Castilla y León"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-41",
+			"geometryId": "41",
+			"name": "Sevilla",
+			"localNames": [
+				"Seville"
+			],
+			"aliases": [
+				"Seville"
+			],
+			"codes": [
+				"41"
+			],
+			"groupId": "es-andalusia",
+			"groupName": "Andalusia",
+			"groupAliases": [
+				"Andalucía"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-42",
+			"geometryId": "42",
+			"name": "Soria",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"42"
+			],
+			"groupId": "es-castile-and-leon",
+			"groupName": "Castile and León",
+			"groupAliases": [
+				"Castilla y León"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-43",
+			"geometryId": "43",
+			"name": "Tarragona",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"43"
+			],
+			"groupId": "es-catalonia",
+			"groupName": "Catalonia",
+			"groupAliases": [
+				"Catalunya",
+				"Cataluña"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-44",
+			"geometryId": "44",
+			"name": "Teruel",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"44"
+			],
+			"groupId": "es-aragon",
+			"groupName": "Aragon",
+			"groupAliases": [
+				"Aragón"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-45",
+			"geometryId": "45",
+			"name": "Toledo",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"45"
+			],
+			"groupId": "es-castile-la-mancha",
+			"groupName": "Castilla–La Mancha",
+			"groupAliases": [
+				"Castilla-La Mancha"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-46",
+			"geometryId": "46",
+			"name": "València / Valencia",
+			"localNames": [
+				"València",
+				"Valencia"
+			],
+			"aliases": [
+				"València",
+				"Valencia"
+			],
+			"codes": [
+				"46"
+			],
+			"groupId": "es-valencian-community",
+			"groupName": "Valencian Community",
+			"groupAliases": [
+				"Comunitat Valenciana",
+				"Comunidad Valenciana"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-47",
+			"geometryId": "47",
+			"name": "Valladolid",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"47"
+			],
+			"groupId": "es-castile-and-leon",
+			"groupName": "Castile and León",
+			"groupAliases": [
+				"Castilla y León"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-48",
+			"geometryId": "48",
+			"name": "Bizkaia",
+			"localNames": [
+				"Vizcaya"
+			],
+			"aliases": [
+				"Vizcaya"
+			],
+			"codes": [
+				"48"
+			],
+			"groupId": "es-basque-country",
+			"groupName": "Basque Country",
+			"groupAliases": [
+				"Euskadi",
+				"País Vasco"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-49",
+			"geometryId": "49",
+			"name": "Zamora",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"49"
+			],
+			"groupId": "es-castile-and-leon",
+			"groupName": "Castile and León",
+			"groupAliases": [
+				"Castilla y León"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-50",
+			"geometryId": "50",
+			"name": "Zaragoza",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"50"
+			],
+			"groupId": "es-aragon",
+			"groupName": "Aragon",
+			"groupAliases": [
+				"Aragón"
+			],
+			"selectable": true
+		},
+		{
+			"id": "es-51",
+			"geometryId": "51",
+			"name": "Ceuta",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"51"
+			],
+			"groupId": "es-ceuta",
+			"groupName": "Ceuta",
+			"groupAliases": [
+				"Autonomous City of Ceuta",
+				"Ciudad Autónoma de Ceuta"
+			],
+			"selectable": true,
+			"inset": "ceuta"
+		},
+		{
+			"id": "es-52",
+			"geometryId": "52",
+			"name": "Melilla",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"52"
+			],
+			"groupId": "es-melilla",
+			"groupName": "Melilla",
+			"groupAliases": [
+				"Autonomous City of Melilla",
+				"Ciudad Autónoma de Melilla"
+			],
+			"selectable": true,
+			"inset": "melilla"
+		}
+	],
+	"parents": [
+		{
+			"id": "es-andalusia",
+			"name": "Andalusia",
+			"aliases": [
+				"Andalucía"
+			],
+			"childIds": [
+				"es-04",
+				"es-11",
+				"es-14",
+				"es-18",
+				"es-21",
+				"es-23",
+				"es-29",
+				"es-41"
+			]
+		},
+		{
+			"id": "es-aragon",
+			"name": "Aragon",
+			"aliases": [
+				"Aragón"
+			],
+			"childIds": [
+				"es-22",
+				"es-44",
+				"es-50"
+			]
+		},
+		{
+			"id": "es-asturias",
+			"name": "Asturias",
+			"aliases": [
+				"Principality of Asturias",
+				"Principado de Asturias"
+			],
+			"childIds": [
+				"es-33"
+			]
+		},
+		{
+			"id": "es-balearic-islands",
+			"name": "Balearic Islands",
+			"aliases": [
+				"Illes Balears",
+				"Islas Baleares"
+			],
+			"childIds": [
+				"es-07"
+			]
+		},
+		{
+			"id": "es-basque-country",
+			"name": "Basque Country",
+			"aliases": [
+				"Euskadi",
+				"País Vasco"
+			],
+			"childIds": [
+				"es-01",
+				"es-20",
+				"es-48"
+			]
+		},
+		{
+			"id": "es-canary-islands",
+			"name": "Canary Islands",
+			"aliases": [
+				"Canarias",
+				"Islas Canarias"
+			],
+			"childIds": [
+				"es-35",
+				"es-38"
+			]
+		},
+		{
+			"id": "es-cantabria",
+			"name": "Cantabria",
+			"aliases": [],
+			"childIds": [
+				"es-39"
+			]
+		},
+		{
+			"id": "es-castile-and-leon",
+			"name": "Castile and León",
+			"aliases": [
+				"Castilla y León"
+			],
+			"childIds": [
+				"es-05",
+				"es-09",
+				"es-24",
+				"es-34",
+				"es-37",
+				"es-40",
+				"es-42",
+				"es-47",
+				"es-49"
+			]
+		},
+		{
+			"id": "es-castile-la-mancha",
+			"name": "Castilla–La Mancha",
+			"aliases": [
+				"Castilla-La Mancha"
+			],
+			"childIds": [
+				"es-02",
+				"es-13",
+				"es-16",
+				"es-19",
+				"es-45"
+			]
+		},
+		{
+			"id": "es-catalonia",
+			"name": "Catalonia",
+			"aliases": [
+				"Catalunya",
+				"Cataluña"
+			],
+			"childIds": [
+				"es-08",
+				"es-17",
+				"es-25",
+				"es-43"
+			]
+		},
+		{
+			"id": "es-extremadura",
+			"name": "Extremadura",
+			"aliases": [],
+			"childIds": [
+				"es-06",
+				"es-10"
+			]
+		},
+		{
+			"id": "es-galicia",
+			"name": "Galicia",
+			"aliases": [
+				"Galiza"
+			],
+			"childIds": [
+				"es-15",
+				"es-27",
+				"es-32",
+				"es-36"
+			]
+		},
+		{
+			"id": "es-la-rioja",
+			"name": "La Rioja",
+			"aliases": [],
+			"childIds": [
+				"es-26"
+			]
+		},
+		{
+			"id": "es-madrid",
+			"name": "Community of Madrid",
+			"aliases": [
+				"Comunidad de Madrid",
+				"Madrid"
+			],
+			"childIds": [
+				"es-28"
+			]
+		},
+		{
+			"id": "es-murcia",
+			"name": "Region of Murcia",
+			"aliases": [
+				"Región de Murcia",
+				"Murcia"
+			],
+			"childIds": [
+				"es-30"
+			]
+		},
+		{
+			"id": "es-navarre",
+			"name": "Navarre",
+			"aliases": [
+				"Nafarroa",
+				"Navarra"
+			],
+			"childIds": [
+				"es-31"
+			]
+		},
+		{
+			"id": "es-valencian-community",
+			"name": "Valencian Community",
+			"aliases": [
+				"Comunitat Valenciana",
+				"Comunidad Valenciana"
+			],
+			"childIds": [
+				"es-03",
+				"es-12",
+				"es-46"
+			]
+		},
+		{
+			"id": "es-ceuta",
+			"name": "Ceuta",
+			"aliases": [
+				"Autonomous City of Ceuta",
+				"Ciudad Autónoma de Ceuta"
+			],
+			"childIds": [
+				"es-51"
+			]
+		},
+		{
+			"id": "es-melilla",
+			"name": "Melilla",
+			"aliases": [
+				"Autonomous City of Melilla",
+				"Ciudad Autónoma de Melilla"
+			],
+			"childIds": [
+				"es-52"
+			]
+		}
+	]
+}
