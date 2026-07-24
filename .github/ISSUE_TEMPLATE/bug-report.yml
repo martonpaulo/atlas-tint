@@ -1,0 +1,48 @@
+name: Bug report
+description: Report reproducible incorrect behavior in AtlasTint.
+title: "bug: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping improve AtlasTint. Please avoid including sensitive local progress exports.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the observed behavior and what you expected instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Open…
+        2. Select…
+        3. Observe…
+    validations:
+      required: true
+
+  - type: input
+    id: preset
+    attributes:
+      label: Preset name or ID
+      description: Leave this blank when the issue is not specific to a preset.
+      placeholder: world, brazil, spain, or another registered preset
+
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and operating system
+      placeholder: Firefox 141 on macOS 26
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add screenshots, console output, or accessibility details if useful.

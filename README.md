@@ -1,5 +1,10 @@
 # AtlasTint
 
+[![CI](https://github.com/martonpaulo/atlas-tint/actions/workflows/ci.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/ci.yml)
+[![Deploy GitHub Pages](https://github.com/martonpaulo/atlas-tint/actions/workflows/pages.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/pages.yml)
+
+[Open AtlasTint](https://martonpaulo.github.io/atlas-tint/) · [Report a bug](https://github.com/martonpaulo/atlas-tint/issues/new/choose)
+
 AtlasTint is a desktop-first, local-first interactive SVG atlas for marking geographic regions, tracking progress, and building deterministic personal maps.
 
 The production v1 experience is complete for the currently registered World, Brazil, and Spain presets. These are catalog entries, not fixed product types: application state, import/export, the selector, loading, and rendering work from preset registrations and string stable IDs, so a future Australia- or Japan-only catalog does not require rewriting the product core.
@@ -52,6 +57,12 @@ pnpm build
 ```
 
 Focused commands are available for normal development. `pnpm test` runs Vitest unit and component tests; `pnpm test:e2e` runs the critical Playwright journeys.
+
+## Deployment
+
+Every push to `main` runs the complete quality pipeline and publishes the production build to GitHub Pages. The Pages workflow sets Vite's `VITE_BASE_PATH` to the repository path, so routing, the favicon, and lazy-loaded map geometry work both at the hosted URL and at local root development URLs.
+
+Dependency update proposals are grouped weekly for npm packages and GitHub Actions. Security reports use GitHub's private vulnerability-reporting channel.
 
 ## Current preset policies
 

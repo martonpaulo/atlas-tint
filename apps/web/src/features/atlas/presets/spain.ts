@@ -3,12 +3,13 @@ import {
 	presetManifestSchema,
 } from "@/features/atlas/domain";
 import spainManifestData from "@/features/atlas/presets/data/spain.manifest.json";
+import { publicAssetUrl } from "@/lib/public-asset-url";
 
 const manifest = presetManifestSchema.parse(spainManifestData);
 
 export const spainPreset: LoadedPreset = {
 	manifest,
-	geometryUrl: "/maps/spain.topo.json",
+	geometryUrl: publicAssetUrl("maps/spain.topo.json"),
 	attribution: "Derived from BDLJE · CC BY 4.0 · ign.es",
 	fit: "entities",
 	insets: [

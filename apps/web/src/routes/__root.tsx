@@ -5,6 +5,7 @@ import {
 	Outlet,
 } from "@tanstack/react-router";
 import { ThemeProvider } from "@/components/theme-provider";
+import { publicAssetUrl } from "@/lib/public-asset-url";
 
 import "../index.css";
 
@@ -26,7 +27,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 		links: [
 			{
 				rel: "icon",
-				href: "/favicon.svg",
+				href: publicAssetUrl("favicon.svg"),
 				type: "image/svg+xml",
 			},
 		],

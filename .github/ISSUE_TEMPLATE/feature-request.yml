@@ -1,0 +1,32 @@
+name: Feature request
+description: Propose a focused product or preset improvement.
+title: "feat: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user need or limitation should AtlasTint address?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed outcome
+      description: Describe the behavior and why it fits a local-first editorial atlas.
+    validations:
+      required: true
+
+  - type: textarea
+    id: geography
+    attributes:
+      label: Geographic data considerations
+      description: For preset requests, include an authoritative source, inclusion policy, identifiers, and attribution requirements.
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Note any smaller or existing approach that could solve the same need.

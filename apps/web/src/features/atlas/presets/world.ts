@@ -3,12 +3,13 @@ import {
 	presetManifestSchema,
 } from "@/features/atlas/domain";
 import worldManifestData from "@/features/atlas/presets/data/world.manifest.json";
+import { publicAssetUrl } from "@/lib/public-asset-url";
 
 const manifest = presetManifestSchema.parse(worldManifestData);
 
 export const worldPreset: LoadedPreset = {
 	manifest,
-	geometryUrl: "/maps/world.topo.json",
+	geometryUrl: publicAssetUrl("maps/world.topo.json"),
 	attribution: "Natural Earth 5.1.1 · public domain",
 	fit: "sphere",
 	insets: [],
