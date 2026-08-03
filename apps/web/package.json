@@ -16,7 +16,7 @@
 	"dependencies": {
 		"@atlas-tint/env": "workspace:*",
 		"@atlas-tint/ui": "workspace:*",
-		"@hookform/resolvers": "^5.4.0",
+		"@hookform/resolvers": "^5.5.7",
 		"@tailwindcss/vite": "^4.3.2",
 		"@tanstack/react-router": "^1.170.17",
 		"d3-geo": "^3.1.1",
