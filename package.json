@@ -29,7 +29,7 @@
 	},
 	"devDependencies": {
 		"@atlas-tint/config": "workspace:*",
-		"@biomejs/biome": "^2.5.2",
+		"@biomejs/biome": "^2.5.7",
 		"@types/node": "catalog:",
 		"d3-geo": "^3.1.1",
 		"shapefile": "^0.6.6",
