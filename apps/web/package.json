@@ -16,9 +16,9 @@
 	"dependencies": {
 		"@atlas-tint/env": "workspace:*",
 		"@atlas-tint/ui": "workspace:*",
-		"@hookform/resolvers": "^5.4.0",
+		"@hookform/resolvers": "^5.8.0",
 		"@tailwindcss/vite": "^4.3.2",
-		"@tanstack/react-router": "^1.170.17",
+		"@tanstack/react-router": "^1.170.27",
 		"d3-geo": "^3.1.1",
 		"d3-geo-projection": "^4.0.0",
 		"d3-selection": "^3.0.0",
@@ -31,7 +31,7 @@
 		"sonner": "catalog:",
 		"topojson-client": "^3.1.0",
 		"zod": "catalog:",
-		"zustand": "^5.0.14"
+		"zustand": "^5.0.15"
 	},
 	"devDependencies": {
 		"@atlas-tint/config": "workspace:*",
