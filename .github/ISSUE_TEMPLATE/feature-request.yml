@@ -1,7 +1,7 @@
 name: Feature request
 description: Propose a focused product or preset improvement.
 title: "feat: "
-labels: [enhancement]
+labels: ["type: feature"]
 body:
   - type: textarea
     id: problem
