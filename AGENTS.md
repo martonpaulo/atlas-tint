@@ -18,13 +18,14 @@
 - Push policy: Push completed, validated issue branches automatically; never push directly to `main`.
 - Product versioning: Continuous deployment without a user-visible product version; persistence and import schema versions remain explicit and independent.
 - Agent automation: `enabled`
+- Agent automation scope: Local Agent Orchestrator only. Remote GitHub Actions lifecycle automation is not configured or required; [issue #46](https://github.com/martonpaulo/atlas-tint/issues/46) preserves it as an optional future decision with owner-only credential prerequisites.
 - Implementation agent: `claude`
 - Review agent: `codex`
 - Orchestration agent: `codex`
 - Merge policy: squash pull requests into `main`; direct pushes to `main` are forbidden for agents.
 - Commit subject: a commit made for an issue ends with `(#<issue number>)`.
 - Delete branches after merge: enabled.
-- Release, signing, and secret-storage policy: GitHub Pages deploys continuously from `main`; there are no tags, releases, downloadable artifacts, or signing identity. Store automation credentials only as GitHub Actions secrets.
+- Release, signing, and secret-storage policy: GitHub Pages deploys continuously from `main`; there are no tags, releases, downloadable artifacts, signing identity, or remote agent credentials required by the supported local automation.
 - Skills baseline revision: `9026cafb46c2bae55a3e7415eb475ce437ff1c1a`
 - Skills baseline applied: `2026-09-04`
 
