@@ -1,5 +1,43 @@
 # AtlasTint — rules for coding agents
 
+## Project identity and policy
+
+- Project name: `atlas-tint`
+- Public name: `AtlasTint`
+- Benefit-first description: A local-first interactive SVG atlas for selecting, coloring, and tracking geographic regions.
+- Repository: `martonpaulo/atlas-tint` (public)
+- Public identifiers: GitHub repository `martonpaulo/atlas-tint` and Pages site `https://martonpaulo.github.io/atlas-tint/`; workspace packages are private.
+- Landing page: GitHub Pages at `https://martonpaulo.github.io/atlas-tint/`, built from `main`.
+- License: `MIT`
+- Copyright: 2026 Marton Paulo
+- Development language: English.
+- Product copy: English (`en-US`) is the source and fallback language; add localization only through an explicit product request.
+- Browser acceptance: Chromium only; automated and manual browser checks use Chromium for Testing, never Brave.
+- Branch policy: Agents work on issue branches and deliver through pull requests; unattended AO branches carry the required session prefix.
+- Commit policy: Commit completed, validated task work automatically using focused Conventional Commits.
+- Push policy: Push completed, validated issue branches automatically; never push directly to `main`.
+- Product versioning: Continuous deployment without a user-visible product version; persistence and import schema versions remain explicit and independent.
+- Agent automation: `enabled`
+- Implementation agent: `claude`
+- Review agent: `codex`
+- Orchestration agent: `codex`
+- Merge policy: squash pull requests into `main`; direct pushes to `main` are forbidden for agents.
+- Commit subject: a commit made for an issue ends with `(#<issue number>)`.
+- Delete branches after merge: enabled.
+- Release, signing, and secret-storage policy: GitHub Pages deploys continuously from `main`; there are no tags, releases, downloadable artifacts, or signing identity. Store automation credentials only as GitHub Actions secrets.
+- Skills baseline revision: `9026cafb46c2bae55a3e7415eb475ce437ff1c1a`
+- Skills baseline applied: `2026-09-04`
+
+Treat these values as stable project decisions. Change an identifier, license, visibility, branch policy, localization strategy, landing-page contract, automation state, or distribution policy only through an explicit migration task.
+
+## Instruction hierarchy and sources of truth
+
+- Follow the direct task, the most specific scoped instructions, this root file, and then general working agreements, in that order.
+- Code is evidence of current behavior. `AGENTS.md` is normative for process. An approved issue specification is normative for desired behavior.
+- Surface conflicts among code, guidance, and approved specifications; do not silently choose one as universally authoritative.
+- Keep one canonical owner for each rule. Secondary documents summarize or link instead of duplicating it.
+- Do not turn an audit, research pass, review, or analysis into implementation without the workflow authorization that owns the next phase.
+
 ## Product mission
 
 AtlasTint is a desktop-first, local-first web application for selecting, coloring, searching, and tracking geographic regions on high-quality interactive SVG maps.
@@ -24,7 +62,7 @@ Do not trade a higher-priority item for a lower-priority item.
 
 ## Mandatory workflow
 
-- Work only on `main`. Never create, switch, or rename branches.
+- Start issue work from current `main`, create the recorded issue branch, and deliver through a pull request. Never push directly to `main`.
 - Read this file before making changes.
 - Search before adding code. Reuse established components, tokens, schemas, map abstractions, utilities, state actions, and tests.
 - Read only the minimum relevant files or chunks before editing.
@@ -41,6 +79,14 @@ Do not trade a higher-priority item for a lower-priority item.
   - why the change is worth its complexity
 - Never claim completion from visual inspection alone. Validate behavior, types, tests, build, accessibility, persistence, and map data invariants.
 
+## Long-running operations
+
+- Use bounded yields or status tools and wait for observable state instead of arbitrary sleeps.
+- Report useful progress at least once per minute when the client supports it.
+- Inspect current output and state before interrupting, retrying, or changing approach.
+- Interrupt only for a verified stall, an expired deadline, or cost and risk that no longer justify continuing.
+- After interruption, preserve useful state, explain the evidence, and choose a narrower retry or explicit blocker. Never rerun the same unchanged failure.
+
 ## Agent instruction files
 
 - `AGENTS.md` is the source of truth.
@@ -49,8 +95,9 @@ Do not trade a higher-priority item for a lower-priority item.
 - Every folder-specific `AGENTS.md` must have a sibling `CLAUDE.md` symbolic link pointing to it.
 - Do not duplicate the same rules across instruction files.
 
-## Personal skill paths
+## Agent skill paths
 
+- Product definition: `docs/product.md`
 - Domain glossary: `CONTEXT.md` (optional; create only when useful)
 - ADRs: `docs/adr/` (create only when recording a durable architectural decision)
 - Research notes: `docs/research/` (create only when persisting research)
@@ -631,13 +678,41 @@ Documentation must explain:
 
 Do not document an exact code tree unless it is generated or automatically verified. File-layout documentation becomes stale quickly.
 
+## Durable project learning
+
+- Propose durable documentation only for learning that is verified, project-specific, likely to recur, and absent from its canonical owner.
+- State the evidence, canonical owner, smallest change, exact draft, and requested decision before writing an adjacent learning outside the current scope.
+- Do not persist hypotheses, raw logs, issue-specific implementation detail, credentials, personal data, or machine-specific paths as project guidance.
+- Documentation required by the selected behavior remains part of that task and needs no additional approval.
+
+## User attention
+
+- Use a proposed-issue notice for distinct evidence-backed work outside the accepted scope.
+- Use a decision notice for materially different outcomes that repository evidence cannot settle.
+- Use an approval notice for an exact external, destructive, privacy, cost, or publication boundary.
+- Use an action-needed notice when only the owner can perform the required external step.
+- Each notice names the evidence, impact, recommendation, exact requested response, and what permits work to resume. Never hide a required response in a general summary.
+
+## Agent execution
+
+Rules for any executor working from a clone of this repository, including cloud executors that read only committed files.
+
+- Run tests with `pnpm validate`; run lint with `pnpm lint`. A change is not done while either fails on the exact current head.
+- Branch as `<type>/<agent>/issue-<n>/<short-slug>`; commit with Conventional Commits, subject ending in `(#<n>)`.
+- Never push to `main` and never merge: open a pull request and stop. Merge belongs to the owner or the orchestration workflow recorded in `.ao/worker-rules.md`.
+- Start the PR body with one `Closes #<n>` line per resolved issue, then the problem, implementation, tests with results, and residual risk.
+- Do not touch: `.ao/**`, `.github/workflows/**`, `docs/product.md`, `LICENSE`, or `ATTRIBUTIONS.md`.
+- `AGENTS.md` is protected by section, not as a file. `## Project identity and policy` is governance and never changes under an executor. Other sections change only when the accepted implementation makes a recorded project pattern untrue.
+- When a required product decision is absent from the issue, publish the exact question, apply `status: needs-decision` with `in-progress`, verify both labels, and stop instead of guessing.
+
 ## Git and delivery
 
 - Use focused Conventional Commits in English.
-- Do not create a branch.
+- Use one issue branch per coherent delivery group and follow the recorded naming convention.
 - Inspect the diff before committing.
 - Remove debug code and unrelated generated changes.
-- Commit and push after the requested scope is complete and validated, unless the user explicitly says not to push.
+- Commit and push the issue branch after the requested scope is complete and validated, unless the user explicitly says not to push.
+- Never push directly to `main`; open a pull request with the complete closing issue set.
 - If push is unavailable, report the exact reason without claiming success.
 
 The final report must include:

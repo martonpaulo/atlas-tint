@@ -7,7 +7,9 @@
 
 AtlasTint is a desktop-first, local-first interactive SVG atlas for marking geographic regions, tracking progress, and building deterministic personal maps.
 
-The production v1 experience is complete for the currently registered World, Brazil, and Spain presets. These are catalog entries, not fixed product types: application state, import/export, the selector, loading, and rendering work from preset registrations and string stable IDs, so a future Australia- or Japan-only catalog does not require rewriting the product core.
+The current production experience covers the registered World, Brazil, and Spain presets. These are catalog entries, not fixed product types: application state, import/export, the selector, loading, and rendering work from preset registrations and string stable IDs, so a future Australia- or Japan-only catalog does not require rewriting the product core.
+
+The durable product boundary and non-goals are recorded in [`docs/product.md`](docs/product.md).
 
 ## Product behavior
 
@@ -38,7 +40,7 @@ Vite serves the web app on `http://localhost:3001` by default.
 
 ## Validation
 
-Run the complete release gate with:
+Run the complete validation gate with:
 
 ```bash
 pnpm validate
@@ -175,7 +177,7 @@ The interface follows one visual grammar: 8 px control corners, 12 px major surf
 
 ## Known limitations
 
-- V1 is desktop-only and deliberately provides no compressed mobile workspace.
+- AtlasTint is desktop-only and deliberately provides no compressed mobile workspace.
 - Visit dates are already supported by the persisted model but do not yet have an editing UI.
 - JSON import replaces compatible local progress as one atomic operation rather than merging individual selections.
 - The catalog currently ships three presets; there is no end-user preset installation UI.
@@ -183,4 +185,4 @@ The interface follows one visual grammar: 8 px control corners, 12 px major surf
 
 ## License
 
-A project source-code license has not been selected. Geographic source rights and attribution requirements are independent and must be preserved; see [`ATTRIBUTIONS.md`](ATTRIBUTIONS.md).
+AtlasTint source code is available under the [`MIT License`](LICENSE). Geographic source rights and attribution requirements are independent and must be preserved; see [`ATTRIBUTIONS.md`](ATTRIBUTIONS.md).
