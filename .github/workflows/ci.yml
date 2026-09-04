@@ -86,3 +86,17 @@ jobs:
           path: artifacts/playwright
           if-no-files-found: ignore
           retention-days: 7
+
+  validate:
+    name: validate
+    if: always()
+    needs: [quality, end-to-end]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every validation job
+        env:
+          QUALITY_RESULT: ${{ needs.quality.result }}
+          END_TO_END_RESULT: ${{ needs.end-to-end.result }}
+        run: |
+          test "$QUALITY_RESULT" = success
+          test "$END_TO_END_RESULT" = success
