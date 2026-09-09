@@ -179,11 +179,19 @@
 	.section-heading {
 		@apply text-[10px] font-semibold tracking-[0.16em] text-muted-foreground uppercase;
 	}
-	.control-select {
-		@apply h-9 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground shadow-xs outline-none transition-colors hover:border-foreground/30 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30;
+	/*
+	 * One select recipe. The two variants differ only where their context requires it: a field
+	 * select fills its column and carries the raised field border, a toolbar select is shorter,
+	 * flat, and sized to its own content.
+	 */
+	.atlas-select {
+		@apply rounded-md border bg-background px-3 text-foreground outline-none transition-colors hover:border-foreground/30 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30;
 	}
-	.topbar-select {
-		@apply h-8 min-w-36 rounded-md border border-border bg-background px-3 text-xs font-medium text-foreground outline-none transition-colors hover:border-foreground/30 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30;
+	.atlas-select[data-variant="field"] {
+		@apply h-9 w-full border-input text-xs shadow-xs;
+	}
+	.atlas-select[data-variant="toolbar"] {
+		@apply h-8 min-w-36 border-border font-medium text-xs;
 	}
 	.legend-swatch {
 		@apply inline-block size-2.5 rounded-sm border border-map-border;
@@ -191,9 +199,6 @@
 	.legend-focus {
 		@apply inline-block size-2.5 rounded-full border-2;
 		border-color: var(--map-focus);
-	}
-	.skeleton-line {
-		@apply animate-pulse rounded-md bg-muted;
 	}
 }
 
@@ -296,6 +301,8 @@
 	pointer-events: none;
 }
 .map-inset-frame rect {
+	/* The declared control radius, rather than a literal that happens to equal it today. */
+	rx: var(--radius-md);
 	fill: color-mix(in oklch, var(--map-surface), var(--foreground) 2%);
 	stroke: var(--map-border);
 	stroke-dasharray: 4 3;

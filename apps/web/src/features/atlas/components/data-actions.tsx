@@ -1,4 +1,4 @@
-import { Button } from "@atlas-tint/ui/components/button";
+import { Button, buttonVariants } from "@atlas-tint/ui/components/button";
 import {
 	Dialog,
 	DialogContent,
@@ -7,6 +7,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@atlas-tint/ui/components/dialog";
+import { cn } from "@atlas-tint/ui/lib/utils";
 import { Download, RotateCcw, Trash2, Upload } from "lucide-react";
 import { type ChangeEvent, useRef, useState } from "react";
 
@@ -148,7 +149,17 @@ export function DataActions({
 				<Button variant="outline" onClick={exportProgress}>
 					<Download data-icon="inline-start" /> Export
 				</Button>
-				<label className="inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-border bg-background px-2.5 font-medium text-xs transition-colors focus-within:ring-2 focus-within:ring-ring hover:bg-muted has-disabled:cursor-not-allowed has-disabled:opacity-50">
+				{/*
+				 * A label wrapping a real file input, not a Button: only a native input can open
+				 * the file picker. It borrows the outline button recipe so it cannot drift away
+				 * from the buttons beside it.
+				 */}
+				<label
+					className={cn(
+						buttonVariants({ variant: "outline" }),
+						"cursor-pointer focus-within:ring-2 focus-within:ring-ring has-disabled:cursor-not-allowed has-disabled:opacity-50",
+					)}
+				>
 					<Upload className="size-4" aria-hidden="true" />{" "}
 					{isImporting ? "Reading…" : "Import"}
 					<input

@@ -1,4 +1,5 @@
 import { Button } from "@atlas-tint/ui/components/button";
+import { Skeleton } from "@atlas-tint/ui/components/skeleton";
 import { AlertTriangle, MapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -19,6 +20,15 @@ import {
 import { loadPreset } from "@/features/atlas/preset-loader";
 import { createSelectionPolicy } from "@/features/atlas/selection-policy";
 import { useAtlasStore } from "@/features/atlas/store";
+
+/**
+ * One owner for the workspace shell geometry.
+ *
+ * Loading used a fixed 340px column while ready used a clamp, so the sidebar visibly jumped
+ * the moment the map finished loading.
+ */
+const workspaceColumns =
+	"grid min-h-0 grid-cols-[clamp(310px,24vw,336px)_minmax(0,1fr)]";
 
 type PresetLoadState =
 	| { status: "loading" }
@@ -93,7 +103,8 @@ export function AtlasApp() {
 					<label className="flex min-w-0 items-center gap-2 text-muted-foreground text-xs">
 						<span className="sr-only">Map preset</span>
 						<select
-							className="topbar-select"
+							className="atlas-select"
+							data-variant="toolbar"
 							aria-label="Map preset"
 							value={activePresetId}
 							onChange={(event) => {
@@ -118,7 +129,7 @@ export function AtlasApp() {
 			</header>
 
 			{loadState.status === "ready" ? (
-				<div className="grid min-h-0 grid-cols-[clamp(310px,24vw,336px)_minmax(0,1fr)]">
+				<div className={workspaceColumns}>
 					<AtlasSidebar
 						preset={loadState.preset}
 						focusedEntityId={focusedEntityId}
@@ -133,15 +144,15 @@ export function AtlasApp() {
 				</div>
 			) : loadState.status === "loading" ? (
 				<div
-					className="grid min-h-0 grid-cols-[340px_minmax(0,1fr)]"
+					className={workspaceColumns}
 					aria-label="Loading map preset"
 					role="status"
 				>
 					<div className="border-border border-r bg-sidebar p-6">
-						<div className="skeleton-line h-7 w-3/5" />
-						<div className="skeleton-line mt-8 h-24" />
-						<div className="skeleton-line mt-6 h-9" />
-						<div className="skeleton-line mt-4 h-80" />
+						<Skeleton className="h-7 w-3/5" />
+						<Skeleton className="mt-8 h-24" />
+						<Skeleton className="mt-6 h-9" />
+						<Skeleton className="mt-4 h-80" />
 					</div>
 					<div className="grid place-items-center bg-map-canvas">
 						<div className="text-center">

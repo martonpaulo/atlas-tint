@@ -475,6 +475,38 @@ test("names the selection-order mode and states its direction", async ({
 	await expect(legend).not.toContainText("First marked");
 });
 
+test("keeps one shell geometry between loading and ready", async ({ page }) => {
+	// Freeze the geometry request so the loading shell is observable.
+	let release: () => void = () => undefined;
+	const held = new Promise<void>((resolve) => {
+		release = resolve;
+	});
+	await page.route("**/maps/*.topo.json*", async (route) => {
+		await held;
+		await route.continue();
+	});
+
+	await page.goto("/");
+	const loading = page.getByRole("status", { name: "Loading map preset" });
+	await expect(loading).toBeVisible();
+	const loadingColumns = await loading.evaluate(
+		(element) => getComputedStyle(element).gridTemplateColumns,
+	);
+
+	release();
+	await expect(page.getByTestId("atlas-map")).toBeVisible();
+	const readyColumns = await page
+		.getByTestId("atlas-map")
+		.evaluate(
+			(element) =>
+				getComputedStyle(element.closest("main")?.parentElement as HTMLElement)
+					.gridTemplateColumns,
+		);
+
+	// The sidebar must not jump the moment the map finishes loading.
+	expect(loadingColumns).toBe(readyColumns);
+});
+
 test("respects reduced motion", async ({ page }) => {
 	await page.emulateMedia({ reducedMotion: "reduce" });
 	const duration = await page

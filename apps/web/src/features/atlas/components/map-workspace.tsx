@@ -194,7 +194,6 @@ function MapCanvas({
 								y={inset.y}
 								width={inset.width}
 								height={inset.height}
-								rx="8"
 							/>
 							<text x={inset.x + inset.padding} y={inset.y + 26}>
 								{inset.label}
@@ -363,7 +362,8 @@ export function MapWorkspace(props: MapWorkspaceProps) {
 					<label className="grid gap-1 font-semibold text-[10px] text-muted-foreground uppercase tracking-[0.12em]">
 						Projection
 						<select
-							className="control-select min-w-40 text-foreground normal-case tracking-normal"
+							className="atlas-select min-w-40 normal-case tracking-normal"
+							data-variant="field"
 							value={projection}
 							onChange={(event) => {
 								const parsed = projectionIdSchema.safeParse(event.target.value);

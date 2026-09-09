@@ -599,7 +599,8 @@ export function AtlasSidebar({
 					<label className="grid gap-1.5 font-medium text-[11px] text-muted-foreground">
 						Color mode
 						<select
-							className="control-select text-foreground"
+							className="atlas-select"
+							data-variant="field"
 							value={progress.fillMode}
 							onChange={(event) => {
 								const mode = fillModeSchema.safeParse(event.target.value);
