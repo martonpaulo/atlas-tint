@@ -20,12 +20,13 @@ AtlasTint commits optimized derived TopoJSON rather than unexplained raw archive
 
 ## Spanish provinces and autonomous cities
 
-- Source: IGN/CNIG Base de Datos de Divisiones Administrativas de España provincial enclosures, published 2026-02-12
+- Source: IGN/CNIG Base de Datos de Divisiones Administrativas de España provincial enclosures, published 2026-07-28
 - Retrieval endpoint: `https://centrodedescargas.cnig.es/CentroDescargas/descargaDir`
 - Retrieval form body: `secDescDirLA=9000029&secuencial=9000029`
-- SHA-256: `d2c5ee140e7f48b3a5fc177b7c2bb05b757472e349290d0d0065d9c562f891da`
+- SHA-256: `d752b1b943e6c60f46a23119d6c3d4ad0b198461c502f0a5433197d7a5e34c83`
 - Terms: derived work of BDLJE under CC BY 4.0; attribution `ign.es`.
-- Coordinate systems: peninsular/Balearic/Ceuta/Melilla source geometry is ETRS89 (EPSG:4258); Canary geometry is REGCAN95 (EPSG:4081). Both are geographic longitude/latitude and are used directly as WGS84-compatible coordinates at this atlas scale; no projected-coordinate conversion is applied.
+- Coordinate systems: peninsular/Balearic/Ceuta/Melilla source geometry is ETRS89 (EPSG:4258); Canary geometry is WGS84 (EPSG:4326) in this publication, which shipped the Canary enclosures under `SHP_WGS84` rather than the earlier `SHP_REGCAN95`. Both are geographic longitude/latitude and are used directly as WGS84-compatible coordinates at this atlas scale; no projected-coordinate conversion is applied.
+- Retrieval note: this endpoint always serves the current publication, so its checksum cannot be satisfied once IGN republishes. Keep the verified archive; `ATLAS_GEO_CACHE_DIR` is populated automatically by a successful build.
 - Product policy: 50 provinces plus Ceuta and Melilla, grouped by 17 autonomous communities and two autonomous cities.
 
 ## Transformations

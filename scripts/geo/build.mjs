@@ -43,8 +43,8 @@ const sources = {
 		filename: "spain.zip",
 		url: "https://centrodedescargas.cnig.es/CentroDescargas/descargaDir",
 		requestBody: "secDescDirLA=9000029&secuencial=9000029",
-		sha256: "d2c5ee140e7f48b3a5fc177b7c2bb05b757472e349290d0d0065d9c562f891da",
-		version: "IGN/CNIG BDDAE provincial enclosures, published 2026-02-12",
+		sha256: "d752b1b943e6c60f46a23119d6c3d4ad0b198461c502f0a5433197d7a5e34c83",
+		version: "IGN/CNIG BDDAE provincial enclosures, published 2026-07-28",
 		license: "Derived work of BDLJE CC-BY 4.0 ign.es",
 	},
 };
@@ -315,10 +315,13 @@ async function buildSpain(zipPath, tempDirectory) {
 			base: "recintos_provinciales_inspire_peninbal_etrs89",
 		},
 		{
+			// The 2026-07-28 publication ships the Canary enclosures as WGS84 instead of the
+			// earlier REGCAN95 folder. Both are geographic longitude/latitude on the same
+			// datum realisation, so the coordinates are used as-is.
 			directory: "spain-canarias",
 			entry:
-				"SHP_REGCAN95/recintos_provinciales_inspire_canarias_regcan95/recintos_provinciales_inspire_canarias_regcan95",
-			base: "recintos_provinciales_inspire_canarias_regcan95",
+				"SHP_WGS84/recintos_provinciales_inspire_canarias_wgs84/recintos_provinciales_inspire_canarias_wgs84",
+			base: "recintos_provinciales_inspire_canarias_wgs84",
 		},
 	];
 	const byCode = new Map();
