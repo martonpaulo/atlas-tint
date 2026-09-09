@@ -103,7 +103,7 @@ export function AtlasApp() {
 					<label className="flex min-w-0 items-center gap-2 text-muted-foreground text-xs">
 						<span className="sr-only">Map preset</span>
 						<select
-							className="atlas-select"
+							className="atlas-select focus-ring"
 							data-variant="toolbar"
 							aria-label="Map preset"
 							value={activePresetId}

@@ -362,7 +362,7 @@ export function MapWorkspace(props: MapWorkspaceProps) {
 					<label className="grid gap-1 font-semibold text-[10px] text-muted-foreground uppercase tracking-[0.12em]">
 						Projection
 						<select
-							className="atlas-select min-w-40 normal-case tracking-normal"
+							className="atlas-select focus-ring min-w-40 normal-case tracking-normal"
 							data-variant="field"
 							value={projection}
 							onChange={(event) => {

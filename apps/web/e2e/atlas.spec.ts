@@ -507,6 +507,64 @@ test("keeps one shell geometry between loading and ready", async ({ page }) => {
 	expect(loadingColumns).toBe(readyColumns);
 });
 
+test("gives every control family the same visible focus treatment", async ({
+	page,
+}) => {
+	await openStyleAndData(page);
+
+	const outlineOf = (selector: string) =>
+		page
+			.locator(selector)
+			.first()
+			.evaluate((element) => {
+				const style = getComputedStyle(element);
+				return {
+					width: style.outlineWidth,
+					style: style.outlineStyle,
+					offset: style.outlineOffset,
+					color: style.outlineColor,
+				};
+			});
+
+	const families: Array<[string, string]> = [
+		["toolbar select", '[aria-label="Map preset"]'],
+		["search input", '[role="searchbox"]'],
+		[
+			"button",
+			'[data-slot="button"]:has(> svg + text), button[data-slot="button"]',
+		],
+		["region row", "#entity-results button[data-selected]"],
+		["filter toggle", 'button[aria-pressed][class*="capitalize"]'],
+		["summary", "details.settings-disclosure > summary"],
+		["field select", '[aria-label="Selected region color mode"]'],
+	];
+
+	const measured: Array<{ width: string; style: string; offset: string }> = [];
+	for (const [, selector] of families) {
+		// Keyboard focus, so `:focus-visible` actually applies.
+		await page.locator(selector).first().focus();
+		await page.keyboard.press("Shift+Tab");
+		await page.keyboard.press("Tab");
+		const outline = await outlineOf(selector);
+		measured.push(outline);
+	}
+
+	// Every family, one geometry.
+	expect(
+		measured.map(({ style, width, offset }) => `${style} ${width} ${offset}`),
+	).toEqual(families.map(() => "solid 2px 2px"));
+
+	// The file trigger focuses its hidden input, so its wrapper carries the ring instead.
+	await page.getByLabel("Import progress JSON").focus();
+	await expect
+		.poll(async () =>
+			page
+				.locator("label:has(input[type=file])")
+				.evaluate((element) => getComputedStyle(element).outlineStyle),
+		)
+		.toBe("solid");
+});
+
 test("respects reduced motion", async ({ page }) => {
 	await page.emulateMedia({ reducedMotion: "reduce" });
 	const duration = await page

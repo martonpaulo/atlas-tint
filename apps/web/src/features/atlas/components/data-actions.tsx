@@ -157,7 +157,7 @@ export function DataActions({
 				<label
 					className={cn(
 						buttonVariants({ variant: "outline" }),
-						"cursor-pointer focus-within:ring-2 focus-within:ring-ring has-disabled:cursor-not-allowed has-disabled:opacity-50",
+						"focus-ring-within cursor-pointer has-disabled:cursor-not-allowed has-disabled:opacity-50",
 					)}
 				>
 					<Upload className="size-4" aria-hidden="true" />{" "}

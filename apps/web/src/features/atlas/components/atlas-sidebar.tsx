@@ -71,7 +71,7 @@ function ParentCheckbox({
 	}, [state]);
 	const selectedCount = childIds.filter((id) => selected[id]).length;
 	return (
-		<label className="group flex cursor-pointer items-center gap-3 rounded-md px-2.5 py-2 text-xs focus-within:ring-2 focus-within:ring-sidebar-ring hover:bg-sidebar-accent">
+		<label className="focus-ring-within focus-ring-sidebar group flex cursor-pointer items-center gap-3 rounded-md px-2.5 py-2 text-xs hover:bg-sidebar-accent">
 			<input
 				ref={inputRef}
 				type="checkbox"
@@ -131,7 +131,7 @@ function EntityRow({
 			<button
 				ref={(element) => registerRow(entity.id, element)}
 				type="button"
-				className="flex min-w-0 items-center gap-3 rounded-md px-2.5 py-2.5 text-left outline-none hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent data-[selected=true]:font-medium"
+				className="focus-ring focus-ring-sidebar flex min-w-0 items-center gap-3 rounded-md px-2.5 py-2.5 text-left hover:bg-sidebar-accent disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent data-[selected=true]:font-medium"
 				data-selected={selected}
 				aria-pressed={selectable ? selected : undefined}
 				disabled={!selectable}
@@ -486,7 +486,7 @@ export function AtlasSidebar({
 									// A two-state toggle group: exactly one is pressed, and native
 									// button keyboard behaviour is preserved.
 									aria-pressed={filter === value}
-									className="rounded-sm px-2.5 py-1.5 font-medium text-[11px] text-muted-foreground capitalize outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-sidebar-ring aria-pressed:bg-background aria-pressed:text-foreground aria-pressed:shadow-xs"
+									className="focus-ring focus-ring-sidebar rounded-sm px-2.5 py-1.5 font-medium text-[11px] text-muted-foreground capitalize hover:text-foreground aria-pressed:bg-background aria-pressed:text-foreground aria-pressed:shadow-xs"
 									onClick={() => setFilter(value)}
 								>
 									{value}
@@ -503,7 +503,7 @@ export function AtlasSidebar({
 
 					{manifest.parents.length > 0 && !query && filter === "all" ? (
 						<details className="mt-3 rounded-md border border-sidebar-border bg-background/35">
-							<summary className="cursor-pointer px-3 py-2.5 font-medium text-xs outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring">
+							<summary className="focus-ring focus-ring-sidebar cursor-pointer px-3 py-2.5 font-medium text-xs">
 								Select groups
 							</summary>
 							<div className="max-h-48 overflow-y-auto border-sidebar-border border-t p-1">
@@ -588,7 +588,7 @@ export function AtlasSidebar({
 			</div>
 
 			<details className="settings-disclosure border-sidebar-border border-t bg-background/25">
-				<summary className="flex cursor-pointer list-none items-center gap-2 px-4 py-3 font-medium text-xs outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring">
+				<summary className="focus-ring focus-ring-sidebar flex cursor-pointer list-none items-center gap-2 px-4 py-3 font-medium text-xs">
 					<SlidersHorizontal
 						className="size-4 text-muted-foreground"
 						aria-hidden="true"
@@ -599,7 +599,7 @@ export function AtlasSidebar({
 					<label className="grid gap-1.5 font-medium text-[11px] text-muted-foreground">
 						Color mode
 						<select
-							className="atlas-select"
+							className="atlas-select focus-ring"
 							data-variant="field"
 							value={progress.fillMode}
 							onChange={(event) => {

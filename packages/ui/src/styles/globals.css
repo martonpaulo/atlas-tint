@@ -164,11 +164,41 @@
 	body {
 		@apply m-0 bg-background font-sans text-foreground antialiased;
 	}
-	button,
-	select,
-	input,
-	summary {
-		@apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+	:root {
+		/*
+		 * One focus geometry for the whole product.
+		 *
+		 * Width, offset, and colour used to be restated in the base rule, in Button, in Input,
+		 * in Dialog, in both selects, in sidebar rows, in summaries, in the filter buttons, and
+		 * in the import trigger — with different widths and alphas, so equivalent controls
+		 * already looked different. An outline rather than a ring, so it never competes with a
+		 * surface's own elevation shadow, and it follows the element's border radius.
+		 */
+		--focus-ring-width: 2px;
+		--focus-ring-offset: 2px;
+		--focus-ring-color: var(--ring);
+	}
+}
+
+@layer components {
+	/*
+	 * `.focus-ring` for a control that owns its own focus, `.focus-ring-within` for a wrapper
+	 * whose real control is visually hidden — a label around a file input. Native controls that
+	 * carry neither still get the same treatment, so nothing can lose a visible focus state.
+	 */
+	.focus-ring:focus-visible,
+	.focus-ring-within:focus-within,
+	:where(button, select, input, summary, [tabindex]):not(
+		.focus-ring,
+		.focus-ring-within
+	):focus-visible {
+		outline: var(--focus-ring-width) solid var(--focus-ring-color);
+		outline-offset: var(--focus-ring-offset);
+	}
+
+	/* The only variant: the sidebar's focus colour is semantically its own. */
+	.focus-ring-sidebar {
+		--focus-ring-color: var(--sidebar-ring);
 	}
 }
 
@@ -185,7 +215,7 @@
 	 * flat, and sized to its own content.
 	 */
 	.atlas-select {
-		@apply rounded-md border bg-background px-3 text-foreground outline-none transition-colors hover:border-foreground/30 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30;
+		@apply rounded-md border bg-background px-3 text-foreground transition-colors hover:border-foreground/30;
 	}
 	.atlas-select[data-variant="field"] {
 		@apply h-9 w-full border-input text-xs shadow-xs;
