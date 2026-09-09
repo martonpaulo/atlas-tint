@@ -9,7 +9,10 @@ import {
 import { Check, LocateFixed, Minus, Plus, RotateCcw } from "lucide-react";
 import { type PointerEvent, useEffect, useMemo, useRef, useState } from "react";
 
-import { getSelectedFill } from "@/features/atlas/colors";
+import {
+	createChronologyContext,
+	getSelectedFill,
+} from "@/features/atlas/colors";
 import { type LoadedPreset, projectionIdSchema } from "@/features/atlas/domain";
 import type { GeometryBundle } from "@/features/atlas/geometry";
 import { createProjectionLayout } from "@/features/atlas/projections";
@@ -58,6 +61,11 @@ function MapCanvas({
 				centroid: layout.centroidFor(feature),
 			})),
 		[geometry.entities.features, layout],
+	);
+	// Built once per selection set instead of re-derived for every rendered entity.
+	const chronology = useMemo(
+		() => createChronologyContext(progress.selected),
+		[progress.selected],
 	);
 	const renderedParents = useMemo(
 		() =>
@@ -221,7 +229,12 @@ function MapCanvas({
 									style={{
 										fill: selectable
 											? selected
-												? getSelectedFill(entity, progress.fillMode, progress)
+												? getSelectedFill(
+														entity,
+														progress.fillMode,
+														progress,
+														chronology,
+													)
 												: "var(--map-fill-unselected)"
 											: // A hatch, not merely another colour, so unavailable geography reads as
 												// unavailable without depending on colour perception.
