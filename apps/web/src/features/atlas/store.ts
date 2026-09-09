@@ -9,8 +9,10 @@ import type {
 	ThemePreference,
 } from "@/features/atlas/domain";
 import {
+	canPersist,
 	createBrowserPersistenceAdapter,
 	type PersistenceAdapter,
+	type PersistenceMode,
 } from "@/features/atlas/persistence-adapter";
 import {
 	createDefaultState,
@@ -27,6 +29,9 @@ import {
 interface AtlasStore {
 	data: PersistedStateV1;
 	hydrated: boolean;
+	persistenceMode: PersistenceMode;
+	/** Untouched bytes of an incompatible newer record, offered back as a download. */
+	incompatibleRecord?: string;
 	storageNotice?: string;
 	announcement: string;
 	initialize: () => () => void;
@@ -49,6 +54,8 @@ interface AtlasStore {
 	resetPreset: (presetId: PresetId) => void;
 	resetAll: () => void;
 	replaceData: (data: PersistedStateV1, message: string) => void;
+	/** Explicit destructive transition: overwrite an incompatible newer record with this session. */
+	replaceIncompatibleRecord: () => void;
 }
 
 let persistenceAdapter: PersistenceAdapter | undefined;
@@ -56,28 +63,35 @@ let saveTimer: ReturnType<typeof setTimeout> | undefined;
 let pendingSave:
 	| {
 			data: PersistedStateV1;
-			setNotice: (message: string | undefined) => void;
+			onFailure: (message: string) => void;
 	  }
 	| undefined;
 
 function flushSave() {
 	if (!pendingSave || !persistenceAdapter) return;
 	if (saveTimer) clearTimeout(saveTimer);
-	const { data, setNotice } = pendingSave;
+	const { data, onFailure } = pendingSave;
 	pendingSave = undefined;
 	saveTimer = undefined;
 	const result = persistenceAdapter.save(data);
-	if (!result.ok) setNotice(result.message);
+	if (!result.ok) onFailure(result.message);
 }
 
 function scheduleSave(
 	data: PersistedStateV1,
-	setNotice: (message: string | undefined) => void,
+	onFailure: (message: string) => void,
 ) {
 	if (!persistenceAdapter) return;
 	if (saveTimer) clearTimeout(saveTimer);
-	pendingSave = { data, setNotice };
+	pendingSave = { data, onFailure };
 	saveTimer = setTimeout(flushSave, 80);
+}
+
+/** Drop a scheduled write so a blocked or replaced session can never flush it later. */
+function discardPendingSave() {
+	if (saveTimer) clearTimeout(saveTimer);
+	pendingSave = undefined;
+	saveTimer = undefined;
 }
 
 export const useAtlasStore = create<AtlasStore>((set, get) => {
@@ -86,24 +100,36 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 		announcement = get().announcement,
 	) => {
 		set({ data, announcement });
-		scheduleSave(data, (storageNotice) => set({ storageNotice }));
+		// A session that may not write stays fully usable in memory; it simply never schedules a
+		// write, so no timer, storage event, or `pagehide` can reach the storage key.
+		if (!canPersist(get().persistenceMode)) return;
+		scheduleSave(data, (storageNotice) =>
+			set({ persistenceMode: "save-failed", storageNotice }),
+		);
 	};
 
 	return {
 		data: createDefaultState(),
 		hydrated: false,
+		persistenceMode: "durable",
 		announcement: "",
 		initialize() {
 			persistenceAdapter = createBrowserPersistenceAdapter();
+			discardPendingSave();
 			const result = persistenceAdapter.load();
 			set({
 				data: result.state,
 				hydrated: true,
-				storageNotice: result.status === "ok" ? undefined : result.message,
+				persistenceMode: result.mode,
+				incompatibleRecord: result.incompatibleRecord,
+				storageNotice: result.message,
 			});
 			if (typeof window === "undefined") return () => undefined;
 			const handleStorage = (event: StorageEvent) => {
 				if (event.key !== STORAGE_KEY || event.newValue === null) return;
+				// The record is newer than this build understands; adopting it would reinterpret
+				// unknown data through the current schema.
+				if (get().persistenceMode === "future-blocked") return;
 				try {
 					const parsed: unknown = JSON.parse(event.newValue);
 					set({
@@ -245,6 +271,14 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 		},
 		replaceData(data, message) {
 			commit(data, message);
+		},
+		replaceIncompatibleRecord() {
+			set({
+				persistenceMode: "durable",
+				incompatibleRecord: undefined,
+				storageNotice: undefined,
+			});
+			commit(get().data, "Incompatible saved progress replaced.");
 		},
 	};
 });

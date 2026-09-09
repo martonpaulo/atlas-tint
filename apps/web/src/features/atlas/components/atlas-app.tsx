@@ -5,6 +5,10 @@ import { useEffect, useState } from "react";
 import { ModeToggle } from "@/components/mode-toggle";
 import { AtlasSidebar } from "@/features/atlas/components/atlas-sidebar";
 import { MapWorkspace } from "@/features/atlas/components/map-workspace";
+import {
+	PersistenceNotice,
+	persistenceStatusLabel,
+} from "@/features/atlas/components/persistence-notice";
 import type { LoadedPreset } from "@/features/atlas/domain";
 import { type GeometryBundle, loadGeometry } from "@/features/atlas/geometry";
 import {
@@ -21,7 +25,7 @@ type PresetLoadState =
 
 export function AtlasApp() {
 	const activePresetId = useAtlasStore(({ data }) => data.activePresetId);
-	const storageNotice = useAtlasStore(({ storageNotice }) => storageNotice);
+	const persistenceMode = useAtlasStore(({ persistenceMode: mode }) => mode);
 	const announcement = useAtlasStore(({ announcement }) => announcement);
 	const initialize = useAtlasStore(({ initialize }) => initialize);
 	const setActivePreset = useAtlasStore(
@@ -97,7 +101,7 @@ export function AtlasApp() {
 				</div>
 				<div className="flex items-center gap-2">
 					<span className="hidden text-muted-foreground text-xs 2xl:inline">
-						Saved locally
+						{persistenceStatusLabel(persistenceMode)}
 					</span>
 					<ModeToggle />
 				</div>
@@ -161,14 +165,7 @@ export function AtlasApp() {
 				</main>
 			)}
 
-			{storageNotice ? (
-				<div
-					className="fixed right-4 bottom-4 z-40 max-w-sm rounded-md border border-warning/40 bg-warning-surface px-4 py-3 text-warning-foreground text-xs leading-5 shadow-lg"
-					role="status"
-				>
-					{storageNotice}
-				</div>
-			) : null}
+			<PersistenceNotice />
 			<p className="sr-only" aria-live="polite" aria-atomic="true">
 				{announcement}
 			</p>

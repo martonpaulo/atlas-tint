@@ -1,16 +1,17 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
 	createPersistenceAdapter,
 	serializePersistedState,
 } from "@/features/atlas/persistence-adapter";
 import {
-	STORAGE_KEY,
 	createDefaultState,
 	migratePersistedState,
 	persistedStateV1Schema,
+	STORAGE_KEY,
 	sanitizeUnknownEntityIds,
 } from "@/features/atlas/persistence-schema";
+import { useAtlasStore } from "@/features/atlas/store";
 
 describe("persistence", () => {
 	it("serializes and loads version 1 state including projection preferences", () => {
@@ -23,7 +24,7 @@ describe("persistence", () => {
 		state.presets.world.projection = "robinson";
 		const adapter = createPersistenceAdapter(storage);
 		expect(adapter.save(state)).toEqual({ ok: true });
-		expect(adapter.load()).toEqual({ status: "ok", state });
+		expect(adapter.load()).toEqual({ mode: "durable", state });
 		expect(
 			JSON.parse(serializePersistedState(state)).presets.world.projection,
 		).toBe("robinson");
@@ -46,7 +47,8 @@ describe("persistence", () => {
 			setItem: () => undefined,
 		});
 		const result = adapter.load();
-		expect(result.status).toBe("recovered");
+		expect(result.mode).toBe("durable");
+		expect(result.message).toMatch(/malformed/i);
 		expect(result.state).toEqual(createDefaultState());
 	});
 
@@ -59,7 +61,7 @@ describe("persistence", () => {
 				throw new DOMException("Quota");
 			},
 		});
-		expect(adapter.load().status).toBe("unavailable");
+		expect(adapter.load().mode).toBe("session-only");
 		expect(adapter.save(createDefaultState())).toEqual({
 			ok: false,
 			message: "AtlasTint could not save progress in browser storage.",
@@ -83,6 +85,18 @@ describe("persistence", () => {
 		]);
 	});
 
+	it("reports a newer schema as future-blocked and keeps its bytes opaque", () => {
+		const record = '{"schemaVersion":2,"unknownField":"kept"}';
+		const adapter = createPersistenceAdapter({
+			getItem: () => record,
+			setItem: () => undefined,
+		});
+		const result = adapter.load();
+		expect(result.mode).toBe("future-blocked");
+		expect(result.incompatibleRecord).toBe(record);
+		expect(result.state).toEqual(createDefaultState());
+	});
+
 	it("uses the expected versioned storage key", () => {
 		expect(STORAGE_KEY).toBe("atlas-tint:state");
 	});
@@ -96,5 +110,91 @@ describe("persistence", () => {
 			projection: "mercator",
 		};
 		expect(persistedStateV1Schema.parse(state).presets.australia).toBeDefined();
+	});
+});
+
+describe("persistence mode guards the storage key", () => {
+	const futureRecord = '{"schemaVersion":2,"presets":{"world":"newer shape"}}';
+
+	beforeEach(() => {
+		vi.useFakeTimers();
+		window.localStorage.clear();
+		useAtlasStore.setState({
+			data: createDefaultState(),
+			hydrated: false,
+			persistenceMode: "durable",
+			incompatibleRecord: undefined,
+			storageNotice: undefined,
+			announcement: "",
+		});
+	});
+
+	afterEach(() => {
+		vi.useRealTimers();
+		window.localStorage.clear();
+	});
+
+	it("leaves a future record byte-identical across mutation, timers, and pagehide", () => {
+		window.localStorage.setItem(STORAGE_KEY, futureRecord);
+		const stop = useAtlasStore.getState().initialize();
+
+		expect(useAtlasStore.getState().persistenceMode).toBe("future-blocked");
+		useAtlasStore.getState().toggleEntity("world", "world-fr", "France");
+		useAtlasStore.getState().setThemePreference("dark");
+		vi.advanceTimersByTime(1_000);
+		window.dispatchEvent(new Event("pagehide"));
+		vi.advanceTimersByTime(1_000);
+
+		expect(window.localStorage.getItem(STORAGE_KEY)).toBe(futureRecord);
+		// The session itself stays usable in memory.
+		expect(
+			useAtlasStore.getState().data.presets.world.selected["world-fr"],
+		).toBeDefined();
+		stop();
+	});
+
+	it("ignores a cross-tab update while the stored record is incompatible", () => {
+		window.localStorage.setItem(STORAGE_KEY, futureRecord);
+		const stop = useAtlasStore.getState().initialize();
+
+		window.dispatchEvent(
+			new StorageEvent("storage", {
+				key: STORAGE_KEY,
+				newValue: serializePersistedState(createDefaultState()),
+			}),
+		);
+
+		expect(useAtlasStore.getState().persistenceMode).toBe("future-blocked");
+		expect(window.localStorage.getItem(STORAGE_KEY)).toBe(futureRecord);
+		stop();
+	});
+
+	it("writes only after the explicit destructive replacement", () => {
+		window.localStorage.setItem(STORAGE_KEY, futureRecord);
+		const stop = useAtlasStore.getState().initialize();
+
+		useAtlasStore.getState().replaceIncompatibleRecord();
+		vi.advanceTimersByTime(1_000);
+
+		const stored = window.localStorage.getItem(STORAGE_KEY);
+		expect(stored).not.toBe(futureRecord);
+		expect(JSON.parse(stored ?? "{}").schemaVersion).toBe(1);
+		expect(useAtlasStore.getState().persistenceMode).toBe("durable");
+		expect(useAtlasStore.getState().incompatibleRecord).toBeUndefined();
+		stop();
+	});
+
+	it("keeps saving normally for a compatible record", () => {
+		const stop = useAtlasStore.getState().initialize();
+
+		expect(useAtlasStore.getState().persistenceMode).toBe("durable");
+		useAtlasStore.getState().toggleEntity("world", "world-fr", "France");
+		vi.advanceTimersByTime(1_000);
+
+		const stored = window.localStorage.getItem(STORAGE_KEY);
+		expect(
+			JSON.parse(stored ?? "{}").presets.world.selected["world-fr"],
+		).toBeDefined();
+		stop();
 	});
 });
