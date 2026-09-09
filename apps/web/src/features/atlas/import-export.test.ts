@@ -5,7 +5,11 @@ import {
 	serializeAtlasExport,
 	validateImportText,
 } from "@/features/atlas/import-export";
-import { createDefaultState } from "@/features/atlas/persistence-schema";
+import { importLimits } from "@/features/atlas/import-limits";
+import {
+	createDefaultState,
+	type PersistedStateV1,
+} from "@/features/atlas/persistence-schema";
 import { brazilPreset } from "@/features/atlas/presets/brazil";
 import { spainPreset } from "@/features/atlas/presets/spain";
 import { worldPreset } from "@/features/atlas/presets/world";
@@ -57,5 +61,141 @@ describe("import and export", () => {
 		expect(result.ok).toBe(false);
 		if (!result.ok)
 			expect(result.message).toContain("Invalid AtlasTint export");
+	});
+});
+
+describe("import limits", () => {
+	const exportText = (state: PersistedStateV1) =>
+		serializeAtlasExport(state, new Date("2026-07-24T12:00:00.000Z"));
+
+	function selections(count: number) {
+		return Object.fromEntries(
+			Array.from({ length: count }, (_, index) => [
+				`world-${index}`,
+				{
+					selectedAt: "2026-07-24T12:00:00.000Z",
+					order: index + 1,
+				},
+			]),
+		);
+	}
+
+	it("round-trips a complete export of every catalog entity", () => {
+		const state = createDefaultState();
+		let order = 0;
+		for (const [id, manifest] of Object.entries(manifests)) {
+			state.presets[id].selected = Object.fromEntries(
+				manifest.entities.map((entity) => [
+					entity.id,
+					{
+						selectedAt: "2026-07-24T12:00:00.000Z",
+						order: ++order,
+					},
+				]),
+			);
+			state.presets[id].customColors = Object.fromEntries(
+				manifest.entities.map((entity) => [entity.id, "#b86b45"]),
+			);
+		}
+		const text = exportText(state);
+		const result = validateImportText(text, manifests);
+
+		expect(result.ok).toBe(true);
+		// The limit is headroom over a complete file, not a product ceiling.
+		expect(new TextEncoder().encode(text).byteLength).toBeLessThan(
+			importLimits.maxBytes,
+		);
+		expect(order).toBe(274);
+	});
+
+	it("rejects a payload over the byte limit before parsing it", () => {
+		const oversized = `${" ".repeat(importLimits.maxBytes + 1)}{}`;
+		const result = validateImportText(oversized, manifests);
+
+		expect(result).toEqual({
+			ok: false,
+			message: expect.stringContaining("over the 1024 KB import limit"),
+		});
+	});
+
+	it("accepts the largest selection record and rejects one entry more", () => {
+		const atLimit = createDefaultState();
+		atLimit.presets.world.selected = selections(importLimits.maxSelections);
+		expect(validateImportText(exportText(atLimit), manifests).ok).toBe(true);
+
+		const overLimit = createDefaultState();
+		overLimit.presets.world.selected = selections(
+			importLimits.maxSelections + 1,
+		);
+		const result = validateImportText(exportText(overLimit), manifests);
+		expect(result.ok).toBe(false);
+		if (result.ok) return;
+		expect(result.message).toContain("presets.world.selected");
+		expect(result.message).toContain("at most 2000");
+	});
+
+	it("rejects an entity key longer than the limit", () => {
+		const state = createDefaultState();
+		state.presets.world.selected["w".repeat(importLimits.maxKeyLength + 1)] = {
+			selectedAt: "2026-07-24T12:00:00.000Z",
+			order: 1,
+		};
+		const result = validateImportText(exportText(state), manifests);
+
+		expect(result.ok).toBe(false);
+		if (result.ok) return;
+		expect(result.message).toContain("presets.world.selected");
+	});
+
+	it("rejects a custom color that is not a #rrggbb value", () => {
+		const state = createDefaultState();
+		state.presets.world.customColors["world-fr"] = "javascript:alert(1)";
+		const result = validateImportText(exportText(state), manifests);
+
+		expect(result.ok).toBe(false);
+		if (result.ok) return;
+		expect(result.message).toContain("#rrggbb");
+	});
+
+	it("bounds unknown preset records so they cannot retain unbounded state", () => {
+		const withinLimit = createDefaultState();
+		for (let index = 0; index < importLimits.maxPresets - 3; index += 1)
+			withinLimit.presets[`future-${index}`] = {
+				selected: {},
+				fillMode: "hierarchical",
+				customColors: {},
+				projection: "mercator",
+			};
+		expect(validateImportText(exportText(withinLimit), manifests).ok).toBe(
+			true,
+		);
+
+		const overLimit = createDefaultState();
+		for (let index = 0; index < importLimits.maxPresets; index += 1)
+			overLimit.presets[`future-${index}`] = {
+				selected: {},
+				fillMode: "hierarchical",
+				customColors: {},
+				projection: "mercator",
+			};
+		const result = validateImportText(exportText(overLimit), manifests);
+		expect(result.ok).toBe(false);
+		if (result.ok) return;
+		expect(result.message).toContain("at most 32 preset records");
+	});
+
+	it("bounds an unknown preset's own records too", () => {
+		const state = createDefaultState();
+		state.presets.future = {
+			selected: selections(importLimits.maxSelections + 1),
+			fillMode: "hierarchical",
+			customColors: {},
+			projection: "mercator",
+		};
+		const result = validateImportText(exportText(state), manifests);
+
+		expect(result.ok).toBe(false);
+		if (result.ok) return;
+		expect(result.message).toContain("presets.future.selected");
 	});
 });

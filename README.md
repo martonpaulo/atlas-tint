@@ -156,6 +156,8 @@ All reads and writes pass through a narrow persistence adapter. Zod validates th
 
 Exports contain schema version, application version, timestamp, and validated progress only. Imports report incompatible data and unknown entity IDs, show a per-preset preview, and require confirmation before atomic replacement.
 
+An imported file is untrusted input, so it is bounded before it is read: at most 1 MiB, 32 preset records, 2,000 selections and 2,000 custom colours per preset, and 128-character keys. These are defensive headroom rather than supported product totals — a complete export of all 274 catalog entities, every one selected and coloured, is about 30 KB. A file over any bound is rejected whole; nothing is silently truncated.
+
 ## Architecture
 
 The implementation keeps these concerns independent:

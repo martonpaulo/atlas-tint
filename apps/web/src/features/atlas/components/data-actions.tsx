@@ -8,7 +8,7 @@ import {
 	DialogTitle,
 } from "@atlas-tint/ui/components/dialog";
 import { Download, RotateCcw, Trash2, Upload } from "lucide-react";
-import { type ChangeEvent, useState } from "react";
+import { type ChangeEvent, useRef, useState } from "react";
 
 import type { PresetId } from "@/features/atlas/domain";
 import {
@@ -16,6 +16,7 @@ import {
 	serializeAtlasExport,
 	validateImportText,
 } from "@/features/atlas/import-export";
+import { formatByteLimit, importLimits } from "@/features/atlas/import-limits";
 import { loadAllManifests } from "@/features/atlas/preset-loader";
 import { useAtlasStore } from "@/features/atlas/store";
 
@@ -35,6 +36,13 @@ export function DataActions({
 	const [resetScope, setResetScope] = useState<ResetScope>();
 	const [preview, setPreview] = useState<ImportPreview>();
 	const [importMessage, setImportMessage] = useState<string>();
+	const [isImporting, setIsImporting] = useState(false);
+	/**
+	 * Reading a file and loading the manifests are both async, so two choices can resolve out of
+	 * order and a slower earlier file could replace the preview for a newer one. `File.text()`
+	 * cannot be reliably aborted, so identify the latest operation instead of cancelling.
+	 */
+	const latestImport = useRef(0);
 
 	const exportProgress = () => {
 		const blob = new Blob([serializeAtlasExport(data)], {
@@ -52,25 +60,44 @@ export function DataActions({
 		const file = event.target.files?.[0];
 		event.target.value = "";
 		if (!file) return;
+
+		const operation = latestImport.current + 1;
+		latestImport.current = operation;
+		const isLatest = () => latestImport.current === operation;
+
+		setPreview(undefined);
+		// Reject before reading: an excessive file must never reach memory or the parser.
+		if (file.size > importLimits.maxBytes) {
+			setIsImporting(false);
+			setImportMessage(
+				`The selected file is ${formatByteLimit(file.size)}, over the ${formatByteLimit(importLimits.maxBytes)} import limit.`,
+			);
+			return;
+		}
+
+		setImportMessage(undefined);
+		setIsImporting(true);
 		try {
 			const [text, manifests] = await Promise.all([
 				file.text(),
 				loadAllManifests(),
 			]);
+			if (!isLatest()) return;
 			const result = validateImportText(text, manifests);
 			if (!result.ok) {
 				setImportMessage(result.message);
-				setPreview(undefined);
 				return;
 			}
-			setImportMessage(undefined);
 			setPreview(result.preview);
 		} catch (error) {
+			if (!isLatest()) return;
 			setImportMessage(
 				error instanceof Error
 					? error.message
 					: "The import could not be read.",
 			);
+		} finally {
+			if (isLatest()) setIsImporting(false);
 		}
 	};
 
@@ -90,6 +117,7 @@ export function DataActions({
 	return (
 		<section
 			aria-labelledby="data-actions-title"
+			aria-busy={isImporting}
 			className="mt-3 border-sidebar-border border-t pt-3"
 		>
 			<div className="section-heading-row">
@@ -101,13 +129,15 @@ export function DataActions({
 				<Button variant="outline" onClick={exportProgress}>
 					<Download data-icon="inline-start" /> Export
 				</Button>
-				<label className="inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-border bg-background px-2.5 font-medium text-xs transition-colors focus-within:ring-2 focus-within:ring-ring hover:bg-muted">
-					<Upload className="size-4" aria-hidden="true" /> Import
+				<label className="inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-border bg-background px-2.5 font-medium text-xs transition-colors focus-within:ring-2 focus-within:ring-ring hover:bg-muted has-disabled:cursor-not-allowed has-disabled:opacity-50">
+					<Upload className="size-4" aria-hidden="true" />{" "}
+					{isImporting ? "Reading…" : "Import"}
 					<input
 						type="file"
 						accept="application/json,.json"
 						className="sr-only"
 						aria-label="Import progress JSON"
+						disabled={isImporting}
 						onChange={chooseImport}
 					/>
 				</label>
@@ -122,6 +152,9 @@ export function DataActions({
 					<Trash2 data-icon="inline-start" /> Reset all
 				</Button>
 			</div>
+			<p className="sr-only" role="status">
+				{isImporting ? "Reading the selected progress file." : ""}
+			</p>
 			{importMessage ? (
 				<p
 					className="mt-3 rounded-md border border-destructive/30 bg-destructive/8 px-3 py-2 text-destructive text-xs leading-5"
