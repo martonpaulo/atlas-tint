@@ -179,12 +179,6 @@
 	.section-heading {
 		@apply text-[10px] font-semibold tracking-[0.16em] text-muted-foreground uppercase;
 	}
-	.section-kicker {
-		@apply text-[10px] text-muted-foreground;
-	}
-	.sidebar-section {
-		@apply border-t border-sidebar-border pt-5;
-	}
 	.control-select {
 		@apply h-9 w-full rounded-md border border-input bg-background px-3 text-xs text-foreground shadow-xs outline-none transition-colors hover:border-foreground/30 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30;
 	}

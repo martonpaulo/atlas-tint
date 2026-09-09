@@ -23,8 +23,6 @@
 		"validate": "pnpm format && pnpm lint && pnpm check-types && pnpm test && pnpm geo:check && pnpm test:e2e && pnpm build"
 	},
 	"dependencies": {
-		"@atlas-tint/env": "workspace:*",
-		"dotenv": "catalog:",
 		"zod": "catalog:"
 	},
 	"devDependencies": {
