@@ -1,6 +1,13 @@
 import { Button } from "@atlas-tint/ui/components/button";
 import { Input } from "@atlas-tint/ui/components/input";
-import { Check, LocateFixed, Search, SlidersHorizontal, X } from "lucide-react";
+import {
+	Ban,
+	Check,
+	LocateFixed,
+	Search,
+	SlidersHorizontal,
+	X,
+} from "lucide-react";
 import {
 	type KeyboardEvent,
 	useEffect,
@@ -20,6 +27,12 @@ import type { SelectionMetadata } from "@/features/atlas/persistence-schema";
 import { formatPercentage } from "@/features/atlas/progress";
 import { searchEntities } from "@/features/atlas/search";
 import { getParentSelectionState } from "@/features/atlas/selection";
+import {
+	countSelectable,
+	createSelectionPolicy,
+	isSelectable,
+	selectableChildren,
+} from "@/features/atlas/selection-policy";
 import { useAtlasStore } from "@/features/atlas/store";
 
 interface AtlasSidebarProps {
@@ -30,19 +43,25 @@ interface AtlasSidebarProps {
 
 function ParentCheckbox({
 	parent,
+	childIds,
 	selected,
 	onChange,
 }: {
 	parent: ParentManifest;
+	/** Only the children the manifest allows selecting; the rest are not this group's business. */
+	childIds: readonly string[];
 	selected: Record<string, SelectionMetadata>;
 	onChange: (value: boolean) => void;
 }) {
 	const inputRef = useRef<HTMLInputElement>(null);
-	const state = getParentSelectionState(parent, selected);
+	const state = getParentSelectionState(
+		{ ...parent, childIds: [...childIds] },
+		selected,
+	);
 	useEffect(() => {
 		if (inputRef.current) inputRef.current.indeterminate = state === "mixed";
 	}, [state]);
-	const selectedCount = parent.childIds.filter((id) => selected[id]).length;
+	const selectedCount = childIds.filter((id) => selected[id]).length;
 	return (
 		<label className="group flex cursor-pointer items-center gap-3 rounded-md px-2.5 py-2 text-xs focus-within:ring-2 focus-within:ring-sidebar-ring hover:bg-sidebar-accent">
 			<input
@@ -51,11 +70,11 @@ function ParentCheckbox({
 				checked={state === "all"}
 				onChange={(event) => onChange(event.target.checked)}
 				className="size-4 rounded border-sidebar-border accent-primary"
-				aria-label={`${parent.name}, ${selectedCount} of ${parent.childIds.length} selected`}
+				aria-label={`${parent.name}, ${selectedCount} of ${childIds.length} selected`}
 			/>
 			<span className="min-w-0 flex-1 truncate font-medium">{parent.name}</span>
 			<span className="text-muted-foreground tabular-nums">
-				{selectedCount}/{parent.childIds.length}
+				{selectedCount}/{childIds.length}
 			</span>
 		</label>
 	);
@@ -63,6 +82,7 @@ function ParentCheckbox({
 
 function EntityRow({
 	entity,
+	selectable,
 	selected,
 	active,
 	mapFocused,
@@ -76,6 +96,8 @@ function EntityRow({
 	onKeyDown,
 }: {
 	entity: EntityManifest;
+	/** The manifest allows selecting this region. Visible does not imply selectable. */
+	selectable: boolean;
 	selected: boolean;
 	/** The roving-focus target: where ArrowUp/ArrowDown will land. Not map focus. */
 	active: boolean;
@@ -95,33 +117,48 @@ function EntityRow({
 		<li
 			className="group grid grid-cols-[minmax(0,1fr)_auto] items-center rounded-md border-sidebar-border/60 border-b last:border-0 data-[active=true]:bg-sidebar-accent/60"
 			data-active={active}
+			data-unavailable={selectable ? undefined : ""}
 		>
 			<button
 				ref={(element) => registerRow(entity.id, element)}
 				type="button"
-				className="flex min-w-0 items-center gap-3 rounded-md px-2.5 py-2.5 text-left outline-none hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring data-[selected=true]:font-medium"
+				className="flex min-w-0 items-center gap-3 rounded-md px-2.5 py-2.5 text-left outline-none hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent data-[selected=true]:font-medium"
 				data-selected={selected}
-				aria-pressed={selected}
+				aria-pressed={selectable ? selected : undefined}
+				disabled={!selectable}
 				tabIndex={tabIndex}
 				onClick={onToggle}
 				onKeyDown={onKeyDown}
 			>
 				<span
-					className="grid size-5 shrink-0 place-items-center rounded-full border border-sidebar-border bg-background text-primary data-[selected=true]:border-primary data-[selected=true]:bg-primary data-[selected=true]:text-primary-foreground"
+					className="grid size-5 shrink-0 place-items-center rounded-full border border-sidebar-border bg-background text-primary data-[selected=true]:border-primary data-[selected=true]:bg-primary data-[selected=true]:text-primary-foreground group-data-[unavailable]:border-dashed"
 					data-selected={selected}
 					aria-hidden="true"
 				>
-					{selected ? <Check className="size-3" /> : null}
+					{selectable ? (
+						selected ? (
+							<Check className="size-3" />
+						) : null
+					) : (
+						<Ban className="size-3 text-muted-foreground" />
+					)}
 				</span>
 				<span className="min-w-0">
-					<span className="block truncate text-[13px]">{entity.name}</span>
+					<span className="block truncate text-[13px]">
+						{entity.name}
+						{selectable ? null : (
+							<span className="ml-1.5 rounded-sm border border-sidebar-border px-1 py-px align-middle font-medium text-[10px] text-muted-foreground uppercase tracking-wide">
+								Unavailable
+							</span>
+						)}
+					</span>
 					<span className="mt-0.5 block truncate text-[11px] text-muted-foreground">
 						{entity.codes.join(" · ")} · {entity.groupName}
 					</span>
 				</span>
 			</button>
 			<div className="flex items-center gap-1 pr-1.5">
-				{customMode && selected ? (
+				{customMode && selected && selectable ? (
 					<input
 						type="color"
 						aria-label={`Custom color for ${entity.name}`}
@@ -166,6 +203,7 @@ export function AtlasSidebar({
 	const setCustomColor = useAtlasStore(
 		({ setCustomColor: updateColor }) => updateColor,
 	);
+	const policy = createSelectionPolicy(manifest);
 	const [query, setQuery] = useState("");
 	const [filter, setFilter] = useState<"all" | "selected">("all");
 	// Roving focus is keyed by stable entity ID, never by index: sorting, filtering, and
@@ -173,7 +211,8 @@ export function AtlasSidebar({
 	const [activeEntityId, setActiveEntityId] = useState<string>();
 	const rowRefs = useRef(new Map<string, HTMLButtonElement>());
 	const searchRef = useRef<HTMLInputElement>(null);
-	const selectedCount = Object.keys(progress.selected).length;
+	// Progress is what the manifest says is selectable, never what happens to be stored.
+	const selectedCount = countSelectable(policy, progress.selected);
 	const percentage = formatPercentage(selectedCount, manifest.primaryTotal);
 	const entities = useMemo(() => {
 		const searched = searchEntities(
@@ -219,7 +258,9 @@ export function AtlasSidebar({
 	};
 
 	const toggleFromKeyboard = (entity: EntityManifest) => {
-		toggleEntity(manifest.id, entity.id, entity.name);
+		// The store refuses anyway; stopping here keeps the announcement honest too.
+		if (!isSelectable(policy, entity.id)) return;
+		toggleEntity(policy, entity.id, entity.name);
 	};
 
 	const handleSearchKeys = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -374,8 +415,9 @@ export function AtlasSidebar({
 									<ParentCheckbox
 										key={parent.id}
 										parent={parent}
+										childIds={selectableChildren(policy, parent)}
 										selected={progress.selected}
-										onChange={(value) => setParent(manifest.id, parent, value)}
+										onChange={(value) => setParent(policy, parent, value)}
 									/>
 								))}
 							</div>
@@ -395,6 +437,7 @@ export function AtlasSidebar({
 							<EntityRow
 								key={entity.id}
 								entity={entity}
+								selectable={isSelectable(policy, entity.id)}
 								selected={progress.selected[entity.id] !== undefined}
 								active={activeEntityId === entity.id}
 								mapFocused={focusedEntityId === entity.id}
@@ -402,17 +445,13 @@ export function AtlasSidebar({
 								customMode={progress.fillMode === "custom"}
 								customColor={progress.customColors[entity.id]}
 								registerRow={registerRow}
-								onToggle={() =>
-									toggleEntity(manifest.id, entity.id, entity.name)
-								}
+								onToggle={() => toggleEntity(policy, entity.id, entity.name)}
 								onLocate={() =>
 									onFocusEntity(
 										focusedEntityId === entity.id ? undefined : entity.id,
 									)
 								}
-								onColor={(color) =>
-									setCustomColor(manifest.id, entity.id, color)
-								}
+								onColor={(color) => setCustomColor(policy, entity.id, color)}
 								onKeyDown={handleRowKeys}
 							/>
 						))}

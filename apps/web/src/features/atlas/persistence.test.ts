@@ -15,7 +15,11 @@ import {
 	STORAGE_KEY,
 	sanitizeUnknownEntityIds,
 } from "@/features/atlas/persistence-schema";
+import { worldPreset } from "@/features/atlas/presets/world";
+import { createSelectionPolicy } from "@/features/atlas/selection-policy";
 import { resetAtlasPersistence, useAtlasStore } from "@/features/atlas/store";
+
+const worldPolicy = createSelectionPolicy(worldPreset.manifest);
 
 describe("persistence", () => {
 	it("serializes and loads version 1 state including projection preferences", () => {
@@ -190,7 +194,7 @@ describe("persistence mode guards the storage key", () => {
 		const stop = useAtlasStore.getState().initialize();
 
 		expect(useAtlasStore.getState().persistenceMode).toBe("future-blocked");
-		useAtlasStore.getState().toggleEntity("world", "world-fr", "France");
+		useAtlasStore.getState().toggleEntity(worldPolicy, "world-fr", "France");
 		useAtlasStore.getState().setThemePreference("dark");
 		vi.advanceTimersByTime(1_000);
 		window.dispatchEvent(new Event("pagehide"));
@@ -241,7 +245,7 @@ describe("persistence mode guards the storage key", () => {
 		const stop = useAtlasStore.getState().initialize();
 
 		expect(useAtlasStore.getState().persistenceMode).toBe("durable");
-		useAtlasStore.getState().toggleEntity("world", "world-fr", "France");
+		useAtlasStore.getState().toggleEntity(worldPolicy, "world-fr", "France");
 		vi.advanceTimersByTime(1_000);
 
 		const stored = window.localStorage.getItem(STORAGE_KEY);
@@ -291,7 +295,7 @@ describe("two tabs sharing one storage key", () => {
 	it("converges on both selections when each tab picks a different region", () => {
 		const stop = useAtlasStore.getState().initialize();
 
-		useAtlasStore.getState().toggleEntity("world", "world-fr", "France");
+		useAtlasStore.getState().toggleEntity(worldPolicy, "world-fr", "France");
 		otherTabWrites((state) => {
 			state.presets.world.selected["world-es"] = {
 				selectedAt: "2026-07-24T12:00:00.000Z",
@@ -319,9 +323,9 @@ describe("two tabs sharing one storage key", () => {
 	it("does not resurrect a deselection when the other tab writes older progress", () => {
 		const stop = useAtlasStore.getState().initialize();
 
-		useAtlasStore.getState().toggleEntity("world", "world-fr", "France");
+		useAtlasStore.getState().toggleEntity(worldPolicy, "world-fr", "France");
 		vi.advanceTimersByTime(1_000);
-		useAtlasStore.getState().toggleEntity("world", "world-fr", "France");
+		useAtlasStore.getState().toggleEntity(worldPolicy, "world-fr", "France");
 		vi.advanceTimersByTime(1_000);
 
 		// The other tab still holds the selection it read before the deselection.
@@ -347,7 +351,7 @@ describe("two tabs sharing one storage key", () => {
 	it("rebases a pending write on progress written between scheduling and flushing", () => {
 		const stop = useAtlasStore.getState().initialize();
 
-		useAtlasStore.getState().toggleEntity("world", "world-fr", "France");
+		useAtlasStore.getState().toggleEntity(worldPolicy, "world-fr", "France");
 		// Written by the other tab inside the debounce window, with no event delivered here.
 		const remote = createDefaultState();
 		remote.presets.world.selected["world-pt"] = {

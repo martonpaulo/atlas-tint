@@ -243,10 +243,17 @@ export function migratePersistedState(value: unknown): PersistedState {
 	return migrated;
 }
 
+/**
+ * Drop stored IDs a preset will not accept.
+ *
+ * `retainedIds` is the set of IDs allowed to stay: the manifest's *selectable* set, not merely
+ * its known set. An entity that is visible but not selectable must not survive in progress or
+ * custom colors, or it would keep counting after the manifest said it should not.
+ */
 export function sanitizeUnknownEntityIds(
 	state: PersistedState,
 	presetId: PresetId,
-	knownIds: ReadonlySet<string>,
+	retainedIds: ReadonlySet<string>,
 ) {
 	const progress =
 		state.presets[presetId] ??
@@ -255,14 +262,14 @@ export function sanitizeUnknownEntityIds(
 		);
 	const keep = <Value>(record: Record<string, Value>) =>
 		Object.fromEntries(
-			Object.entries(record).filter(([id]) => knownIds.has(id)),
+			Object.entries(record).filter(([id]) => retainedIds.has(id)),
 		);
 	const selected = keep(progress.selected);
 	const customColors = keep(progress.customColors);
 	// Tombstones are bounded by the manifest: one per entity that can be deselected at all.
 	const removed = keep(progress.removed);
 	const removedIds = Object.keys(progress.selected).filter(
-		(id) => !knownIds.has(id),
+		(id) => !retainedIds.has(id),
 	);
 	return {
 		state: {

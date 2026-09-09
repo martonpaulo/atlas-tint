@@ -11,7 +11,10 @@ import {
 	STORAGE_KEY,
 } from "@/features/atlas/persistence-schema";
 import { worldPreset } from "@/features/atlas/presets/world";
+import { createSelectionPolicy } from "@/features/atlas/selection-policy";
 import { resetAtlasPersistence, useAtlasStore } from "@/features/atlas/store";
+
+const worldPolicy = createSelectionPolicy(worldPreset.manifest);
 
 vi.mock("@/features/atlas/geometry", async (importOriginal) => {
 	const original =
@@ -72,7 +75,9 @@ describe("AtlasWorkspace persistence lifecycle", () => {
 		try {
 			render(<AtlasWorkspace />);
 			act(() => {
-				useAtlasStore.getState().toggleEntity("world", "world-fr", "France");
+				useAtlasStore
+					.getState()
+					.toggleEntity(worldPolicy, "world-fr", "France");
 			});
 
 			// Cross below the threshold before the debounced write can run, then come back.
@@ -102,7 +107,7 @@ describe("AtlasWorkspace persistence lifecycle", () => {
 		expect(useAtlasStore.getState().persistenceMode).toBe("session-only");
 
 		act(() => {
-			useAtlasStore.getState().toggleEntity("world", "world-es", "Spain");
+			useAtlasStore.getState().toggleEntity(worldPolicy, "world-es", "Spain");
 		});
 		resizeViewport(800, 600);
 		resizeViewport(1024, 768);
@@ -177,7 +182,9 @@ describe("AtlasWorkspace persistence lifecycle", () => {
 		try {
 			const { unmount } = render(<AtlasWorkspace />);
 			act(() => {
-				useAtlasStore.getState().toggleEntity("world", "world-fr", "France");
+				useAtlasStore
+					.getState()
+					.toggleEntity(worldPolicy, "world-fr", "France");
 			});
 			expect(window.localStorage.getItem(STORAGE_KEY)).toBeNull();
 

@@ -13,6 +13,10 @@ import { getSelectedFill } from "@/features/atlas/colors";
 import { type LoadedPreset, projectionIdSchema } from "@/features/atlas/domain";
 import type { GeometryBundle } from "@/features/atlas/geometry";
 import { createProjectionLayout } from "@/features/atlas/projections";
+import {
+	createSelectionPolicy,
+	isSelectable,
+} from "@/features/atlas/selection-policy";
 import { useAtlasStore } from "@/features/atlas/store";
 
 interface MapWorkspaceProps {
@@ -36,6 +40,7 @@ function MapCanvas({
 	onFocusEntity,
 }: MapWorkspaceProps) {
 	const { manifest } = preset;
+	const policy = createSelectionPolicy(manifest);
 	const progress = useAtlasStore(({ data }) => data.presets[manifest.id]);
 	const toggleEntity = useAtlasStore(({ toggleEntity: toggle }) => toggle);
 	const projection = manifest.projections.includes(progress.projection)
@@ -157,6 +162,27 @@ function MapCanvas({
 					Interactive map of {manifest.primaryTotal} selectable regions. Use the
 					adjacent searchable list for full keyboard access.
 				</desc>
+				<defs>
+					{/* Unavailable geography is hatched rather than only tinted, so it stays
+					    distinguishable without relying on colour. */}
+					<pattern
+						id="map-unavailable-hatch"
+						patternUnits="userSpaceOnUse"
+						width="6"
+						height="6"
+						patternTransform="rotate(45)"
+					>
+						<rect width="6" height="6" fill="var(--map-fill-unavailable)" />
+						<line
+							x1="0"
+							y1="0"
+							x2="0"
+							y2="6"
+							stroke="var(--map-unavailable-hatch)"
+							strokeWidth="1.5"
+						/>
+					</pattern>
+				</defs>
 				<g ref={zoomGroupRef}>
 					{preset.insets.map((inset) => (
 						<g key={inset.key} className="map-inset-frame">
@@ -178,6 +204,7 @@ function MapCanvas({
 							if (!entity) return null;
 							const selected = progress.selected[entity.id] !== undefined;
 							const focused = focusedEntityId === entity.id;
+							const selectable = isSelectable(policy, entity.id);
 							return (
 								// biome-ignore lint/a11y/noAriaHiddenOnFocusable: map paths are pointer-only, explicitly unfocusable, and have equivalent list buttons.
 								<path
@@ -187,21 +214,30 @@ function MapCanvas({
 									data-entity-id={entity.id}
 									data-selected={selected || undefined}
 									data-focused={focused || undefined}
+									data-unavailable={selectable ? undefined : ""}
 									aria-hidden="true"
 									focusable="false"
 									vectorEffect="non-scaling-stroke"
 									style={{
-										fill: selected
-											? getSelectedFill(entity, progress.fillMode, progress)
-											: "var(--map-fill-unselected)",
+										fill: selectable
+											? selected
+												? getSelectedFill(entity, progress.fillMode, progress)
+												: "var(--map-fill-unselected)"
+											: // A hatch, not merely another colour, so unavailable geography reads as
+												// unavailable without depending on colour perception.
+												"url(#map-unavailable-hatch)",
 									}}
 									onPointerEnter={() => setHoveredEntityId(entity.id)}
 									onPointerMove={moveTooltip}
 									onPointerLeave={() => setHoveredEntityId(undefined)}
-									onClick={() => {
-										toggleEntity(manifest.id, entity.id, entity.name);
-										onFocusEntity(entity.id);
-									}}
+									onClick={
+										selectable
+											? () => {
+													toggleEntity(policy, entity.id, entity.name);
+													onFocusEntity(entity.id);
+												}
+											: undefined
+									}
 								/>
 							);
 						})}

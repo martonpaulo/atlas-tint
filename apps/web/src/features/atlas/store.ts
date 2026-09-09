@@ -4,7 +4,6 @@ import type {
 	FillMode,
 	ParentManifest,
 	PresetId,
-	PresetManifest,
 	ProjectionId,
 	ThemePreference,
 } from "@/features/atlas/domain";
@@ -31,6 +30,12 @@ import {
 	setParentSelection,
 	toggleSelection,
 } from "@/features/atlas/selection";
+import {
+	isSelectable,
+	partitionStoredIds,
+	type SelectionPolicy,
+	selectableChildren,
+} from "@/features/atlas/selection-policy";
 import { createActorId, LamportClock } from "@/features/atlas/sync";
 
 interface AtlasStore {
@@ -43,19 +48,27 @@ interface AtlasStore {
 	announcement: string;
 	initialize: () => () => void;
 	setActivePreset: (id: PresetId) => void;
-	sanitizePreset: (manifest: PresetManifest) => void;
+	sanitizePreset: (policy: SelectionPolicy) => void;
+	/**
+	 * Selection actions take the policy rather than a preset ID, so a caller cannot reach them
+	 * without the manifest contract that says which entities may be selected at all.
+	 */
 	toggleEntity: (
-		presetId: PresetId,
+		policy: SelectionPolicy,
 		entityId: string,
 		entityName: string,
 	) => void;
 	setParent: (
-		presetId: PresetId,
+		policy: SelectionPolicy,
 		parent: ParentManifest,
 		shouldSelect: boolean,
 	) => void;
 	setFillMode: (presetId: PresetId, mode: FillMode) => void;
-	setCustomColor: (presetId: PresetId, entityId: string, color: string) => void;
+	setCustomColor: (
+		policy: SelectionPolicy,
+		entityId: string,
+		color: string,
+	) => void;
 	setProjection: (presetId: PresetId, projection: ProjectionId) => void;
 	setThemePreference: (theme: ThemePreference) => void;
 	resetPreset: (presetId: PresetId) => void;
@@ -226,20 +239,33 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 				stamps: { ...data.stamps, activePresetId: clock.next() },
 			});
 		},
-		sanitizePreset(manifest) {
+		sanitizePreset(policy) {
+			// Only the selectable set is retained: a known-but-unavailable ID must not survive
+			// in progress, or it would keep counting toward a total that excludes it.
 			const result = sanitizeUnknownEntityIds(
 				get().data,
-				manifest.id,
-				new Set(manifest.entities.map(({ id }) => id)),
+				policy.presetId,
+				policy.selectableIds,
 			);
-			if (result.removedIds.length > 0) {
-				commit(
-					result.state,
-					`${result.removedIds.length} unknown saved ${result.removedIds.length === 1 ? "region was" : "regions were"} ignored.`,
+			if (result.removedIds.length === 0) return;
+			const { unknownIds, unavailableIds } = partitionStoredIds(
+				policy,
+				result.removedIds,
+			);
+			const parts: string[] = [];
+			if (unknownIds.length > 0)
+				parts.push(
+					`${unknownIds.length} unknown saved ${unknownIds.length === 1 ? "region was" : "regions were"} ignored`,
 				);
-			}
+			if (unavailableIds.length > 0)
+				parts.push(
+					`${unavailableIds.length} saved ${unavailableIds.length === 1 ? "region is" : "regions are"} no longer selectable and ${unavailableIds.length === 1 ? "was" : "were"} removed`,
+				);
+			commit(result.state, `${parts.join(", ")}.`);
 		},
-		toggleEntity(presetId, entityId, entityName) {
+		toggleEntity(policy, entityId, entityName) {
+			if (!isSelectable(policy, entityId)) return;
+			const presetId = policy.presetId;
 			const data = get().data;
 			const progress = data.presets[presetId];
 			const wasSelected = progress.selected[entityId] !== undefined;
@@ -262,7 +288,10 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 				`${entityName} ${wasSelected ? "deselected" : "selected"}.`,
 			);
 		},
-		setParent(presetId, parent, shouldSelect) {
+		setParent(policy, parent, shouldSelect) {
+			const childIds = selectableChildren(policy, parent);
+			if (childIds.length === 0) return;
+			const presetId = policy.presetId;
 			const data = get().data;
 			const progress = data.presets[presetId];
 			commit(
@@ -274,7 +303,8 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 							...progress,
 							...setParentSelection(
 								progress,
-								parent,
+								// A parent action reaches only the children the manifest allows.
+								{ ...parent, childIds: [...childIds] },
 								shouldSelect,
 								new Date().toISOString(),
 								() => clock.next(),
@@ -300,7 +330,9 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 				},
 			});
 		},
-		setCustomColor(presetId, entityId, color) {
+		setCustomColor(policy, entityId, color) {
+			if (!isSelectable(policy, entityId)) return;
+			const presetId = policy.presetId;
 			const data = get().data;
 			const progress = data.presets[presetId];
 			commit({

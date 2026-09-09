@@ -17,6 +17,7 @@ import {
 	presetCatalog,
 } from "@/features/atlas/preset-catalog";
 import { loadPreset } from "@/features/atlas/preset-loader";
+import { createSelectionPolicy } from "@/features/atlas/selection-policy";
 import { useAtlasStore } from "@/features/atlas/store";
 
 type PresetLoadState =
@@ -60,7 +61,7 @@ export function AtlasApp() {
 					});
 					return;
 				}
-				sanitizePreset(preset.manifest);
+				sanitizePreset(createSelectionPolicy(preset.manifest));
 				setLoadState({ status: "ready", preset, geometry });
 			})
 			.catch((error: unknown) => {
