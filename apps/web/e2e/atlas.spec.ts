@@ -187,6 +187,29 @@ test("rejects an invalid import without changing progress", async ({
 	await expect(page.getByRole("progressbar")).toHaveAttribute("value", "0");
 });
 
+test("keeps a selection made just before the viewport becomes unsupported", async ({
+	page,
+}) => {
+	const search = page.getByRole("searchbox");
+	await search.fill("portugal");
+	await search.press("Enter");
+	// Cross the threshold immediately, inside the write debounce window.
+	await page.setViewportSize({ width: 900, height: 699 });
+	await expect(
+		page.getByRole("heading", { name: "Give the map more room" }),
+	).toBeVisible();
+	await page.setViewportSize({ width: 1280, height: 800 });
+
+	await expect(page.getByRole("progressbar")).toHaveAttribute("value", "1");
+	await expect(page.getByRole("button", { name: /^Portugal/ })).toHaveAttribute(
+		"aria-pressed",
+		"true",
+	);
+
+	await page.reload();
+	await expect(page.getByRole("progressbar")).toHaveAttribute("value", "1");
+});
+
 test("shows the unsupported viewport screen and recovers automatically", async ({
 	page,
 }) => {

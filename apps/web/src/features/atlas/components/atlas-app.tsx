@@ -28,7 +28,6 @@ export function AtlasApp() {
 	const activePresetId = useAtlasStore(({ data }) => data.activePresetId);
 	const persistenceMode = useAtlasStore(({ persistenceMode: mode }) => mode);
 	const announcement = useAtlasStore(({ announcement }) => announcement);
-	const initialize = useAtlasStore(({ initialize }) => initialize);
 	const setActivePreset = useAtlasStore(
 		({ setActivePreset: setPreset }) => setPreset,
 	);
@@ -38,8 +37,6 @@ export function AtlasApp() {
 	const [loadState, setLoadState] = useState<PresetLoadState>({
 		status: "loading",
 	});
-
-	useEffect(() => initialize(), [initialize]);
 
 	useEffect(() => {
 		const controller = new AbortController();

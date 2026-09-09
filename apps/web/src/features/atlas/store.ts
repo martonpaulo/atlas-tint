@@ -94,6 +94,25 @@ function discardPendingSave() {
 	saveTimer = undefined;
 }
 
+/**
+ * Window listeners are owned for the lifetime of the application, not of any component that
+ * happens to be mounted. `undefined` means none are attached.
+ */
+let detachListeners: (() => void) | undefined;
+
+/**
+ * Reset every module-scoped persistence global.
+ *
+ * Only for tests: the adapter, the debounce timer, and the listener registration outlive any
+ * single render, which is exactly the property under test, so cases need a way back to a clean
+ * start without relying on module reloading.
+ */
+export function resetAtlasPersistence() {
+	detachListeners?.();
+	discardPendingSave();
+	persistenceAdapter = undefined;
+}
+
 export const useAtlasStore = create<AtlasStore>((set, get) => {
 	const commit = (
 		data: PersistedStateV1,
@@ -114,17 +133,23 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 		persistenceMode: "durable",
 		announcement: "",
 		initialize() {
-			persistenceAdapter = createBrowserPersistenceAdapter();
-			discardPendingSave();
-			const result = persistenceAdapter.load();
-			set({
-				data: result.state,
-				hydrated: true,
-				persistenceMode: result.mode,
-				incompatibleRecord: result.incompatibleRecord,
-				storageNotice: result.message,
-			});
+			// Hydrate exactly once per session. A later call — a remount, a second lifecycle, a
+			// StrictMode double effect — must never treat storage as newer than the in-memory
+			// state the user has been editing.
+			if (!get().hydrated) {
+				persistenceAdapter = createBrowserPersistenceAdapter();
+				discardPendingSave();
+				const result = persistenceAdapter.load();
+				set({
+					data: result.state,
+					hydrated: true,
+					persistenceMode: result.mode,
+					incompatibleRecord: result.incompatibleRecord,
+					storageNotice: result.message,
+				});
+			}
 			if (typeof window === "undefined") return () => undefined;
+			if (detachListeners) return detachListeners;
 			const handleStorage = (event: StorageEvent) => {
 				if (event.key !== STORAGE_KEY || event.newValue === null) return;
 				// The record is newer than this build understands; adopting it would reinterpret
@@ -145,10 +170,15 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 			};
 			window.addEventListener("storage", handleStorage);
 			window.addEventListener("pagehide", flushSave);
-			return () => {
+			detachListeners = () => {
+				// Tearing down the application is the last chance to make pending intent durable.
+				// `flushSave` is already a no-op for a session that may not write.
+				flushSave();
 				window.removeEventListener("storage", handleStorage);
 				window.removeEventListener("pagehide", flushSave);
+				detachListeners = undefined;
 			};
+			return detachListeners;
 		},
 		setActivePreset(id) {
 			commit({ ...get().data, activePresetId: id });

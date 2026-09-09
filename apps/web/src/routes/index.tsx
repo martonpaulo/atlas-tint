@@ -1,16 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { AtlasApp } from "@/features/atlas/components/atlas-app";
-import { ViewportGate } from "@/features/atlas/components/viewport-gate";
+import { AtlasWorkspace } from "@/features/atlas/components/atlas-workspace";
 
 export const Route = createFileRoute("/")({
 	component: HomeComponent,
 });
 
 function HomeComponent() {
-	return (
-		<ViewportGate>
-			<AtlasApp />
-		</ViewportGate>
-	);
+	return <AtlasWorkspace />;
 }
