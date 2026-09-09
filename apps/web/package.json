@@ -25,7 +25,6 @@
 		"d3-zoom": "^3.0.0",
 		"dotenv": "catalog:",
 		"lucide-react": "catalog:",
-		"next-themes": "catalog:",
 		"react": "catalog:",
 		"react-dom": "catalog:",
 		"sonner": "catalog:",

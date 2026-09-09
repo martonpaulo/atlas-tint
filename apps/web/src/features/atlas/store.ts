@@ -191,6 +191,9 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 					incompatibleRecord: result.incompatibleRecord,
 					storageNotice: result.message,
 				});
+				// An appearance taken from the pre-versioned key only becomes authoritative once
+				// it is written under the versioned one, which is also what retires the old key.
+				if (result.adoptedLegacyTheme) commit(result.state);
 			}
 			if (typeof window === "undefined") return () => undefined;
 			if (detachListeners) return detachListeners;

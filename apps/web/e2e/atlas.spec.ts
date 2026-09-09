@@ -332,18 +332,30 @@ test("keeps the workspace usable at an effective 200% desktop zoom", async ({
 });
 
 test("supports intentional light and dark themes", async ({ page }) => {
-	const themeButton = page.getByRole("button", { name: "Toggle theme" });
-	await themeButton.click();
-	await page.getByRole("menuitem", { name: "Dark" }).click();
+	// The trigger is named by the current preference, not by a generic verb.
+	await expect(
+		page.getByRole("button", { name: "Appearance: System" }),
+	).toBeVisible();
+
+	await page.getByRole("button", { name: /^Appearance:/ }).click();
+	const options = page.getByRole("menuitemradio");
+	await expect(options).toHaveCount(3);
+	await expect(
+		page.getByRole("menuitemradio", { name: "System" }),
+	).toHaveAttribute("aria-checked", "true");
+	await page.getByRole("menuitemradio", { name: "Dark" }).click();
 	await expect(page.locator("html")).toHaveClass(/dark/);
+	await expect(
+		page.getByRole("button", { name: "Appearance: Dark" }),
+	).toBeVisible();
 	const darkSurface = await page
 		.getByTestId("atlas-map")
 		.evaluate(
 			(element) =>
 				getComputedStyle(element.parentElement as HTMLElement).backgroundColor,
 		);
-	await themeButton.click();
-	await page.getByRole("menuitem", { name: "Light" }).click();
+	await page.getByRole("button", { name: /^Appearance:/ }).click();
+	await page.getByRole("menuitemradio", { name: "Light" }).click();
 	await expect(page.locator("html")).not.toHaveClass(/dark/);
 	const lightSurface = await page
 		.getByTestId("atlas-map")
@@ -352,6 +364,56 @@ test("supports intentional light and dark themes", async ({ page }) => {
 				getComputedStyle(element.parentElement as HTMLElement).backgroundColor,
 		);
 	expect(lightSurface).not.toBe(darkSurface);
+
+	// Only the versioned record is written, and the preference survives a reload without flash.
+	await expect
+		.poll(() =>
+			page.evaluate(
+				() =>
+					JSON.parse(localStorage.getItem("atlas-tint:state") ?? "{}")
+						.themePreference,
+			),
+		)
+		.toBe("light");
+	expect(
+		await page.evaluate(() => localStorage.getItem("atlas-tint:theme")),
+	).toBeNull();
+
+	await page.reload();
+	await expect(page.locator("html")).toHaveClass(/light/);
+	await expect(
+		page.getByRole("button", { name: "Appearance: Light" }),
+	).toBeVisible();
+});
+
+test("adopts a pre-versioned appearance key once and then retires it", async ({
+	page,
+}) => {
+	await page.evaluate(() => {
+		localStorage.clear();
+		localStorage.setItem("atlas-tint:theme", "dark");
+	});
+	await page.reload();
+
+	// No flash: the pre-paint script reads the legacy key too.
+	await expect(page.locator("html")).toHaveClass(/dark/);
+	await expect(
+		page.getByRole("button", { name: "Appearance: Dark" }),
+	).toBeVisible();
+
+	// One durable authority from now on.
+	await expect
+		.poll(() =>
+			page.evaluate(
+				() =>
+					JSON.parse(localStorage.getItem("atlas-tint:state") ?? "{}")
+						.themePreference,
+			),
+		)
+		.toBe("dark");
+	await expect
+		.poll(() => page.evaluate(() => localStorage.getItem("atlas-tint:theme")))
+		.toBeNull();
 });
 
 test("respects reduced motion", async ({ page }) => {

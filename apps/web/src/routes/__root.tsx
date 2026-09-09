@@ -4,7 +4,7 @@ import {
 	HeadContent,
 	Outlet,
 } from "@tanstack/react-router";
-import { ThemeProvider } from "@/components/theme-provider";
+import { AppearanceBridge, useAppearance } from "@/components/appearance";
 import { publicAssetUrl } from "@/lib/public-asset-url";
 
 import "../index.css";
@@ -35,18 +35,13 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootComponent() {
+	const appearance = useAppearance();
 	return (
 		<>
 			<HeadContent />
-			<ThemeProvider
-				attribute="class"
-				defaultTheme="system"
-				disableTransitionOnChange
-				storageKey="atlas-tint:theme"
-			>
-				<Outlet />
-				<Toaster richColors />
-			</ThemeProvider>
+			<AppearanceBridge />
+			<Outlet />
+			<Toaster richColors theme={appearance} />
 		</>
 	);
 }

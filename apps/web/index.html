@@ -4,6 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>atlas-tint</title>
+    <script>
+      // Apply the stored appearance before first paint, so a dark preference never flashes
+      // light. The versioned Atlas record is the authority; `atlas-tint:theme` is only read
+      // here for records written before that was true. Deliberately defensive: this runs
+      // before anything else and must never keep the page from loading.
+      (() => {
+        var preference = "system";
+        var candidate = null;
+        var stored = null;
+        var dark = false;
+        try {
+          stored = JSON.parse(localStorage.getItem("atlas-tint:state") || "null");
+          candidate = stored?.themePreference;
+          if (candidate !== "light" && candidate !== "dark" && candidate !== "system") {
+            candidate = localStorage.getItem("atlas-tint:theme");
+          }
+          if (candidate === "light" || candidate === "dark" || candidate === "system") {
+            preference = candidate;
+          }
+        } catch {}
+        dark =
+          preference === "dark" ||
+          (preference === "system" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.add(dark ? "dark" : "light");
+        document.documentElement.style.colorScheme = dark ? "dark" : "light";
+      })();
+    </script>
   </head>
 
   <body>

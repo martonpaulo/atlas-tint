@@ -1,3 +1,4 @@
+import { themePreferenceSchema } from "@/features/atlas/domain";
 import {
 	CURRENT_SCHEMA_VERSION,
 	createDefaultState,
@@ -10,7 +11,17 @@ import {
 export interface StorageLike {
 	getItem(key: string): string | null;
 	setItem(key: string, value: string): void;
+	removeItem?(key: string): void;
 }
+
+/**
+ * The key `next-themes` used to own before appearance became part of the versioned record.
+ *
+ * It is read exactly once, only when there is no Atlas record at all, so an upgrading user
+ * keeps the appearance they chose. When both exist the Atlas record wins, because it is the
+ * one import, export, and reset carry.
+ */
+export const LEGACY_THEME_KEY = "atlas-tint:theme";
 
 /**
  * How durable the current session is, and therefore whether the storage key may be written.
@@ -43,6 +54,11 @@ export interface LoadResult {
 	 * to the user as a download and never interpreted through the current schema.
 	 */
 	incompatibleRecord?: string;
+	/**
+	 * A preference was taken from the pre-versioned appearance key. The caller must write the
+	 * state once so the value lands under the one durable authority and the old key retires.
+	 */
+	adoptedLegacyTheme?: boolean;
 }
 
 export interface PersistenceAdapter {
@@ -67,6 +83,23 @@ function isFutureRecord(value: unknown) {
 export function createPersistenceAdapter(
 	storage: StorageLike | undefined,
 ): PersistenceAdapter {
+	/** Cleared only after the adopted preference is durably written under the Atlas key. */
+	let legacyThemeToRetire = false;
+
+	function adoptLegacyTheme(state: PersistedState) {
+		if (!storage) return state;
+		let legacy: string | null = null;
+		try {
+			legacy = storage.getItem(LEGACY_THEME_KEY);
+		} catch {
+			return state;
+		}
+		const preference = themePreferenceSchema.safeParse(legacy);
+		if (!preference.success) return state;
+		legacyThemeToRetire = true;
+		return { ...state, themePreference: preference.data };
+	}
+
 	return {
 		load() {
 			if (!storage) {
@@ -88,7 +121,14 @@ export function createPersistenceAdapter(
 						"AtlasTint could not read browser storage. Changes will remain usable for this session only.",
 				};
 			}
-			if (raw === null) return { mode: "durable", state: createDefaultState() };
+			if (raw === null) {
+				const state = adoptLegacyTheme(createDefaultState());
+				return {
+					mode: "durable",
+					state,
+					adoptedLegacyTheme: legacyThemeToRetire,
+				};
+			}
 			try {
 				const parsed: unknown = JSON.parse(raw);
 				if (isFutureRecord(parsed)) {
@@ -115,6 +155,13 @@ export function createPersistenceAdapter(
 				return { ok: false, message: "Browser storage is unavailable." };
 			try {
 				storage.setItem(STORAGE_KEY, serializePersistedState(state));
+				if (legacyThemeToRetire) {
+					legacyThemeToRetire = false;
+					// The preference now lives in the versioned record; nothing reads the old key.
+					try {
+						storage.removeItem?.(LEGACY_THEME_KEY);
+					} catch {}
+				}
 				return { ok: true };
 			} catch {
 				return {
