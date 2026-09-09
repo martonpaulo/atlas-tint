@@ -38,19 +38,25 @@
 			"id": "world",
 			"entities": 195,
 			"parents": 0,
-			"threshold": 0.000001009033984700311
+			"threshold": 0.000001009033984700311,
+			"manifestSha256": "925444778178c1f2ba44832c981c857b53cb6e41b2cbede6289a612b9f51b653",
+			"topologySha256": "89eadbf4566fa313409c4f902f52a152fd6cc571b9491bba5db17bf383ac2cec"
 		},
 		{
 			"id": "brazil",
 			"entities": 27,
 			"parents": 5,
-			"threshold": 1.5643807273517592e-8
+			"threshold": 1.5643807273517592e-8,
+			"manifestSha256": "eef76112b37774b28c126f692ddd24c4c7d5b51d23c6fc6ba0a0923235da2266",
+			"topologySha256": "9f2fa1d9d9a2651d8be62398494740ce8a0ef2681b790ddbb698d3ff322cb52c"
 		},
 		{
 			"id": "spain",
 			"entities": 52,
 			"parents": 19,
-			"threshold": 2.838245633948893e-9
+			"threshold": 2.838245633948893e-9,
+			"manifestSha256": "168c6cfd3fcb9fc01cce5cc4f5f09d31e5a79ba590415b5ccc46fd5d890a2e08",
+			"topologySha256": "c22058b8d76064d01b5e8b75b880a343d61a70a16d210cdecdcf9c076d7f9234"
 		}
 	]
 }

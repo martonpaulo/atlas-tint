@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { join } from "node:path";
 
 import * as shapefile from "shapefile";
 import { mesh, feature as topologyFeature } from "topojson-client";
@@ -14,40 +14,23 @@ import {
 	sphericalTriangleArea,
 } from "topojson-simplify";
 
+import {
+	digest,
+	geometryVersionsPath,
+	manifestDirectory,
+	manifestPath,
+	metadataPath,
+	presetIds,
+	publicMapDirectory,
+	serializeGeometryVersions,
+	serializeManifest,
+	serializeMetadata,
+	serializeTopology,
+	topologyPath,
+} from "./artifacts.mjs";
 import { manifests } from "./manifest-seeds.mjs";
+import { sources } from "./sources.mjs";
 import { validateManifest } from "./validate.mjs";
-
-const repositoryRoot = resolve(import.meta.dirname, "../..");
-const publicMapDirectory = join(repositoryRoot, "apps/web/public/maps");
-const manifestDirectory = join(
-	repositoryRoot,
-	"apps/web/src/features/atlas/presets/data",
-);
-
-const sources = {
-	world: {
-		filename: "world.zip",
-		url: "https://naciscdn.org/naturalearth/50m/cultural/ne_50m_admin_0_countries.zip",
-		sha256: "5fed433373581fa648920435f937d95f2d3c0200e067409c6478dcdf1b853139",
-		version: "Natural Earth Admin 0 Countries 5.1.1, 1:50m",
-		license: "Natural Earth public domain",
-	},
-	brazil: {
-		filename: "brazil.zip",
-		url: "https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/malhas_municipais/municipio_2024/Brasil/BR_UF_2024.zip",
-		sha256: "be61a1e11bf86b265098b5a0b02eb836237421ad73354b1f0892fb6be4598866",
-		version: "IBGE Malha Municipal Digital 2024 — Unidades da Federação",
-		license: "Public IBGE geographic data; attribution required",
-	},
-	spain: {
-		filename: "spain.zip",
-		url: "https://centrodedescargas.cnig.es/CentroDescargas/descargaDir",
-		requestBody: "secDescDirLA=9000029&secuencial=9000029",
-		sha256: "d752b1b943e6c60f46a23119d6c3d4ad0b198461c502f0a5433197d7a5e34c83",
-		version: "IGN/CNIG BDDAE provincial enclosures, published 2026-07-28",
-		license: "Derived work of BDLJE CC-BY 4.0 ign.es",
-	},
-};
 
 function run(command, commandArguments) {
 	const result = spawnSync(command, commandArguments, { encoding: "utf8" });
@@ -381,19 +364,19 @@ async function buildPreset(id, zipPath, tempDirectory) {
 	const simplified = simplify(weighted, threshold);
 	const renderable =
 		id === "spain" ? repairSpainSimplification(simplified) : simplified;
-	await writeFile(
-		join(publicMapDirectory, `${id}.topo.json`),
-		`${JSON.stringify(renderable)}\n`,
-	);
-	await writeFile(
-		join(manifestDirectory, `${id}.manifest.json`),
-		`${JSON.stringify(manifest, null, "\t")}\n`,
-	);
+	const topologyBytes = serializeTopology(renderable);
+	const manifestBytes = serializeManifest(manifest);
+	await writeFile(topologyPath(id), topologyBytes);
+	await writeFile(manifestPath(id), manifestBytes);
 	return {
 		id,
 		entities: entityFeatures.length,
 		parents: parents.length,
 		threshold,
+		// Fingerprints tie the recorded metadata to the exact artifacts this run emitted, so a
+		// stale manifest or topology cannot pass as belonging to the recorded generation.
+		manifestSha256: digest(manifestBytes),
+		topologySha256: digest(topologyBytes),
 	};
 }
 
@@ -403,7 +386,7 @@ async function main() {
 	const tempDirectory = await mkdtemp(join(tmpdir(), "atlas-tint-geo-"));
 	try {
 		const results = [];
-		for (const id of ["world", "brazil", "spain"]) {
+		for (const id of presetIds) {
 			const zipPath = await obtainSource(sources[id], tempDirectory);
 			results.push(await buildPreset(id, zipPath, tempDirectory));
 		}
@@ -421,9 +404,16 @@ async function main() {
 			sources,
 			results,
 		};
+		await writeFile(metadataPath, serializeMetadata(metadata));
+		// The browser requests geometry by content, so a new application bundle can never reuse a
+		// topology cached from a different build.
 		await writeFile(
-			join(publicMapDirectory, "metadata.json"),
-			`${JSON.stringify(metadata, null, "\t")}\n`,
+			geometryVersionsPath,
+			serializeGeometryVersions(
+				Object.fromEntries(
+					results.map(({ id, topologySha256 }) => [id, topologySha256]),
+				),
+			),
 		);
 		for (const result of results)
 			console.log(
