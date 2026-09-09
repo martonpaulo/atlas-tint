@@ -10,7 +10,17 @@ import {
 import { Download, RotateCcw, Trash2, Upload } from "lucide-react";
 import { type ChangeEvent, useRef, useState } from "react";
 
+import {
+	importCopy,
+	resetAllCopy,
+	resetPresetCopy,
+} from "@/features/atlas/destructive-copy";
 import type { PresetId } from "@/features/atlas/domain";
+import {
+	countChanges,
+	type ImportDifference,
+	summarizeImport,
+} from "@/features/atlas/import-diff";
 import {
 	type ImportPreview,
 	serializeAtlasExport,
@@ -37,6 +47,11 @@ export function DataActions({
 	const [preview, setPreview] = useState<ImportPreview>();
 	const [importMessage, setImportMessage] = useState<string>();
 	const [isImporting, setIsImporting] = useState(false);
+	const [differences, setDifferences] = useState<ImportDifference[]>([]);
+	// Base UI focuses the first tabbable element, which the reversed footer makes the
+	// destructive one. An extra Enter would then commit deletion or replacement outright.
+	const cancelResetRef = useRef<HTMLButtonElement>(null);
+	const cancelImportRef = useRef<HTMLButtonElement>(null);
 	/**
 	 * Reading a file and loading the manifests are both async, so two choices can resolve out of
 	 * order and a slower earlier file could replace the preview for a newer one. `File.text()`
@@ -88,6 +103,7 @@ export function DataActions({
 				setImportMessage(result.message);
 				return;
 			}
+			setDifferences(summarizeImport(data, result.preview.state, manifests));
 			setPreview(result.preview);
 		} catch (error) {
 			if (!isLatest()) return;
@@ -107,6 +123,9 @@ export function DataActions({
 		setResetScope(undefined);
 	};
 
+	const resetCopy =
+		resetScope === "all" ? resetAllCopy : resetPresetCopy(presetName);
+	const changedCount = countChanges(differences);
 	const unknownCount = preview
 		? Object.values(preview.unknownIds).reduce(
 				(total, ids) => total + ids.length,
@@ -168,24 +187,20 @@ export function DataActions({
 				open={resetScope !== undefined}
 				onOpenChange={(open) => !open && setResetScope(undefined)}
 			>
-				<DialogContent>
+				<DialogContent initialFocus={cancelResetRef}>
 					<DialogHeader>
-						<DialogTitle>
-							{resetScope === "all"
-								? "Reset all local progress?"
-								: `Reset ${presetName}?`}
-						</DialogTitle>
-						<DialogDescription>
-							{resetScope === "all"
-								? "This removes selections, custom colors, and preferences for every preset in this browser. Export first if you may want them later."
-								: `This removes selections and custom colors for ${presetName}. Other presets remain unchanged.`}
-						</DialogDescription>
+						<DialogTitle>{resetCopy.title}</DialogTitle>
+						<DialogDescription>{resetCopy.description}</DialogDescription>
 					</DialogHeader>
 					<DialogFooter>
 						<Button variant="destructive" onClick={confirmReset}>
-							{resetScope === "all" ? "Reset everything" : "Reset preset"}
+							{resetCopy.confirm}
 						</Button>
-						<Button variant="outline" onClick={() => setResetScope(undefined)}>
+						<Button
+							ref={cancelResetRef}
+							variant="outline"
+							onClick={() => setResetScope(undefined)}
+						>
 							Cancel
 						</Button>
 					</DialogFooter>
@@ -196,47 +211,91 @@ export function DataActions({
 				open={preview !== undefined}
 				onOpenChange={(open) => !open && setPreview(undefined)}
 			>
-				<DialogContent>
+				<DialogContent initialFocus={cancelImportRef}>
 					<DialogHeader>
-						<DialogTitle>Review imported progress</DialogTitle>
-						<DialogDescription>
-							This will atomically replace progress for all presets. Geometry is
-							never included in an export.
-						</DialogDescription>
+						<DialogTitle>{importCopy.title}</DialogTitle>
+						<DialogDescription>{importCopy.description}</DialogDescription>
 					</DialogHeader>
 					{preview ? (
-						<div className="mt-5 grid gap-3 rounded-md border border-border bg-muted/40 p-4 text-sm">
-							{preview.presets.map((preset) => (
-								<p key={preset.id} className="flex justify-between">
-									<span>{preset.name}</span>
-									<strong>
-										{preset.selectedCount} / {preset.total}
-									</strong>
+						<div className="mt-5 rounded-md border border-border bg-muted/40 text-sm">
+							<table className="w-full border-collapse text-left">
+								<caption className="sr-only">
+									Every stored category, before and after this import
+								</caption>
+								<thead>
+									<tr className="border-border border-b text-muted-foreground text-xs">
+										<th scope="col" className="px-4 py-2 font-medium">
+											Setting
+										</th>
+										<th scope="col" className="px-4 py-2 font-medium">
+											Now
+										</th>
+										<th scope="col" className="px-4 py-2 font-medium">
+											After import
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									{differences.map((difference) => (
+										<tr
+											key={`${difference.scope}-${difference.label}`}
+											className="border-border/60 border-b last:border-0 data-[changed=true]:font-medium"
+											data-changed={difference.changed}
+										>
+											<th
+												scope="row"
+												className="px-4 py-2 font-normal text-muted-foreground text-xs"
+											>
+												{difference.scope} · {difference.label}
+											</th>
+											<td className="px-4 py-2 tabular-nums">
+												{difference.current}
+											</td>
+											<td className="px-4 py-2 tabular-nums">
+												{difference.incoming}
+												{difference.changed ? (
+													<span className="sr-only"> (changes)</span>
+												) : null}
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+							<div className="border-border border-t px-4 py-3 text-muted-foreground text-xs">
+								<p>
+									{changedCount === 0
+										? "Nothing would change."
+										: `${changedCount} of ${differences.length} settings would change.`}
 								</p>
-							))}
-							<p className="border-border border-t pt-3 text-muted-foreground text-xs">
-								Exported {new Date(preview.exportedAt).toLocaleString()} with
-								AtlasTint {preview.applicationVersion}.
-							</p>
-							{unknownCount > 0 ? (
-								<p className="text-warning-foreground text-xs">
-									{unknownCount} unknown region{" "}
-									{unknownCount === 1 ? "ID was" : "IDs were"} ignored safely.
+								<p className="mt-1">
+									Exported {new Date(preview.exportedAt).toLocaleString()} with
+									AtlasTint {preview.applicationVersion}.
 								</p>
-							) : null}
+								{unknownCount > 0 ? (
+									<p className="mt-1 text-warning-foreground">
+										{unknownCount} unknown region{" "}
+										{unknownCount === 1 ? "ID was" : "IDs were"} ignored safely.
+									</p>
+								) : null}
+							</div>
 						</div>
 					) : null}
 					<DialogFooter>
 						<Button
+							variant="destructive"
 							onClick={() => {
 								if (!preview) return;
 								replaceData(preview.state, "Imported progress applied.");
 								setPreview(undefined);
 							}}
 						>
-							Replace progress
+							{importCopy.confirm}
 						</Button>
-						<Button variant="outline" onClick={() => setPreview(undefined)}>
+						<Button
+							ref={cancelImportRef}
+							variant="outline"
+							onClick={() => setPreview(undefined)}
+						>
 							Cancel
 						</Button>
 					</DialogFooter>

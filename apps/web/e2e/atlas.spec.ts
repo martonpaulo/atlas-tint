@@ -157,7 +157,7 @@ test("exports, previews, and reimports progress atomically", async ({
 	await page.getByRole("button", { name: "Reset preset" }).click();
 	await page
 		.getByRole("dialog")
-		.getByRole("button", { name: "Reset preset" })
+		.getByRole("button", { name: "Reset World" })
 		.click();
 	await expect(page.getByRole("progressbar")).toHaveAttribute("value", "0");
 
@@ -165,11 +165,44 @@ test("exports, previews, and reimports progress atomically", async ({
 	await expect(
 		page.getByRole("heading", { name: "Review imported progress" }),
 	).toBeVisible();
-	await page.getByRole("button", { name: "Replace progress" }).click();
+	await page.getByRole("button", { name: "Replace local data" }).click();
 	await expect(page.getByRole("button", { name: /^Canada/ })).toHaveAttribute(
 		"aria-pressed",
 		"true",
 	);
+});
+
+test("gives the safe action initial focus in a destructive dialog", async ({
+	page,
+}) => {
+	await page.getByRole("searchbox").fill("france");
+	await page.getByRole("searchbox").press("Enter");
+	await openStyleAndData(page);
+
+	// Open by keyboard: this is the path where an extra Enter could commit the deletion.
+	const trigger = page.getByRole("button", { name: "Reset preset" });
+	await trigger.focus();
+	await trigger.press("Enter");
+
+	const dialog = page.getByRole("dialog");
+	await expect(dialog).toBeVisible();
+	await expect(dialog.getByRole("button", { name: "Cancel" })).toBeFocused();
+	await expect(
+		dialog.getByRole("button", { name: "Reset World" }),
+	).not.toBeFocused();
+
+	// So the very next Enter cancels rather than deletes.
+	await page.keyboard.press("Enter");
+	await expect(dialog).toBeHidden();
+	await expect(page.getByRole("progressbar")).toHaveAttribute("value", "1");
+	await expect(trigger).toBeFocused();
+
+	// Escape leaves progress untouched too.
+	await trigger.press("Enter");
+	await expect(page.getByRole("dialog")).toBeVisible();
+	await page.keyboard.press("Escape");
+	await expect(page.getByRole("dialog")).toBeHidden();
+	await expect(page.getByRole("progressbar")).toHaveAttribute("value", "1");
 });
 
 test("rejects an invalid import without changing progress", async ({

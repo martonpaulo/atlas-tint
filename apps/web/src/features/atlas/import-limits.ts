@@ -3,7 +3,7 @@
  *
  * These are headroom, not supported product totals. A complete export of the current catalog —
  * all 274 selectable entities across World, Brazil, and Spain, every one selected with a custom
- * colour — measures about 30 KB, so the byte ceiling below is over thirty times a full file.
+ * color — measures about 30 KB, so the byte ceiling below is over thirty times a full file.
  * The point is to reject a file that could freeze the tab before it is read, not to describe
  * how much progress AtlasTint supports.
  *

@@ -41,9 +41,9 @@ const boundedProgressSchema = presetProgressSchema.extend({
 		"selected regions per preset",
 	),
 	customColors: boundedRecord(
-		z.string().regex(/^#[0-9a-fA-F]{6}$/, "must be a #rrggbb colour"),
+		z.string().regex(/^#[0-9a-fA-F]{6}$/, "must be a #rrggbb color"),
 		importLimits.maxCustomColors,
-		"custom colours per preset",
+		"custom colors per preset",
 	),
 });
 

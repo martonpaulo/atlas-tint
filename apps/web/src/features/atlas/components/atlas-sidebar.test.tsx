@@ -93,7 +93,7 @@ describe("AtlasSidebar", () => {
 		expect(
 			screen.getByRole("heading", { name: "Reset World?" }),
 		).toBeInTheDocument();
-		await user.click(screen.getByRole("button", { name: "Reset preset" }));
+		await user.click(screen.getByRole("button", { name: "Reset World" }));
 		expect(useAtlasStore.getState().data.presets.world.selected).toEqual({});
 	});
 });

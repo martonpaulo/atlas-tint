@@ -31,7 +31,7 @@ import {
 	setParentSelection,
 	toggleSelection,
 } from "@/features/atlas/selection";
-import { createActorId, LamportClock, type Stamp } from "@/features/atlas/sync";
+import { createActorId, LamportClock } from "@/features/atlas/sync";
 
 interface AtlasStore {
 	data: PersistedState;
