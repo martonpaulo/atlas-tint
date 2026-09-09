@@ -3,6 +3,7 @@ import { AlertTriangle, MapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { ModeToggle } from "@/components/mode-toggle";
+import { validatePresetBundle } from "@/features/atlas/bundle";
 import { AtlasSidebar } from "@/features/atlas/components/atlas-sidebar";
 import { MapWorkspace } from "@/features/atlas/components/map-workspace";
 import {
@@ -51,6 +52,17 @@ export function AtlasApp() {
 			}))
 			.then(({ preset, geometry }) => {
 				if (controller.signal.aborted) return;
+				// Manifest and topology are separate requests and can come from different builds.
+				// Refuse a partial map rather than silently changing what is selectable.
+				const validation = validatePresetBundle(preset.manifest, geometry);
+				if (!validation.ok) {
+					setLoadState({
+						status: "error",
+						message: validation.message,
+						retryKey,
+					});
+					return;
+				}
 				sanitizePreset(preset.manifest);
 				setLoadState({ status: "ready", preset, geometry });
 			})

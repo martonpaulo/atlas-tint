@@ -1,20 +1,52 @@
 import { render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import type { Geometry } from "geojson";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { AtlasApp } from "@/features/atlas/components/atlas-app";
+import { type GeometryBundle, loadGeometry } from "@/features/atlas/geometry";
 import { STORAGE_KEY } from "@/features/atlas/persistence-schema";
+import { worldPreset } from "@/features/atlas/presets/world";
 import { useAtlasStore } from "@/features/atlas/store";
+
+const point: Geometry = { type: "Point", coordinates: [0, 0] };
+
+const emptyGeometry: GeometryBundle = {
+	entities: { type: "FeatureCollection", features: [] },
+	parents: { type: "FeatureCollection", features: [] },
+};
+
+/** Geometry that agrees with the world manifest, which is what a matching build ships. */
+function matchingWorldGeometry(): GeometryBundle {
+	return {
+		entities: {
+			type: "FeatureCollection",
+			features: worldPreset.manifest.entities.map(
+				({ id, geometryId, groupId }) => ({
+					type: "Feature",
+					geometry: point,
+					properties: { id, geometryId, groupId, inset: null },
+				}),
+			),
+		},
+		parents: {
+			type: "FeatureCollection",
+			features: worldPreset.manifest.parents.map(({ id }) => ({
+				type: "Feature",
+				geometry: point,
+				properties: { id, inset: null },
+			})),
+		},
+	};
+}
 
 vi.mock("@/features/atlas/geometry", async (importOriginal) => {
 	const original =
 		await importOriginal<typeof import("@/features/atlas/geometry")>();
-	return {
-		...original,
-		loadGeometry: vi.fn(async () => ({
-			entities: { type: "FeatureCollection", features: [] },
-			parents: { type: "FeatureCollection", features: [] },
-		})),
-	};
+	return { ...original, loadGeometry: vi.fn() };
+});
+
+beforeEach(() => {
+	vi.mocked(loadGeometry).mockResolvedValue(matchingWorldGeometry());
 });
 
 afterEach(() => {
@@ -65,5 +97,27 @@ describe("AtlasApp persistence status", () => {
 		});
 		render(<AtlasApp />);
 		expect(await screen.findByText("This session only")).toBeInTheDocument();
+	});
+});
+
+describe("AtlasApp bundle compatibility", () => {
+	it("refuses to render a map whose geometry does not match the region list", async () => {
+		vi.mocked(loadGeometry).mockResolvedValue(emptyGeometry);
+		render(<AtlasApp />);
+
+		expect(
+			await screen.findByRole("heading", { name: /did not load/i }),
+		).toBeInTheDocument();
+		expect(
+			screen.getByText(/does not match its region list/i),
+		).toBeInTheDocument();
+		expect(screen.getByText(/different build/i)).toBeInTheDocument();
+	});
+
+	it("renders the workspace when both artifacts agree", async () => {
+		render(<AtlasApp />);
+		expect(
+			await screen.findByRole("heading", { name: worldPreset.manifest.name }),
+		).toBeInTheDocument();
 	});
 });
