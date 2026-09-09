@@ -64,34 +64,47 @@ function ParentCheckbox({
 function EntityRow({
 	entity,
 	selected,
-	focused,
+	active,
+	mapFocused,
+	tabbable,
 	customMode,
 	customColor,
+	registerRow,
 	onToggle,
-	onFocus,
+	onLocate,
 	onColor,
+	onKeyDown,
 }: {
 	entity: EntityManifest;
 	selected: boolean;
-	focused: boolean;
+	/** The roving-focus target: where ArrowUp/ArrowDown will land. Not map focus. */
+	active: boolean;
+	/** The map is actually showing this entity, which is what Locate reports. */
+	mapFocused: boolean;
+	tabbable: boolean;
 	customMode: boolean;
 	customColor?: string;
+	registerRow: (id: string, element: HTMLButtonElement | null) => void;
 	onToggle: () => void;
-	onFocus: () => void;
+	onLocate: () => void;
 	onColor: (value: string) => void;
+	onKeyDown: (event: KeyboardEvent<HTMLElement>) => void;
 }) {
+	const tabIndex = tabbable ? 0 : -1;
 	return (
 		<li
-			id={`entity-option-${entity.id}`}
-			className="group grid grid-cols-[minmax(0,1fr)_auto] items-center border-sidebar-border/60 border-b last:border-0"
-			data-focused={focused || undefined}
+			className="group grid grid-cols-[minmax(0,1fr)_auto] items-center rounded-md border-sidebar-border/60 border-b last:border-0 data-[active=true]:bg-sidebar-accent/60"
+			data-active={active}
 		>
 			<button
+				ref={(element) => registerRow(entity.id, element)}
 				type="button"
 				className="flex min-w-0 items-center gap-3 rounded-md px-2.5 py-2.5 text-left outline-none hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring data-[selected=true]:font-medium"
 				data-selected={selected}
 				aria-pressed={selected}
+				tabIndex={tabIndex}
 				onClick={onToggle}
+				onKeyDown={onKeyDown}
 			>
 				<span
 					className="grid size-5 shrink-0 place-items-center rounded-full border border-sidebar-border bg-background text-primary data-[selected=true]:border-primary data-[selected=true]:bg-primary data-[selected=true]:text-primary-foreground"
@@ -114,17 +127,21 @@ function EntityRow({
 						aria-label={`Custom color for ${entity.name}`}
 						className="size-7 cursor-pointer rounded-md border-0 bg-transparent p-0"
 						value={customColor ?? "#b86b45"}
+						tabIndex={tabIndex}
 						onChange={(event) => onColor(event.target.value)}
+						onKeyDown={onKeyDown}
 					/>
 				) : null}
 				<Button
 					variant="ghost"
 					size="icon-xs"
 					className="opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 data-[pressed=true]:opacity-100"
-					data-pressed={focused || undefined}
+					data-pressed={mapFocused || undefined}
 					aria-label={`Locate ${entity.name} on map`}
-					aria-pressed={focused}
-					onClick={onFocus}
+					aria-pressed={mapFocused}
+					tabIndex={tabIndex}
+					onClick={onLocate}
+					onKeyDown={onKeyDown}
 				>
 					<LocateFixed />
 				</Button>
@@ -151,7 +168,11 @@ export function AtlasSidebar({
 	);
 	const [query, setQuery] = useState("");
 	const [filter, setFilter] = useState<"all" | "selected">("all");
-	const [activeIndex, setActiveIndex] = useState(0);
+	// Roving focus is keyed by stable entity ID, never by index: sorting, filtering, and
+	// preset changes reorder the list and an index would point at the wrong region.
+	const [activeEntityId, setActiveEntityId] = useState<string>();
+	const rowRefs = useRef(new Map<string, HTMLButtonElement>());
+	const searchRef = useRef<HTMLInputElement>(null);
 	const selectedCount = Object.keys(progress.selected).length;
 	const percentage = formatPercentage(selectedCount, manifest.primaryTotal);
 	const entities = useMemo(() => {
@@ -165,30 +186,97 @@ export function AtlasSidebar({
 			: searched;
 	}, [filter, manifest.entities, progress.selected, query]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: these values intentionally reset keyboard focus when the result set changes.
-	useEffect(() => setActiveIndex(0), [query, filter, manifest.id]);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: these values intentionally reset keyboard navigation when the result set changes.
+	useEffect(() => setActiveEntityId(undefined), [query, filter, manifest.id]);
+
+	const activeIndex = entities.findIndex(({ id }) => id === activeEntityId);
+	// Exactly one row is reachable with Tab, so Tab and Shift+Tab step over the whole
+	// result set instead of walking hundreds of region controls.
+	const tabbableId = activeIndex >= 0 ? activeEntityId : entities[0]?.id;
+
+	const registerRow = (id: string, element: HTMLButtonElement | null) => {
+		if (element) rowRefs.current.set(id, element);
+		else rowRefs.current.delete(id);
+	};
+
+	const focusRow = (id: string | undefined) => {
+		if (!id) return;
+		setActiveEntityId(id);
+		const row = rowRefs.current.get(id);
+		row?.focus();
+		row?.scrollIntoView({ block: "nearest" });
+	};
+
+	const returnToSearch = () => {
+		setActiveEntityId(undefined);
+		searchRef.current?.focus();
+	};
+
+	const clearSearch = () => {
+		setQuery("");
+		setActiveEntityId(undefined);
+		onFocusEntity(undefined);
+	};
+
+	const toggleFromKeyboard = (entity: EntityManifest) => {
+		toggleEntity(manifest.id, entity.id, entity.name);
+	};
 
 	const handleSearchKeys = (event: KeyboardEvent<HTMLInputElement>) => {
 		if (event.key === "ArrowDown") {
 			event.preventDefault();
-			setActiveIndex((index) =>
-				Math.min(Math.max(entities.length - 1, 0), index + 1),
-			);
+			focusRow(entities[0]?.id);
+			return;
 		}
 		if (event.key === "ArrowUp") {
 			event.preventDefault();
-			setActiveIndex((index) => Math.max(0, index - 1));
+			focusRow(entities.at(-1)?.id);
+			return;
 		}
 		if (event.key === "Enter") {
-			const entity = entities[activeIndex];
+			const entity = entities[0];
 			if (!entity) return;
 			event.preventDefault();
-			toggleEntity(manifest.id, entity.id, entity.name);
+			toggleFromKeyboard(entity);
+			// Enter is a deliberate activation, so it may move the map. Arrow navigation alone
+			// never does, which keeps Locate's pressed state honest.
 			onFocusEntity(entity.id);
+			return;
 		}
 		if (event.key === "Escape") {
-			setQuery("");
-			onFocusEntity(undefined);
+			event.preventDefault();
+			clearSearch();
+		}
+	};
+
+	const handleRowKeys = (event: KeyboardEvent<HTMLElement>) => {
+		const index = entities.findIndex(({ id }) => id === activeEntityId);
+		if (index < 0) return;
+		if (event.key === "ArrowDown") {
+			event.preventDefault();
+			focusRow(entities[Math.min(index + 1, entities.length - 1)]?.id);
+			return;
+		}
+		if (event.key === "ArrowUp") {
+			event.preventDefault();
+			if (index === 0) returnToSearch();
+			else focusRow(entities[index - 1]?.id);
+			return;
+		}
+		if (event.key === "Home") {
+			event.preventDefault();
+			focusRow(entities[0]?.id);
+			return;
+		}
+		if (event.key === "End") {
+			event.preventDefault();
+			focusRow(entities.at(-1)?.id);
+			return;
+		}
+		if (event.key === "Escape") {
+			event.preventDefault();
+			clearSearch();
+			searchRef.current?.focus();
 		}
 	};
 
@@ -227,6 +315,7 @@ export function AtlasSidebar({
 							aria-hidden="true"
 						/>
 						<Input
+							ref={searchRef}
 							className="h-10 pr-9 pl-9 text-[13px]"
 							placeholder="Search regions"
 							value={query}
@@ -235,11 +324,7 @@ export function AtlasSidebar({
 							role="searchbox"
 							aria-label="Search names, aliases, or codes"
 							aria-controls="entity-results"
-							aria-activedescendant={
-								entities[activeIndex]
-									? `entity-option-${entities[activeIndex].id}`
-									: undefined
-							}
+							aria-describedby="entity-results-help"
 						/>
 						{query ? (
 							<Button
@@ -247,11 +332,16 @@ export function AtlasSidebar({
 								size="icon-xs"
 								className="absolute top-1/2 right-1.5 -translate-y-1/2"
 								aria-label="Clear search"
-								onClick={() => setQuery("")}
+								onClick={clearSearch}
 							>
 								<X />
 							</Button>
 						) : null}
+						<p id="entity-results-help" className="sr-only">
+							Press Down Arrow to move into the results, Enter to select the
+							first match, and Escape to clear the search. In the results, Up
+							Arrow from the first region returns here, and Tab leaves the list.
+						</p>
 					</div>
 
 					<div className="mt-3 flex items-center justify-between gap-3">
@@ -301,21 +391,21 @@ export function AtlasSidebar({
 						className="size-full overflow-y-auto p-1"
 						aria-label="Selectable regions"
 					>
-						{entities.map((entity, index) => (
+						{entities.map((entity) => (
 							<EntityRow
 								key={entity.id}
 								entity={entity}
 								selected={progress.selected[entity.id] !== undefined}
-								focused={
-									focusedEntityId === entity.id ||
-									(activeIndex === index && query.length > 0)
-								}
+								active={activeEntityId === entity.id}
+								mapFocused={focusedEntityId === entity.id}
+								tabbable={tabbableId === entity.id}
 								customMode={progress.fillMode === "custom"}
 								customColor={progress.customColors[entity.id]}
+								registerRow={registerRow}
 								onToggle={() =>
 									toggleEntity(manifest.id, entity.id, entity.name)
 								}
-								onFocus={() =>
+								onLocate={() =>
 									onFocusEntity(
 										focusedEntityId === entity.id ? undefined : entity.id,
 									)
@@ -323,6 +413,7 @@ export function AtlasSidebar({
 								onColor={(color) =>
 									setCustomColor(manifest.id, entity.id, color)
 								}
+								onKeyDown={handleRowKeys}
 							/>
 						))}
 					</ul>

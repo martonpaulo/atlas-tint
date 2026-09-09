@@ -53,6 +53,41 @@ test("selects through keyboard search and retains progress after reload", async 
 	).toHaveAttribute("aria-pressed", "true");
 });
 
+test("navigates the region list by keyboard and exits it with one Tab", async ({
+	page,
+}) => {
+	const search = page.getByRole("searchbox");
+	// A region toggle is the only button that carries `data-selected`.
+	const focusedRegion = page.locator("button[data-selected]:focus");
+
+	await search.click();
+	await page.keyboard.press("ArrowDown");
+	await expect(focusedRegion).toHaveCount(1);
+
+	// Walk far enough down that the active row starts outside the scroll viewport.
+	for (let step = 0; step < 25; step += 1)
+		await page.keyboard.press("ArrowDown");
+	await expect(focusedRegion).toHaveCount(1);
+	await expect(focusedRegion).toBeInViewport();
+
+	// Enter activates the row that actually has focus, not the first search result.
+	const activeName = (await focusedRegion.innerText()).split("\n")[0];
+	await page.keyboard.press("Enter");
+	await expect(page.getByRole("progressbar")).toHaveAttribute("value", "1");
+	await expect(
+		page.getByRole("button", { name: new RegExp(`^${activeName}`) }),
+	).toHaveAttribute("aria-pressed", "true");
+
+	// One Tab leaves the whole result set instead of walking the remaining regions.
+	await page.keyboard.press("Tab");
+	await expect(focusedRegion).toHaveCount(0);
+
+	await page.keyboard.press("Shift+Tab");
+	await page.keyboard.press("Escape");
+	await expect(search).toBeFocused();
+	await expect(search).toHaveValue("");
+});
+
 test("keeps each preset progress isolated when switching", async ({ page }) => {
 	await page.getByRole("button", { name: /^Spain/ }).click();
 	await selectPreset(page, "Brazil");
