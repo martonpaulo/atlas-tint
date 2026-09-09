@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://martonpaulo.github.io/atlas-tint/sitemap.xml
