@@ -1,6 +1,6 @@
-# Served at https://atlas.martonpaulo.com/robots.txt, the root of the site, so this is the
+# Served at https://atlastint.martonpaulo.com/robots.txt, the root of the site, so this is the
 # authoritative robots.txt for AtlasTint. It allows everything and points at the sitemap.
 User-agent: *
 Allow: /
 
-Sitemap: https://atlas.martonpaulo.com/sitemap.xml
+Sitemap: https://atlastint.martonpaulo.com/sitemap.xml
