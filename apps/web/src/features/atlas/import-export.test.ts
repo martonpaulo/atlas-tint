@@ -8,7 +8,7 @@ import {
 import { importLimits } from "@/features/atlas/import-limits";
 import {
 	createDefaultState,
-	type PersistedStateV1,
+	type PersistedState,
 } from "@/features/atlas/persistence-schema";
 import { brazilPreset } from "@/features/atlas/presets/brazil";
 import { spainPreset } from "@/features/atlas/presets/spain";
@@ -65,7 +65,7 @@ describe("import and export", () => {
 });
 
 describe("import limits", () => {
-	const exportText = (state: PersistedStateV1) =>
+	const exportText = (state: PersistedState) =>
 		serializeAtlasExport(state, new Date("2026-07-24T12:00:00.000Z"));
 
 	function selections(count: number) {

@@ -7,7 +7,7 @@ import {
 import {
 	createDefaultState,
 	migratePersistedState,
-	persistedStateV1Schema,
+	persistedStateSchema,
 	STORAGE_KEY,
 	sanitizeUnknownEntityIds,
 } from "@/features/atlas/persistence-schema";
@@ -109,7 +109,7 @@ describe("persistence", () => {
 			customColors: {},
 			projection: "mercator",
 		};
-		expect(persistedStateV1Schema.parse(state).presets.australia).toBeDefined();
+		expect(persistedStateSchema.parse(state).presets.australia).toBeDefined();
 	});
 });
 

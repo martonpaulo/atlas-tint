@@ -2,8 +2,8 @@ import {
 	CURRENT_SCHEMA_VERSION,
 	createDefaultState,
 	migratePersistedState,
-	type PersistedStateV1,
-	persistedStateV1Schema,
+	type PersistedState,
+	persistedStateSchema,
 	STORAGE_KEY,
 } from "@/features/atlas/persistence-schema";
 
@@ -36,7 +36,7 @@ export function canPersist(mode: PersistenceMode) {
 
 export interface LoadResult {
 	mode: Exclude<PersistenceMode, "save-failed">;
-	state: PersistedStateV1;
+	state: PersistedState;
 	message?: string;
 	/**
 	 * The untouched bytes of an incompatible newer record. Opaque on purpose: it is offered back
@@ -47,11 +47,11 @@ export interface LoadResult {
 
 export interface PersistenceAdapter {
 	load(): LoadResult;
-	save(state: PersistedStateV1): { ok: true } | { ok: false; message: string };
+	save(state: PersistedState): { ok: true } | { ok: false; message: string };
 }
 
-export function serializePersistedState(state: PersistedStateV1) {
-	return JSON.stringify(persistedStateV1Schema.parse(state));
+export function serializePersistedState(state: PersistedState) {
+	return JSON.stringify(persistedStateSchema.parse(state));
 }
 
 function isFutureRecord(value: unknown) {

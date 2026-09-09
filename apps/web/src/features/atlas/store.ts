@@ -17,7 +17,7 @@ import {
 import {
 	createDefaultState,
 	migratePersistedState,
-	type PersistedStateV1,
+	type PersistedState,
 	STORAGE_KEY,
 	sanitizeUnknownEntityIds,
 } from "@/features/atlas/persistence-schema";
@@ -27,7 +27,7 @@ import {
 } from "@/features/atlas/selection";
 
 interface AtlasStore {
-	data: PersistedStateV1;
+	data: PersistedState;
 	hydrated: boolean;
 	persistenceMode: PersistenceMode;
 	/** Untouched bytes of an incompatible newer record, offered back as a download. */
@@ -53,7 +53,7 @@ interface AtlasStore {
 	setThemePreference: (theme: ThemePreference) => void;
 	resetPreset: (presetId: PresetId) => void;
 	resetAll: () => void;
-	replaceData: (data: PersistedStateV1, message: string) => void;
+	replaceData: (data: PersistedState, message: string) => void;
 	/** Explicit destructive transition: overwrite an incompatible newer record with this session. */
 	replaceIncompatibleRecord: () => void;
 }
@@ -62,7 +62,7 @@ let persistenceAdapter: PersistenceAdapter | undefined;
 let saveTimer: ReturnType<typeof setTimeout> | undefined;
 let pendingSave:
 	| {
-			data: PersistedStateV1;
+			data: PersistedState;
 			onFailure: (message: string) => void;
 	  }
 	| undefined;
@@ -78,7 +78,7 @@ function flushSave() {
 }
 
 function scheduleSave(
-	data: PersistedStateV1,
+	data: PersistedState,
 	onFailure: (message: string) => void,
 ) {
 	if (!persistenceAdapter) return;
@@ -114,10 +114,7 @@ export function resetAtlasPersistence() {
 }
 
 export const useAtlasStore = create<AtlasStore>((set, get) => {
-	const commit = (
-		data: PersistedStateV1,
-		announcement = get().announcement,
-	) => {
+	const commit = (data: PersistedState, announcement = get().announcement) => {
 		set({ data, announcement });
 		// A session that may not write stays fully usable in memory; it simply never schedules a
 		// write, so no timer, storage event, or `pagehide` can reach the storage key.

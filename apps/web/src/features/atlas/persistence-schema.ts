@@ -32,13 +32,13 @@ export const presetProgressSchema = z.object({
 });
 export type PresetProgress = z.infer<typeof presetProgressSchema>;
 
-export const persistedStateV1Schema = z.object({
+export const persistedStateSchema = z.object({
 	schemaVersion: z.literal(CURRENT_SCHEMA_VERSION),
 	activePresetId: presetIdSchema,
 	themePreference: themePreferenceSchema,
 	presets: z.record(presetIdSchema, presetProgressSchema),
 });
-export type PersistedStateV1 = z.infer<typeof persistedStateV1Schema>;
+export type PersistedState = z.infer<typeof persistedStateSchema>;
 
 const legacyStateSchema = z
 	.object({
@@ -67,7 +67,7 @@ export function createEmptyProgress(
 	};
 }
 
-export function createDefaultState(): PersistedStateV1 {
+export function createDefaultState(): PersistedState {
 	return {
 		schemaVersion: CURRENT_SCHEMA_VERSION,
 		activePresetId: defaultPresetId,
@@ -81,9 +81,7 @@ export function createDefaultState(): PersistedStateV1 {
 	};
 }
 
-export function reconcilePresetCatalog(
-	state: PersistedStateV1,
-): PersistedStateV1 {
+export function reconcilePresetCatalog(state: PersistedState): PersistedState {
 	const presets = { ...state.presets };
 	for (const { id, defaultProjection } of presetCatalog) {
 		presets[id] ??= createEmptyProgress(defaultProjection);
@@ -110,8 +108,8 @@ function selectionRecord(ids: string[]) {
 	);
 }
 
-export function migratePersistedState(value: unknown): PersistedStateV1 {
-	const current = persistedStateV1Schema.safeParse(value);
+export function migratePersistedState(value: unknown): PersistedState {
+	const current = persistedStateSchema.safeParse(value);
 	if (current.success) return reconcilePresetCatalog(current.data);
 	const legacy = legacyStateSchema.safeParse(value);
 	if (!legacy.success)
@@ -135,7 +133,7 @@ export function migratePersistedState(value: unknown): PersistedStateV1 {
 }
 
 export function sanitizeUnknownEntityIds(
-	state: PersistedStateV1,
+	state: PersistedState,
 	presetId: PresetId,
 	knownIds: ReadonlySet<string>,
 ) {

@@ -4,8 +4,8 @@ import { type PresetManifest, presetIdSchema } from "@/features/atlas/domain";
 import { formatByteLimit, importLimits } from "@/features/atlas/import-limits";
 import {
 	CURRENT_SCHEMA_VERSION,
-	type PersistedStateV1,
-	persistedStateV1Schema,
+	type PersistedState,
+	persistedStateSchema,
 	presetProgressSchema,
 	reconcilePresetCatalog,
 	sanitizeUnknownEntityIds,
@@ -46,7 +46,7 @@ const boundedProgressSchema = presetProgressSchema.extend({
 	),
 });
 
-const boundedStateSchema = persistedStateV1Schema.extend({
+const boundedStateSchema = persistedStateSchema.extend({
 	presets: z
 		.record(presetIdSchema, boundedProgressSchema)
 		.refine(
@@ -67,7 +67,7 @@ export const atlasExportSchema = z.object({
 export type AtlasExport = z.infer<typeof atlasExportSchema>;
 
 export interface ImportPreview {
-	state: PersistedStateV1;
+	state: PersistedState;
 	exportedAt: string;
 	applicationVersion: string;
 	presets: ReadonlyArray<{
@@ -84,7 +84,7 @@ export type ImportResult =
 	| { ok: false; message: string };
 
 export function createAtlasExport(
-	state: PersistedStateV1,
+	state: PersistedState,
 	now = new Date(),
 ): AtlasExport {
 	return {
@@ -92,14 +92,11 @@ export function createAtlasExport(
 		schemaVersion: CURRENT_SCHEMA_VERSION,
 		applicationVersion: APPLICATION_VERSION,
 		exportedAt: now.toISOString(),
-		state: persistedStateV1Schema.parse(state),
+		state: persistedStateSchema.parse(state),
 	};
 }
 
-export function serializeAtlasExport(
-	state: PersistedStateV1,
-	now = new Date(),
-) {
+export function serializeAtlasExport(state: PersistedState, now = new Date()) {
 	return `${JSON.stringify(createAtlasExport(state, now), null, 2)}\n`;
 }
 
