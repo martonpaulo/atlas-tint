@@ -23,7 +23,7 @@ The durable product boundary and non-goals are recorded in [`docs/product.md`](d
 - Persist versioned progress locally and merge concurrent edits made in several tabs.
 - Export geometry-free JSON and preview a validated import before atomic replacement.
 - Reset one preset or all progress through confirmation dialogs.
-- Use light, dark, or system appearance.
+- Use light, dark, or system appearance, stored in the same versioned record as everything else.
 
 AtlasTint intentionally requires at least 1024 × 700 CSS pixels. Below either threshold it does not mount the workspace and automatically recovers when the viewport becomes supported.
 
@@ -60,9 +60,13 @@ pnpm build
 
 Focused commands are available for normal development. `pnpm test` runs Vitest unit and component tests; `pnpm test:e2e` runs the critical Playwright journeys.
 
+`pnpm screenshots` captures the real application window for documentation, and `pnpm social-card` renders the 1200 × 630 social preview from the running application. The capture method and the rules it enforces are recorded in [`docs/screenshots.md`](docs/screenshots.md).
+
 ## Deployment
 
-Every push to `main` runs the complete quality pipeline and publishes the production build to GitHub Pages. The Pages workflow sets Vite's `VITE_BASE_PATH` to the repository path, so routing, the favicon, and lazy-loaded map geometry work both at the hosted URL and at local root development URLs.
+Every push to `main` runs the quality pipeline and publishes the production build to GitHub Pages. The Pages workflow sets Vite's `VITE_BASE_PATH` to the repository path, so routing, the favicon, and lazy-loaded map geometry work both at the hosted URL and at local root development URLs.
+
+CI spends effort in proportion to what changed. Formatting, lint, types, unit and component tests, geographic invariants, and the production build run on every push and pull request, because they observe everything. The Playwright suite downloads a browser and takes about a minute, so it runs only when something it can observe changed — application or package source, the geographic pipeline, dependency or tooling configuration, or the CI workflow itself. A documentation-only change skips it, says so in the run summary, and still reports a passing gate. When there is no comparable base to diff against, everything runs.
 
 Dependency update proposals are grouped weekly for npm packages and GitHub Actions. Security reports use GitHub's private vulnerability-reporting channel.
 
@@ -167,7 +171,7 @@ with every field at the origin stamp, which loses to any later edit.
 
 All reads and writes pass through a narrow persistence adapter. Zod validates the boundary, version-0 fixtures migrate explicitly, malformed or unavailable storage produces a usable warning state, rapid writes are coalesced, and `pagehide` flushes pending intent. Components never call `localStorage` directly.
 
-Exports contain schema version, application version, timestamp, and validated progress only. Imports report incompatible data and unknown entity IDs, show a per-preset preview, and require confirmation before atomic replacement.
+Exports contain schema version, application version, timestamp, and validated progress only. Imports accept both schema versions, report incompatible data and unknown entity IDs, and show a before-and-after table covering every stored category — the active preset, the appearance preference, and each preset's selected count, custom colours, colour mode, and projection — before an atomic replacement the user has to confirm.
 
 An imported file is untrusted input, so it is bounded before it is read: at most 1 MiB, 32 preset records, 2,000 selections and 2,000 custom colours per preset, and 128-character keys. These are defensive headroom rather than supported product totals — a complete export of all 274 catalog entities, every one selected and coloured, is about 30 KB. A file over any bound is rejected whole; nothing is silently truncated.
 
@@ -197,6 +201,10 @@ The interface follows one visual grammar: 8 px control corners, 12 px major surf
 - JSON import replaces compatible local progress as one atomic operation rather than merging individual selections.
 - The catalog currently ships three presets; there is no end-user preset installation UI.
 - Political and administrative boundaries reflect the documented source versions and inclusion policies, not a claim that every boundary is universally uncontested.
+
+## Discoverability
+
+The deployed page carries its metadata statically in `index.html` rather than injecting it from the router, because social scrapers and most crawlers read the HTML without executing JavaScript. That covers the canonical URL, the complete `og:` and `twitter:` sets with the image's type and dimensions and alt text, `theme-color` for each colour scheme, and `WebApplication` structured data. `sitemap.xml` and `robots.txt` point at the same canonical URL.
 
 ## License
 
