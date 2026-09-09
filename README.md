@@ -3,7 +3,7 @@
 [![CI](https://github.com/martonpaulo/atlas-tint/actions/workflows/ci.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/ci.yml)
 [![Deploy GitHub Pages](https://github.com/martonpaulo/atlas-tint/actions/workflows/pages.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/pages.yml)
 
-[Open AtlasTint](https://martonpaulo.com/atlas-tint/) · [Report a bug](https://github.com/martonpaulo/atlas-tint/issues/new/choose)
+[Open AtlasTint](https://atlas.martonpaulo.com/) · [Report a bug](https://github.com/martonpaulo/atlas-tint/issues/new/choose)
 
 AtlasTint is a desktop-first, local-first interactive SVG atlas for marking geographic regions, tracking progress, and building deterministic personal maps.
 
@@ -64,7 +64,7 @@ Focused commands are available for normal development. `pnpm test` runs Vitest u
 
 ## Deployment
 
-Every push to `main` runs the quality pipeline and publishes the production build to GitHub Pages. The Pages workflow sets Vite's `VITE_BASE_PATH` to the repository path, so routing, the favicon, and lazy-loaded map geometry work both at the hosted URL and at local root development URLs.
+Every push to `main` runs the quality pipeline and publishes the production build to GitHub Pages. The site is served from the root of `atlas.martonpaulo.com`, so Vite builds with the default base path `/` and routing, the favicon, and lazy-loaded map geometry resolve the same way at the hosted URL and at local development URLs.
 
 CI spends effort in proportion to what changed. Formatting, lint, types, unit and component tests, geographic invariants, and the production build run on every push and pull request, because they observe everything. The Playwright suite downloads a browser and takes about a minute, so it runs only when something it can observe changed — application or package source, the geographic pipeline, dependency or tooling configuration, or the CI workflow itself. A documentation-only change skips it, says so in the run summary, and still reports a passing gate. When there is no comparable base to diff against, everything runs.
 
@@ -204,7 +204,7 @@ The interface follows one visual grammar: 8 px control corners, 12 px major surf
 
 ## Discoverability
 
-The deployed page carries its metadata statically in `index.html` rather than injecting it from the router, because social scrapers and most crawlers read the HTML without executing JavaScript. That covers the canonical URL, the complete `og:` and `twitter:` sets with the image's type and dimensions and alt text, `theme-color` for each color scheme, and `WebApplication` structured data. `sitemap.xml` points at the same canonical URL. GitHub Pages serves this repository from the `martonpaulo.com` custom domain, so the canonical is `https://martonpaulo.com/atlas-tint/` — the address that answers 200 — rather than the `github.io` one, which 301-redirects there.
+The deployed page carries its metadata statically in `index.html` rather than injecting it from the router, because social scrapers and most crawlers read the HTML without executing JavaScript. That covers the canonical URL, the complete `og:` and `twitter:` sets with the image's type and dimensions and alt text, `theme-color` for each color scheme, and `WebApplication` structured data. `sitemap.xml` points at the same canonical URL. GitHub Pages serves this repository at the `atlas.martonpaulo.com` custom domain (`apps/web/public/CNAME`), so the canonical is `https://atlas.martonpaulo.com/` — the address that answers 200.
 
 ## License
 

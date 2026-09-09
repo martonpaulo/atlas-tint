@@ -6,8 +6,8 @@
 - Public name: `AtlasTint`
 - Benefit-first description: A local-first interactive SVG atlas for selecting, coloring, and tracking geographic regions.
 - Repository: `martonpaulo/atlas-tint` (public)
-- Public identifiers: GitHub repository `martonpaulo/atlas-tint` and Pages site `https://martonpaulo.github.io/atlas-tint/`; workspace packages are private.
-- Landing page: GitHub Pages at `https://martonpaulo.github.io/atlas-tint/`, built from `main`.
+- Public identifiers: GitHub repository `martonpaulo/atlas-tint` and Pages site `https://atlas.martonpaulo.com/`; workspace packages are private.
+- Landing page: GitHub Pages at `https://atlas.martonpaulo.com/`, built from `main`.
 - License: `MIT`
 - Copyright: 2026 Marton Paulo
 - Development language: English.

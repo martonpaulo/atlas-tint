@@ -1,8 +1,6 @@
-# Served at /atlas-tint/robots.txt. Crawlers only honour robots.txt at a domain root, so the
-# authoritative one for this site is https://martonpaulo.com/robots.txt, which this repository
-# does not own. This file documents the intent and points at the sitemap for anything that does
-# look here.
+# Served at https://atlas.martonpaulo.com/robots.txt, the root of the site, so this is the
+# authoritative robots.txt for AtlasTint. It allows everything and points at the sitemap.
 User-agent: *
 Allow: /
 
-Sitemap: https://martonpaulo.com/atlas-tint/sitemap.xml
+Sitemap: https://atlas.martonpaulo.com/sitemap.xml

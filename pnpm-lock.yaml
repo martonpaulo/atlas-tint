@@ -213,9 +213,6 @@ importers:
       react-dom:
         specifier: 'catalog:'
         version: 19.2.8(react@19.2.8)
-      shadcn:
-        specifier: ^4.21.0
-        version: 4.21.0(typescript@6.0.3)
       sonner:
         specifier: 'catalog:'
         version: 2.0.8(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -238,6 +235,9 @@ importers:
       '@types/react-dom':
         specifier: 'catalog:'
         version: 19.2.7(@types/react@19.2.18)
+      shadcn:
+        specifier: ^4.21.0
+        version: 4.21.0(typescript@6.0.3)
       tailwindcss:
         specifier: 'catalog:'
         version: 4.3.3
