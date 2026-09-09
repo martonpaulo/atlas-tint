@@ -3,7 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { AtlasSidebar } from "@/features/atlas/components/atlas-sidebar";
-import { createDefaultState } from "@/features/atlas/persistence-schema";
+import {
+	createDefaultState,
+	ORIGIN_STAMP,
+} from "@/features/atlas/persistence-schema";
 import { spainPreset } from "@/features/atlas/presets/spain";
 import { worldPreset } from "@/features/atlas/presets/world";
 import { useAtlasStore } from "@/features/atlas/store";
@@ -76,6 +79,7 @@ describe("AtlasSidebar", () => {
 		state.presets.world.selected["world-fr"] = {
 			selectedAt: "2026-07-24T12:00:00.000Z",
 			order: 1,
+			stamp: ORIGIN_STAMP,
 		};
 		useAtlasStore.setState({ data: state });
 		render(

@@ -5,7 +5,10 @@ import {
 	isValidCustomColor,
 	stableHash,
 } from "@/features/atlas/colors";
-import { createEmptyProgress } from "@/features/atlas/persistence-schema";
+import {
+	createEmptyProgress,
+	ORIGIN_STAMP,
+} from "@/features/atlas/persistence-schema";
 import { brazilPreset } from "@/features/atlas/presets/brazil";
 import {
 	calculatePercentage,
@@ -44,6 +47,7 @@ describe("progress and deterministic colors", () => {
 		progress.selected[entity.id] = {
 			selectedAt: "2026-07-24T12:00:00.000Z",
 			order: 1,
+			stamp: ORIGIN_STAMP,
 		};
 		progress.customColors[entity.id] = "#123abc";
 		expect(getSelectedFill(entity, "custom", progress)).toBe("#123abc");

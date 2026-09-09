@@ -187,6 +187,60 @@ test("rejects an invalid import without changing progress", async ({
 	await expect(page.getByRole("progressbar")).toHaveAttribute("value", "0");
 });
 
+test("merges independent selections made in two tabs of one browser", async ({
+	page,
+	context,
+}) => {
+	const second = await context.newPage();
+	await second.goto("/");
+	await expect(
+		second.getByRole("heading", { name: "World sovereign states" }),
+	).toBeVisible();
+
+	// Each tab selects a different region, neither having seen the other's choice.
+	await page.getByRole("searchbox").fill("france");
+	await page.getByRole("searchbox").press("Enter");
+	await second.getByRole("searchbox").fill("spain");
+	await second.getByRole("searchbox").press("Enter");
+
+	// A reload is what makes each tab read the durable record the other one wrote.
+	await page.reload();
+	await second.reload();
+	await expect(page.getByRole("progressbar")).toHaveAttribute("value", "2");
+	await expect(second.getByRole("progressbar")).toHaveAttribute("value", "2");
+
+	// Deselect in one tab while the other makes an unrelated edit.
+	await page.getByRole("searchbox").fill("france");
+	await page.getByRole("searchbox").press("Enter");
+	await second.getByRole("searchbox").fill("portugal");
+	await second.getByRole("searchbox").press("Enter");
+
+	await page.reload();
+	await second.reload();
+	// France stays gone and Portugal survives: no resurrection, no loss.
+	for (const tab of [page, second]) {
+		await expect(tab.getByRole("progressbar")).toHaveAttribute("value", "2");
+		await expect(tab.getByRole("button", { name: /^France/ })).toHaveAttribute(
+			"aria-pressed",
+			"false",
+		);
+		await expect(
+			tab.getByRole("button", { name: /^Portugal/ }),
+		).toHaveAttribute("aria-pressed", "true");
+		await expect(tab.getByRole("button", { name: /^Spain/ })).toHaveAttribute(
+			"aria-pressed",
+			"true",
+		);
+	}
+
+	// A fresh page reads the same durable record.
+	const third = await context.newPage();
+	await third.goto("/");
+	await expect(third.getByRole("progressbar")).toHaveAttribute("value", "2");
+	await second.close();
+	await third.close();
+});
+
 test("keeps a selection made just before the viewport becomes unsupported", async ({
 	page,
 }) => {

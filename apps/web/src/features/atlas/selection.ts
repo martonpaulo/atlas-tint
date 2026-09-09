@@ -1,7 +1,18 @@
 import type { ParentManifest } from "@/features/atlas/domain";
 import type { SelectionMetadata } from "@/features/atlas/persistence-schema";
+import type { Stamp } from "@/features/atlas/sync";
 
 export type ParentSelectionState = "none" | "mixed" | "all";
+
+/**
+ * Selection is a pair, not a single record: what is selected, and what was deliberately
+ * deselected. A merge cannot distinguish "never selected here" from "removed here" without the
+ * second half, so every deselection leaves a stamped tombstone behind.
+ */
+export interface SelectionState {
+	selected: Record<string, SelectionMetadata>;
+	removed: Record<string, Stamp>;
+}
 
 export function getParentSelectionState(
 	parent: ParentManifest,
@@ -21,41 +32,63 @@ export function nextSelectionOrder(
 	return Math.max(0, ...Object.values(selected).map(({ order }) => order)) + 1;
 }
 
-export function toggleSelection(
-	selected: Record<string, SelectionMetadata>,
+function select(
+	state: SelectionState,
 	entityId: string,
 	now: string,
-): Record<string, SelectionMetadata> {
-	if (selected[entityId]) {
-		const { [entityId]: _removed, ...remaining } = selected;
-		return remaining;
-	}
+	stamp: Stamp,
+	order: number,
+): SelectionState {
+	const { [entityId]: _resurrected, ...removed } = state.removed;
 	return {
-		...selected,
-		[entityId]: { selectedAt: now, order: nextSelectionOrder(selected) },
+		selected: {
+			...state.selected,
+			[entityId]: { selectedAt: now, order, stamp },
+		},
+		removed,
 	};
 }
 
+function deselect(
+	state: SelectionState,
+	entityId: string,
+	stamp: Stamp,
+): SelectionState {
+	const { [entityId]: _deselected, ...selected } = state.selected;
+	return { selected, removed: { ...state.removed, [entityId]: stamp } };
+}
+
+export function toggleSelection(
+	state: SelectionState,
+	entityId: string,
+	now: string,
+	stamp: Stamp,
+): SelectionState {
+	return state.selected[entityId]
+		? deselect(state, entityId, stamp)
+		: select(state, entityId, now, stamp, nextSelectionOrder(state.selected));
+}
+
 export function setParentSelection(
-	selected: Record<string, SelectionMetadata>,
+	state: SelectionState,
 	parent: ParentManifest,
 	shouldSelect: boolean,
 	now: string,
-): Record<string, SelectionMetadata> {
-	if (!shouldSelect) {
-		return Object.fromEntries(
-			Object.entries(selected).filter(([id]) => !parent.childIds.includes(id)),
-		);
+	nextStamp: () => Stamp,
+): SelectionState {
+	// Each child gets its own stamp so two tabs editing different children of the same group
+	// merge as the independent edits they are.
+	let next = state;
+	let order = nextSelectionOrder(state.selected);
+	for (const id of parent.childIds) {
+		if (shouldSelect) {
+			if (next.selected[id] !== undefined) continue;
+			next = select(next, id, now, nextStamp(), order);
+			order += 1;
+		} else {
+			if (next.selected[id] === undefined) continue;
+			next = deselect(next, id, nextStamp());
+		}
 	}
-	let order = nextSelectionOrder(selected);
-	const additions = Object.fromEntries(
-		parent.childIds
-			.filter((id) => selected[id] === undefined)
-			.map((id) => {
-				const metadata = { selectedAt: now, order };
-				order += 1;
-				return [id, metadata];
-			}),
-	);
-	return { ...selected, ...additions };
+	return next;
 }

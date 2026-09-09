@@ -5,13 +5,17 @@ import {
 	serializePersistedState,
 } from "@/features/atlas/persistence-adapter";
 import {
+	CURRENT_SCHEMA_VERSION,
 	createDefaultState,
+	createEmptyProgress,
 	migratePersistedState,
+	ORIGIN_STAMP,
+	type PersistedState,
 	persistedStateSchema,
 	STORAGE_KEY,
 	sanitizeUnknownEntityIds,
 } from "@/features/atlas/persistence-schema";
-import { useAtlasStore } from "@/features/atlas/store";
+import { resetAtlasPersistence, useAtlasStore } from "@/features/atlas/store";
 
 describe("persistence", () => {
 	it("serializes and loads version 1 state including projection preferences", () => {
@@ -36,9 +40,51 @@ describe("persistence", () => {
 			activePresetId: "world",
 			selectedIds: ["world-fr", "world-es"],
 		});
-		expect(migrated.schemaVersion).toBe(1);
+		expect(migrated.schemaVersion).toBe(CURRENT_SCHEMA_VERSION);
 		expect(migrated.presets.world.selected["world-fr"]?.order).toBe(1);
 		expect(migrated.presets.world.selected["world-es"]?.order).toBe(2);
+	});
+
+	it("migrates a version-1 record and gives every field the origin stamp", () => {
+		const version1 = {
+			schemaVersion: 1,
+			activePresetId: "spain",
+			themePreference: "dark",
+			presets: {
+				world: {
+					selected: {
+						"world-fr": {
+							selectedAt: "2026-07-24T12:00:00.000Z",
+							order: 1,
+						},
+					},
+					fillMode: "custom",
+					customColors: { "world-fr": "#b86b45" },
+					projection: "robinson",
+				},
+			},
+		};
+
+		const migrated = migratePersistedState(version1);
+
+		expect(migrated.schemaVersion).toBe(CURRENT_SCHEMA_VERSION);
+		expect(migrated.activePresetId).toBe("spain");
+		expect(migrated.themePreference).toBe("dark");
+		expect(migrated.presets.world.fillMode).toBe("custom");
+		expect(migrated.presets.world.projection).toBe("robinson");
+		expect(migrated.presets.world.customColors["world-fr"]).toBe("#b86b45");
+		expect(migrated.presets.world.selected["world-fr"]?.order).toBe(1);
+		// Everything written before stamps existed loses to any later edit in any tab.
+		expect(migrated.presets.world.selected["world-fr"]?.stamp).toEqual(
+			ORIGIN_STAMP,
+		);
+		expect(migrated.presets.world.stamps.customColors["world-fr"]).toEqual(
+			ORIGIN_STAMP,
+		);
+		expect(migrated.stamps.themePreference).toEqual(ORIGIN_STAMP);
+		expect(migrated.presets.world.removed).toEqual({});
+		// Presets missing from the old record are reconciled from the catalog.
+		expect(migrated.presets.brazil).toBeDefined();
 	});
 
 	it("recovers safely from malformed JSON", () => {
@@ -71,8 +117,16 @@ describe("persistence", () => {
 	it("ignores unknown entity IDs without affecting known progress", () => {
 		const state = createDefaultState();
 		state.presets.world.selected = {
-			"world-fr": { selectedAt: "2026-07-24T12:00:00.000Z", order: 1 },
-			"world-unknown": { selectedAt: "2026-07-24T12:00:01.000Z", order: 2 },
+			"world-fr": {
+				selectedAt: "2026-07-24T12:00:00.000Z",
+				order: 1,
+				stamp: ORIGIN_STAMP,
+			},
+			"world-unknown": {
+				selectedAt: "2026-07-24T12:00:01.000Z",
+				order: 2,
+				stamp: ORIGIN_STAMP,
+			},
 		};
 		const result = sanitizeUnknownEntityIds(
 			state,
@@ -86,7 +140,7 @@ describe("persistence", () => {
 	});
 
 	it("reports a newer schema as future-blocked and keeps its bytes opaque", () => {
-		const record = '{"schemaVersion":2,"unknownField":"kept"}';
+		const record = '{"schemaVersion":99,"unknownField":"kept"}';
 		const adapter = createPersistenceAdapter({
 			getItem: () => record,
 			setItem: () => undefined,
@@ -104,17 +158,14 @@ describe("persistence", () => {
 	it("accepts progress for presets added outside the initial catalog", () => {
 		const state = createDefaultState();
 		state.presets.australia = {
-			selected: {},
-			fillMode: "hierarchical",
-			customColors: {},
-			projection: "mercator",
+			...createEmptyProgress("mercator"),
 		};
 		expect(persistedStateSchema.parse(state).presets.australia).toBeDefined();
 	});
 });
 
 describe("persistence mode guards the storage key", () => {
-	const futureRecord = '{"schemaVersion":2,"presets":{"world":"newer shape"}}';
+	const futureRecord = '{"schemaVersion":99,"presets":{"world":"newer shape"}}';
 
 	beforeEach(() => {
 		vi.useFakeTimers();
@@ -178,7 +229,9 @@ describe("persistence mode guards the storage key", () => {
 
 		const stored = window.localStorage.getItem(STORAGE_KEY);
 		expect(stored).not.toBe(futureRecord);
-		expect(JSON.parse(stored ?? "{}").schemaVersion).toBe(1);
+		expect(JSON.parse(stored ?? "{}").schemaVersion).toBe(
+			CURRENT_SCHEMA_VERSION,
+		);
 		expect(useAtlasStore.getState().persistenceMode).toBe("durable");
 		expect(useAtlasStore.getState().incompatibleRecord).toBeUndefined();
 		stop();
@@ -195,6 +248,142 @@ describe("persistence mode guards the storage key", () => {
 		expect(
 			JSON.parse(stored ?? "{}").presets.world.selected["world-fr"],
 		).toBeDefined();
+		stop();
+	});
+});
+
+describe("two tabs sharing one storage key", () => {
+	/**
+	 * The second tab is simulated by writing the key directly and dispatching the `storage`
+	 * event a real browser would deliver. `storage` never fires in the tab that wrote, which is
+	 * exactly the asymmetry the merge has to survive.
+	 */
+	function otherTabWrites(mutate: (state: PersistedState) => void) {
+		const state = createDefaultState();
+		mutate(state);
+		const value = serializePersistedState(state);
+		window.localStorage.setItem(STORAGE_KEY, value);
+		window.dispatchEvent(
+			new StorageEvent("storage", { key: STORAGE_KEY, newValue: value }),
+		);
+		return state;
+	}
+
+	beforeEach(() => {
+		vi.useFakeTimers();
+		window.localStorage.clear();
+		resetAtlasPersistence();
+		useAtlasStore.setState({
+			data: createDefaultState(),
+			hydrated: false,
+			persistenceMode: "durable",
+			incompatibleRecord: undefined,
+			storageNotice: undefined,
+			announcement: "",
+		});
+	});
+
+	afterEach(() => {
+		vi.useRealTimers();
+		window.localStorage.clear();
+	});
+
+	it("converges on both selections when each tab picks a different region", () => {
+		const stop = useAtlasStore.getState().initialize();
+
+		useAtlasStore.getState().toggleEntity("world", "world-fr", "France");
+		otherTabWrites((state) => {
+			state.presets.world.selected["world-es"] = {
+				selectedAt: "2026-07-24T12:00:00.000Z",
+				order: 1,
+				stamp: { counter: 1, actor: "other-tab" },
+			};
+		});
+		vi.advanceTimersByTime(1_000);
+
+		const visible = Object.keys(
+			useAtlasStore.getState().data.presets.world.selected,
+		).sort();
+		expect(visible).toEqual(["world-es", "world-fr"]);
+
+		const durable = JSON.parse(
+			window.localStorage.getItem(STORAGE_KEY) ?? "{}",
+		);
+		expect(Object.keys(durable.presets.world.selected).sort()).toEqual([
+			"world-es",
+			"world-fr",
+		]);
+		stop();
+	});
+
+	it("does not resurrect a deselection when the other tab writes older progress", () => {
+		const stop = useAtlasStore.getState().initialize();
+
+		useAtlasStore.getState().toggleEntity("world", "world-fr", "France");
+		vi.advanceTimersByTime(1_000);
+		useAtlasStore.getState().toggleEntity("world", "world-fr", "France");
+		vi.advanceTimersByTime(1_000);
+
+		// The other tab still holds the selection it read before the deselection.
+		otherTabWrites((state) => {
+			state.presets.world.selected["world-fr"] = {
+				selectedAt: "2026-07-24T12:00:00.000Z",
+				order: 1,
+				stamp: { counter: 1, actor: "other-tab" },
+			};
+		});
+		vi.advanceTimersByTime(1_000);
+
+		expect(
+			useAtlasStore.getState().data.presets.world.selected["world-fr"],
+		).toBeUndefined();
+		const durable = JSON.parse(
+			window.localStorage.getItem(STORAGE_KEY) ?? "{}",
+		);
+		expect(durable.presets.world.selected["world-fr"]).toBeUndefined();
+		stop();
+	});
+
+	it("rebases a pending write on progress written between scheduling and flushing", () => {
+		const stop = useAtlasStore.getState().initialize();
+
+		useAtlasStore.getState().toggleEntity("world", "world-fr", "France");
+		// Written by the other tab inside the debounce window, with no event delivered here.
+		const remote = createDefaultState();
+		remote.presets.world.selected["world-pt"] = {
+			selectedAt: "2026-07-24T12:00:00.000Z",
+			order: 1,
+			stamp: { counter: 1, actor: "other-tab" },
+		};
+		window.localStorage.setItem(STORAGE_KEY, serializePersistedState(remote));
+
+		vi.advanceTimersByTime(1_000);
+
+		const durable = JSON.parse(
+			window.localStorage.getItem(STORAGE_KEY) ?? "{}",
+		);
+		expect(Object.keys(durable.presets.world.selected).sort()).toEqual([
+			"world-fr",
+			"world-pt",
+		]);
+		stop();
+	});
+
+	it("does not write back a remote record it has nothing to add to", () => {
+		const stop = useAtlasStore.getState().initialize();
+		const written = otherTabWrites((state) => {
+			state.presets.world.selected["world-es"] = {
+				selectedAt: "2026-07-24T12:00:00.000Z",
+				order: 1,
+				stamp: { counter: 1, actor: "other-tab" },
+			};
+		});
+		vi.advanceTimersByTime(1_000);
+
+		// Byte-identical: no echo, so two tabs cannot keep waking each other.
+		expect(window.localStorage.getItem(STORAGE_KEY)).toBe(
+			serializePersistedState(written),
+		);
 		stop();
 	});
 });

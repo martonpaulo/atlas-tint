@@ -20,7 +20,7 @@ The durable product boundary and non-goals are recorded in [`docs/product.md`](d
 - Switch presets without mixing or losing their progress.
 - Change supported projections without losing selections.
 - Use hierarchical, single-accent, visit-chronology, or per-entity custom colors.
-- Persist versioned progress locally and synchronize compatible cross-tab updates.
+- Persist versioned progress locally and merge concurrent edits made in several tabs.
 - Export geometry-free JSON and preview a validated import before atomic replacement.
 - Reset one preset or all progress through confirmation dialogs.
 - Use light, dark, or system appearance.
@@ -143,7 +143,7 @@ The pipeline verifies SHA-256 checksums before reading source files, keeps only 
 
 ## Persistence and imports
 
-The authoritative local state uses storage key `atlas-tint:state` and schema version 1. It contains:
+The authoritative local state uses storage key `atlas-tint:state` and schema version 2. It contains:
 
 - active preset and theme preference;
 - a record of per-preset progress keyed by preset ID;
@@ -151,6 +151,15 @@ The authoritative local state uses storage key `atlas-tint:state` and schema ver
 - fill mode, custom colors, and projection preference.
 
 Geometry, projected paths, hover state, open controls, search text, percentages, and transient errors are never persisted.
+
+Two tabs share that one key, so every mutable field carries a Lamport stamp — a counter plus a
+session-scoped actor ID — and deselections leave stamped tombstones. Merging is a per-field
+decision rather than a whole-document one: independent edits in different tabs both survive,
+a deselection is not undone by another tab's older copy, and a same-entity conflict resolves on
+the greater counter, breaking ties on actor ID so every tab reaches the same answer. Wall-clock
+timestamps are deliberately not used; two tabs' clocks are independent and can run backwards.
+A pending write is rebased on whatever is durable at flush time, and a version-1 record migrates
+with every field at the origin stamp, which loses to any later edit.
 
 All reads and writes pass through a narrow persistence adapter. Zod validates the boundary, version-0 fixtures migrate explicitly, malformed or unavailable storage produces a usable warning state, rapid writes are coalesced, and `pagehide` flushes pending intent. Components never call `localStorage` directly.
 

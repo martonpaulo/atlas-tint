@@ -4,6 +4,7 @@ import { type PresetManifest, presetIdSchema } from "@/features/atlas/domain";
 import { formatByteLimit, importLimits } from "@/features/atlas/import-limits";
 import {
 	CURRENT_SCHEMA_VERSION,
+	migratePersistedState,
 	type PersistedState,
 	persistedStateSchema,
 	presetProgressSchema,
@@ -63,6 +64,21 @@ export const atlasExportSchema = z.object({
 	applicationVersion: z.string().min(1),
 	exportedAt: z.iso.datetime(),
 	state: boundedStateSchema,
+});
+
+/**
+ * The envelope, without committing to a state shape.
+ *
+ * A file exported before cross-tab stamps existed is still a valid export of someone's
+ * progress, so the state is migrated through the same path as stored data and only then
+ * bounded. Refusing it would make an upgrade destroy a user's backup.
+ */
+const importEnvelopeSchema = z.object({
+	format: z.literal("atlas-tint-progress"),
+	schemaVersion: z.union([z.literal(1), z.literal(CURRENT_SCHEMA_VERSION)]),
+	applicationVersion: z.string().min(1),
+	exportedAt: z.iso.datetime(),
+	state: z.unknown(),
 });
 export type AtlasExport = z.infer<typeof atlasExportSchema>;
 
@@ -126,10 +142,25 @@ export function validateImportText(
 	} catch {
 		return { ok: false, message: "The selected file is not valid JSON." };
 	}
-	const result = atlasExportSchema.safeParse(parsed);
+	const envelope = importEnvelopeSchema.safeParse(parsed);
+	if (!envelope.success)
+		return { ok: false, message: issueMessage(envelope.error) };
+
+	let migrated: unknown;
+	try {
+		migrated = migratePersistedState(envelope.data.state);
+	} catch {
+		return {
+			ok: false,
+			message:
+				"Invalid AtlasTint export: the progress it contains is not a supported shape.",
+		};
+	}
+
+	const result = boundedStateSchema.safeParse(migrated);
 	if (!result.success)
 		return { ok: false, message: issueMessage(result.error) };
-	let state = reconcilePresetCatalog(result.data.state);
+	let state = reconcilePresetCatalog(result.data);
 	const unknownIds: Record<string, string[]> = {};
 	for (const [id, manifest] of Object.entries(manifests)) {
 		const sanitized = sanitizeUnknownEntityIds(
@@ -144,8 +175,8 @@ export function validateImportText(
 		ok: true,
 		preview: {
 			state,
-			exportedAt: result.data.exportedAt,
-			applicationVersion: result.data.applicationVersion,
+			exportedAt: envelope.data.exportedAt,
+			applicationVersion: envelope.data.applicationVersion,
 			presets: Object.entries(manifests).map(([id, manifest]) => ({
 				id,
 				name: manifest.shortName,

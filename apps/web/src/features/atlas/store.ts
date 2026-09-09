@@ -15,7 +15,13 @@ import {
 	type PersistenceMode,
 } from "@/features/atlas/persistence-adapter";
 import {
+	asReplacement,
+	greatestStamp,
+	mergeStates,
+} from "@/features/atlas/persistence-merge";
+import {
 	createDefaultState,
+	createEmptyProgress,
 	migratePersistedState,
 	type PersistedState,
 	STORAGE_KEY,
@@ -25,6 +31,7 @@ import {
 	setParentSelection,
 	toggleSelection,
 } from "@/features/atlas/selection";
+import { createActorId, LamportClock, type Stamp } from "@/features/atlas/sync";
 
 interface AtlasStore {
 	data: PersistedState;
@@ -64,26 +71,47 @@ let pendingSave:
 	| {
 			data: PersistedState;
 			onFailure: (message: string) => void;
+			onMerged: (state: PersistedState) => void;
 	  }
 	| undefined;
 
+/**
+ * This tab's Lamport clock. Session-scoped: a reload is a new participant, which is fine because
+ * a reload also reads whatever the previous session durably wrote and advances past its stamps.
+ */
+let clock = new LamportClock(createActorId());
+
+/**
+ * Rebase pending intent on whatever is durable right now, then write once.
+ *
+ * Between scheduling a write and performing it, another tab may have written. Persisting the
+ * local snapshot as-is would drop that work; merging first keeps both, because every field
+ * carries a stamp and the merge is per field. A whole-document last-writer-wins is what this
+ * replaces.
+ */
 function flushSave() {
 	if (!pendingSave || !persistenceAdapter) return;
 	if (saveTimer) clearTimeout(saveTimer);
-	const { data, onFailure } = pendingSave;
+	const { data, onFailure, onMerged } = pendingSave;
 	pendingSave = undefined;
 	saveTimer = undefined;
-	const result = persistenceAdapter.save(data);
-	if (!result.ok) onFailure(result.message);
+	const durable = persistenceAdapter.load();
+	const merged =
+		durable.mode === "durable" ? mergeStates(durable.state, data) : data;
+	clock.observe(greatestStamp(merged));
+	const result = persistenceAdapter.save(merged);
+	if (result.ok) onMerged(merged);
+	else onFailure(result.message);
 }
 
 function scheduleSave(
 	data: PersistedState,
 	onFailure: (message: string) => void,
+	onMerged: (state: PersistedState) => void,
 ) {
 	if (!persistenceAdapter) return;
 	if (saveTimer) clearTimeout(saveTimer);
-	pendingSave = { data, onFailure };
+	pendingSave = { data, onFailure, onMerged };
 	saveTimer = setTimeout(flushSave, 80);
 }
 
@@ -111,6 +139,7 @@ export function resetAtlasPersistence() {
 	detachListeners?.();
 	discardPendingSave();
 	persistenceAdapter = undefined;
+	clock = new LamportClock(createActorId());
 }
 
 export const useAtlasStore = create<AtlasStore>((set, get) => {
@@ -119,8 +148,12 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 		// A session that may not write stays fully usable in memory; it simply never schedules a
 		// write, so no timer, storage event, or `pagehide` can reach the storage key.
 		if (!canPersist(get().persistenceMode)) return;
-		scheduleSave(data, (storageNotice) =>
-			set({ persistenceMode: "save-failed", storageNotice }),
+		scheduleSave(
+			data,
+			(storageNotice) => set({ persistenceMode: "save-failed", storageNotice }),
+			// The written value is the merge of local intent with whatever another tab had
+			// already durably written, so the visible state has to become that merge too.
+			(merged) => set({ data: merged }),
 		);
 	};
 
@@ -137,6 +170,7 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 				persistenceAdapter = createBrowserPersistenceAdapter();
 				discardPendingSave();
 				const result = persistenceAdapter.load();
+				clock.observe(greatestStamp(result.state));
 				set({
 					data: result.state,
 					hydrated: true,
@@ -153,11 +187,18 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 				// unknown data through the current schema.
 				if (get().persistenceMode === "future-blocked") return;
 				try {
-					const parsed: unknown = JSON.parse(event.newValue);
-					set({
-						data: migratePersistedState(parsed),
-						storageNotice: undefined,
-					});
+					const remote = migratePersistedState(JSON.parse(event.newValue));
+					// Merge rather than adopt: this tab may hold intent the other one never saw.
+					const merged = mergeStates(remote, get().data);
+					clock.observe(greatestStamp(merged));
+					set({ data: merged, storageNotice: undefined });
+					// Only write back when this tab actually knows something the record does not,
+					// so two tabs cannot ping-pong events at each other forever.
+					if (
+						canPersist(get().persistenceMode) &&
+						JSON.stringify(merged) !== JSON.stringify(remote)
+					)
+						commit(merged);
 				} catch {
 					set({
 						storageNotice:
@@ -178,7 +219,12 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 			return detachListeners;
 		},
 		setActivePreset(id) {
-			commit({ ...get().data, activePresetId: id });
+			const data = get().data;
+			commit({
+				...data,
+				activePresetId: id,
+				stamps: { ...data.stamps, activePresetId: clock.next() },
+			});
 		},
 		sanitizePreset(manifest) {
 			const result = sanitizeUnknownEntityIds(
@@ -204,10 +250,11 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 						...data.presets,
 						[presetId]: {
 							...progress,
-							selected: toggleSelection(
-								progress.selected,
+							...toggleSelection(
+								progress,
 								entityId,
 								new Date().toISOString(),
+								clock.next(),
 							),
 						},
 					},
@@ -225,11 +272,12 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 						...data.presets,
 						[presetId]: {
 							...progress,
-							selected: setParentSelection(
-								progress.selected,
+							...setParentSelection(
+								progress,
 								parent,
 								shouldSelect,
 								new Date().toISOString(),
+								() => clock.next(),
 							),
 						},
 					},
@@ -239,11 +287,16 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 		},
 		setFillMode(presetId, mode) {
 			const data = get().data;
+			const progress = data.presets[presetId];
 			commit({
 				...data,
 				presets: {
 					...data.presets,
-					[presetId]: { ...data.presets[presetId], fillMode: mode },
+					[presetId]: {
+						...progress,
+						fillMode: mode,
+						stamps: { ...progress.stamps, fillMode: clock.next() },
+					},
 				},
 			});
 		},
@@ -257,36 +310,59 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 					[presetId]: {
 						...progress,
 						customColors: { ...progress.customColors, [entityId]: color },
+						stamps: {
+							...progress.stamps,
+							customColors: {
+								...progress.stamps.customColors,
+								[entityId]: clock.next(),
+							},
+						},
 					},
 				},
 			});
 		},
 		setProjection(presetId, projection) {
 			const data = get().data;
+			const progress = data.presets[presetId];
 			commit({
 				...data,
 				presets: {
 					...data.presets,
-					[presetId]: { ...data.presets[presetId], projection },
+					[presetId]: {
+						...progress,
+						projection,
+						stamps: { ...progress.stamps, projection: clock.next() },
+					},
 				},
 			});
 		},
 		setThemePreference(themePreference) {
-			commit({ ...get().data, themePreference });
+			const data = get().data;
+			commit({
+				...data,
+				themePreference,
+				stamps: { ...data.stamps, themePreference: clock.next() },
+			});
 		},
 		resetPreset(presetId) {
 			const data = get().data;
-			const projection = data.presets[presetId].projection;
+			const progress = data.presets[presetId];
+			const stamp = clock.next();
 			commit(
 				{
 					...data,
 					presets: {
 						...data.presets,
+						// A reset is a deselection of everything, so it leaves tombstones. Without
+						// them another tab's copy would put the whole preset straight back.
 						[presetId]: {
-							selected: {},
-							fillMode: "hierarchical",
-							customColors: {},
-							projection,
+							...createEmptyProgress(progress.projection, stamp),
+							removed: {
+								...progress.removed,
+								...Object.fromEntries(
+									Object.keys(progress.selected).map((id) => [id, stamp]),
+								),
+							},
 						},
 					},
 				},
@@ -294,10 +370,31 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 			);
 		},
 		resetAll() {
-			commit(createDefaultState(), "All local progress reset.");
+			const data = get().data;
+			const stamp = clock.next();
+			const cleared = createDefaultState(stamp);
+			for (const [presetId, progress] of Object.entries(data.presets)) {
+				const empty =
+					cleared.presets[presetId] ??
+					createEmptyProgress(progress.projection, stamp);
+				cleared.presets[presetId] = {
+					...empty,
+					removed: {
+						...progress.removed,
+						...Object.fromEntries(
+							Object.keys(progress.selected).map((id) => [id, stamp]),
+						),
+					},
+				};
+			}
+			commit(cleared, "All local progress reset.");
 		},
 		replaceData(data, message) {
-			commit(data, message);
+			// An imported file was stamped by whichever device produced it, and those counters
+			// say nothing about this tab's history. Restamp it as one deliberate local action,
+			// and turn everything it does not contain into a tombstone, so the replacement is
+			// atomic in every tab rather than only in this one.
+			commit(asReplacement(get().data, data, clock.next()), message);
 		},
 		replaceIncompatibleRecord() {
 			set({

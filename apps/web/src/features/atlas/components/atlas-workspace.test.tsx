@@ -7,6 +7,7 @@ import { AtlasWorkspace } from "@/features/atlas/components/atlas-workspace";
 import { type GeometryBundle, loadGeometry } from "@/features/atlas/geometry";
 import {
 	createDefaultState,
+	ORIGIN_STAMP,
 	STORAGE_KEY,
 } from "@/features/atlas/persistence-schema";
 import { worldPreset } from "@/features/atlas/presets/world";
@@ -154,6 +155,7 @@ describe("AtlasWorkspace persistence lifecycle", () => {
 		remote.presets.world.selected["world-pt"] = {
 			selectedAt: "2026-07-24T12:00:00.000Z",
 			order: 1,
+			stamp: ORIGIN_STAMP,
 		};
 		act(() => {
 			window.dispatchEvent(

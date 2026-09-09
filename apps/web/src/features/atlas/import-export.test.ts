@@ -7,7 +7,10 @@ import {
 } from "@/features/atlas/import-export";
 import { importLimits } from "@/features/atlas/import-limits";
 import {
+	CURRENT_SCHEMA_VERSION,
 	createDefaultState,
+	createEmptyProgress,
+	ORIGIN_STAMP,
 	type PersistedState,
 } from "@/features/atlas/persistence-schema";
 import { brazilPreset } from "@/features/atlas/presets/brazil";
@@ -26,7 +29,7 @@ describe("import and export", () => {
 			createDefaultState(),
 			new Date("2026-07-24T12:00:00.000Z"),
 		);
-		expect(exported.schemaVersion).toBe(1);
+		expect(exported.schemaVersion).toBe(CURRENT_SCHEMA_VERSION);
 		expect(exported.applicationVersion).toBe("1.0.0");
 		expect(JSON.stringify(exported)).not.toContain("coordinates");
 	});
@@ -36,6 +39,7 @@ describe("import and export", () => {
 		state.presets.world.selected["world-fr"] = {
 			selectedAt: "2026-07-24T12:00:00.000Z",
 			order: 1,
+			stamp: ORIGIN_STAMP,
 		};
 		const result = validateImportText(
 			serializeAtlasExport(state, new Date("2026-07-24T12:00:00.000Z")),
@@ -75,6 +79,7 @@ describe("import limits", () => {
 				{
 					selectedAt: "2026-07-24T12:00:00.000Z",
 					order: index + 1,
+					stamp: ORIGIN_STAMP,
 				},
 			]),
 		);
@@ -90,6 +95,7 @@ describe("import limits", () => {
 					{
 						selectedAt: "2026-07-24T12:00:00.000Z",
 						order: ++order,
+						stamp: ORIGIN_STAMP,
 					},
 				]),
 			);
@@ -139,6 +145,7 @@ describe("import limits", () => {
 		state.presets.world.selected["w".repeat(importLimits.maxKeyLength + 1)] = {
 			selectedAt: "2026-07-24T12:00:00.000Z",
 			order: 1,
+			stamp: ORIGIN_STAMP,
 		};
 		const result = validateImportText(exportText(state), manifests);
 
@@ -161,10 +168,7 @@ describe("import limits", () => {
 		const withinLimit = createDefaultState();
 		for (let index = 0; index < importLimits.maxPresets - 3; index += 1)
 			withinLimit.presets[`future-${index}`] = {
-				selected: {},
-				fillMode: "hierarchical",
-				customColors: {},
-				projection: "mercator",
+				...createEmptyProgress("mercator"),
 			};
 		expect(validateImportText(exportText(withinLimit), manifests).ok).toBe(
 			true,
@@ -173,10 +177,7 @@ describe("import limits", () => {
 		const overLimit = createDefaultState();
 		for (let index = 0; index < importLimits.maxPresets; index += 1)
 			overLimit.presets[`future-${index}`] = {
-				selected: {},
-				fillMode: "hierarchical",
-				customColors: {},
-				projection: "mercator",
+				...createEmptyProgress("mercator"),
 			};
 		const result = validateImportText(exportText(overLimit), manifests);
 		expect(result.ok).toBe(false);
@@ -187,10 +188,8 @@ describe("import limits", () => {
 	it("bounds an unknown preset's own records too", () => {
 		const state = createDefaultState();
 		state.presets.future = {
+			...createEmptyProgress("mercator"),
 			selected: selections(importLimits.maxSelections + 1),
-			fillMode: "hierarchical",
-			customColors: {},
-			projection: "mercator",
 		};
 		const result = validateImportText(exportText(state), manifests);
 

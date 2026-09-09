@@ -7,6 +7,7 @@ import { serializeAtlasExport } from "@/features/atlas/import-export";
 import { importLimits } from "@/features/atlas/import-limits";
 import {
 	createDefaultState,
+	ORIGIN_STAMP,
 	type PersistedState,
 } from "@/features/atlas/persistence-schema";
 import { useAtlasStore } from "@/features/atlas/store";
@@ -41,6 +42,7 @@ const selectFrance = (state: PersistedState) => {
 	state.presets.world.selected["world-fr"] = {
 		selectedAt: "2026-07-24T12:00:00.000Z",
 		order: 1,
+		stamp: ORIGIN_STAMP,
 	};
 };
 
@@ -48,10 +50,12 @@ const selectSpainAndBrazil = (state: PersistedState) => {
 	state.presets.spain.selected["es-01"] = {
 		selectedAt: "2026-07-24T12:00:00.000Z",
 		order: 1,
+		stamp: ORIGIN_STAMP,
 	};
 	state.presets.brazil.selected["br-ac"] = {
 		selectedAt: "2026-07-24T12:00:01.000Z",
 		order: 2,
+		stamp: ORIGIN_STAMP,
 	};
 };
 

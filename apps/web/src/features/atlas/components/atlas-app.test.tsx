@@ -80,7 +80,7 @@ describe("AtlasApp persistence status", () => {
 	});
 
 	it("never claims progress is saved while a newer record blocks writes", async () => {
-		window.localStorage.setItem(STORAGE_KEY, '{"schemaVersion":2}');
+		window.localStorage.setItem(STORAGE_KEY, '{"schemaVersion":99}');
 		render(<AtlasWorkspace />);
 
 		expect(await screen.findByText("Saved data locked")).toBeInTheDocument();
