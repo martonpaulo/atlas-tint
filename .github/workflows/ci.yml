@@ -14,6 +14,68 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # What changed decides what runs. The cheap checks below observe everything, so they always
+  # run; the browser suite costs a ~114 MiB download plus a minute of wall clock, so it only
+  # runs when something it can actually observe changed. A README edit cannot change what a
+  # Playwright journey sees.
+  changes:
+    name: Detect product changes
+    runs-on: ubuntu-latest
+    outputs:
+      product: ${{ steps.detect.outputs.product }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+
+      - name: Detect product changes
+        id: detect
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          # Anything the browser suite can observe: application and package source, the
+          # geographic pipeline and its shipped assets, dependency and tooling configuration,
+          # and this workflow itself.
+          pattern='^(apps/|packages/|scripts/geo/|package\.json$|pnpm-lock\.yaml$|pnpm-workspace\.yaml$|tsconfig\.json$|biome\.json$|\.github/workflows/ci\.yml$)'
+
+          base=""
+          case "$EVENT_NAME" in
+            pull_request) base="$BASE_SHA" ;;
+            push)
+              if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ] \
+                && git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+                base="$BEFORE"
+              fi
+              ;;
+          esac
+
+          # No comparable base — a first push, a force push, a manual dispatch — means run
+          # everything. Skipping on missing information would be the wrong default.
+          if [ -z "$base" ]; then
+            echo "product=true" >> "$GITHUB_OUTPUT"
+            echo "No comparable base commit; running the full suite." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          changed="$(git diff --name-only "$base" "$HEAD_SHA")"
+          if printf '%s\n' "$changed" | grep -Eq "$pattern"; then
+            echo "product=true" >> "$GITHUB_OUTPUT"
+            echo "Product paths changed; running the browser suite." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "product=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "No product paths changed; skipping the browser suite."
+              echo
+              echo '```'
+              printf '%s\n' "$changed"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
   quality:
     name: Quality and build
     runs-on: ubuntu-latest
@@ -54,6 +116,8 @@ jobs:
 
   end-to-end:
     name: Critical journeys
+    needs: changes
+    if: needs.changes.outputs.product == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -72,8 +136,28 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Chromium
-        run: pnpm --filter web exec playwright install --with-deps chromium
+      - name: Resolve the Playwright version
+        id: playwright
+        run: |
+          version="$(pnpm --filter web exec playwright --version | awk '{print $2}')"
+          printf 'version=%s\n' "$version" >> "$GITHUB_OUTPUT"
+
+      - name: Restore the browser cache
+        id: browser-cache
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+
+      # The suite is headless with no channel, so the full Chrome for Testing binary is never
+      # launched. Installing only the headless shell avoids ~177 MiB of transfer per run.
+      - name: Install the Chromium headless shell
+        if: steps.browser-cache.outputs.cache-hit != 'true'
+        run: pnpm --filter web exec playwright install --with-deps chromium-headless-shell
+
+      - name: Install system dependencies for the cached browser
+        if: steps.browser-cache.outputs.cache-hit == 'true'
+        run: pnpm --filter web exec playwright install-deps chromium-headless-shell
 
       - name: Run Playwright journeys
         run: pnpm test:e2e
@@ -90,13 +174,19 @@ jobs:
   validate:
     name: validate
     if: always()
-    needs: [quality, end-to-end]
+    needs: [changes, quality, end-to-end]
     runs-on: ubuntu-latest
     steps:
-      - name: Require every validation job
+      - name: Require every validation job that ran
         env:
           QUALITY_RESULT: ${{ needs.quality.result }}
           END_TO_END_RESULT: ${{ needs.end-to-end.result }}
+          PRODUCT_CHANGED: ${{ needs.changes.outputs.product }}
         run: |
           test "$QUALITY_RESULT" = success
-          test "$END_TO_END_RESULT" = success
+          # A deliberately skipped browser suite is a pass; a failed or cancelled one is not.
+          if [ "$PRODUCT_CHANGED" = true ]; then
+            test "$END_TO_END_RESULT" = success
+          else
+            test "$END_TO_END_RESULT" = skipped
+          fi
