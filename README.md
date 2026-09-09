@@ -3,7 +3,7 @@
 [![CI](https://github.com/martonpaulo/atlas-tint/actions/workflows/ci.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/ci.yml)
 [![Deploy GitHub Pages](https://github.com/martonpaulo/atlas-tint/actions/workflows/pages.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/pages.yml)
 
-[Open AtlasTint](https://martonpaulo.github.io/atlas-tint/) · [Report a bug](https://github.com/martonpaulo/atlas-tint/issues/new/choose)
+[Open AtlasTint](https://martonpaulo.com/atlas-tint/) · [Report a bug](https://github.com/martonpaulo/atlas-tint/issues/new/choose)
 
 AtlasTint is a desktop-first, local-first interactive SVG atlas for marking geographic regions, tracking progress, and building deterministic personal maps.
 
@@ -204,7 +204,7 @@ The interface follows one visual grammar: 8 px control corners, 12 px major surf
 
 ## Discoverability
 
-The deployed page carries its metadata statically in `index.html` rather than injecting it from the router, because social scrapers and most crawlers read the HTML without executing JavaScript. That covers the canonical URL, the complete `og:` and `twitter:` sets with the image's type and dimensions and alt text, `theme-color` for each colour scheme, and `WebApplication` structured data. `sitemap.xml` and `robots.txt` point at the same canonical URL.
+The deployed page carries its metadata statically in `index.html` rather than injecting it from the router, because social scrapers and most crawlers read the HTML without executing JavaScript. That covers the canonical URL, the complete `og:` and `twitter:` sets with the image's type and dimensions and alt text, `theme-color` for each color scheme, and `WebApplication` structured data. `sitemap.xml` points at the same canonical URL. GitHub Pages serves this repository from the `martonpaulo.com` custom domain, so the canonical is `https://martonpaulo.com/atlas-tint/` — the address that answers 200 — rather than the `github.io` one, which 301-redirects there.
 
 ## License
 
