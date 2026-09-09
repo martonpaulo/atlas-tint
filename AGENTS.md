@@ -491,7 +491,7 @@ Supported modes:
 
 - hierarchical palette
 - single accent with deterministic tonal variation
-- visit chronology
+- selection order (persisted as `chronology`)
 - per-entity custom color
 
 Never generate random colors at render time.

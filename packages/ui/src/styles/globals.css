@@ -267,6 +267,19 @@
 	stroke: var(--map-boundary);
 	stroke-width: 0.7;
 }
+/* The selection-order scale, drawn in the same lightness endpoints the map uses. */
+.legend-scale {
+	display: inline-block;
+	width: 3.5rem;
+	height: 0.5rem;
+	border-radius: 999px;
+	border: 1px solid var(--map-border);
+	background: linear-gradient(
+		to right,
+		oklch(0.74 0.12 39),
+		oklch(0.49 0.12 39)
+	);
+}
 .map-parent-boundaries {
 	pointer-events: none;
 	fill: none;

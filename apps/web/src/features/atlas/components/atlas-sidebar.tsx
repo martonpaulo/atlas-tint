@@ -20,6 +20,7 @@ import {
 import {
 	createChronologyContext,
 	defaultCustomColor,
+	fillModeLabels,
 	type ResolvedColor,
 	resolveEntityColor,
 } from "@/features/atlas/colors";
@@ -606,10 +607,11 @@ export function AtlasSidebar({
 							}}
 							aria-label="Selected region color mode"
 						>
-							<option value="hierarchical">Hierarchical palette</option>
-							<option value="accent">Single accent</option>
-							<option value="chronology">Visit chronology</option>
-							<option value="custom">Custom per region</option>
+							{fillModeSchema.options.map((mode) => (
+								<option key={mode} value={mode}>
+									{fillModeLabels[mode]}
+								</option>
+							))}
 						</select>
 					</label>
 					<DataActions presetId={manifest.id} presetName={manifest.shortName} />

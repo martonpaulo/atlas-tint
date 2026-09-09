@@ -1,3 +1,4 @@
+import { fillModeLabels } from "@/features/atlas/colors";
 import type { PresetManifest } from "@/features/atlas/domain";
 import type { PersistedState } from "@/features/atlas/persistence-schema";
 
@@ -17,13 +18,6 @@ export interface ImportDifference {
 	incoming: string;
 	changed: boolean;
 }
-
-const fillModeLabels: Record<string, string> = {
-	hierarchical: "Hierarchical palette",
-	accent: "Single accent",
-	chronology: "Visit chronology",
-	custom: "Custom per region",
-};
 
 const projectionLabels: Record<string, string> = {
 	"equal-earth": "Equal Earth",

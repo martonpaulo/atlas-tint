@@ -4,8 +4,10 @@ import {
 	chronologyFill,
 	createChronologyContext,
 	emptyChronologyContext,
+	fillModeLabels,
 	getSelectedFill,
 	isValidCustomColor,
+	selectionOrderLegend,
 	stableHash,
 } from "@/features/atlas/colors";
 import {
@@ -191,5 +193,63 @@ describe("visit chronology colors", () => {
 		const snapshot = structuredClone(stored);
 		createChronologyContext(stored);
 		expect(stored).toEqual(snapshot);
+	});
+});
+
+describe("selection-order semantics", () => {
+	it("calls the mode Selection order everywhere it is shown", () => {
+		expect(fillModeLabels.chronology).toBe("Selection order");
+		// The persisted value stays `chronology`, so no migration is needed.
+		expect(Object.keys(fillModeLabels)).toContain("chronology");
+	});
+
+	it("states the direction of the scale in words", () => {
+		expect(selectionOrderLegend.earliest).toBe("First marked");
+		expect(selectionOrderLegend.latest).toBe("Most recently marked");
+	});
+
+	it("ranks three known selections earliest to latest", () => {
+		const context = createChronologyContext({
+			c: {
+				selectedAt: "2026-07-24T12:00:02.000Z",
+				order: 3,
+				stamp: ORIGIN_STAMP,
+			},
+			a: {
+				selectedAt: "2026-07-24T12:00:00.000Z",
+				order: 1,
+				stamp: ORIGIN_STAMP,
+			},
+			b: {
+				selectedAt: "2026-07-24T12:00:01.000Z",
+				order: 2,
+				stamp: ORIGIN_STAMP,
+			},
+		});
+		expect(context.rankById.get("a")).toBe(0);
+		expect(context.rankById.get("b")).toBe(1);
+		expect(context.rankById.get("c")).toBe(2);
+	});
+
+	it("ignores visitDate entirely, present or missing, but preserves it", () => {
+		const selected = {
+			later: {
+				selectedAt: "2026-07-24T12:00:01.000Z",
+				order: 2,
+				// An earlier visit date on a later selection must not reorder anything.
+				visitDate: "2001-01-01",
+				stamp: ORIGIN_STAMP,
+			},
+			earlier: {
+				selectedAt: "2026-07-24T12:00:00.000Z",
+				order: 1,
+				stamp: ORIGIN_STAMP,
+			},
+		};
+		const context = createChronologyContext(selected);
+
+		expect(context.rankById.get("earlier")).toBe(0);
+		expect(context.rankById.get("later")).toBe(1);
+		expect(selected.later.visitDate).toBe("2001-01-01");
 	});
 });

@@ -416,6 +416,36 @@ test("adopts a pre-versioned appearance key once and then retires it", async ({
 		.toBeNull();
 });
 
+test("names the selection-order mode and states its direction", async ({
+	page,
+}) => {
+	await page.getByRole("searchbox").fill("france");
+	await page.getByRole("searchbox").press("Enter");
+	await openStyleAndData(page);
+
+	const modes = page.getByLabel("Selected region color mode");
+	await expect(modes).toContainText("Selection order");
+	await expect(modes).not.toContainText("Visit chronology");
+	await modes.selectOption("chronology");
+
+	const legend = page.locator("footer");
+	await expect(legend).toContainText("First marked");
+	await expect(legend).toContainText("Most recently marked");
+
+	// The direction is readable in both themes, because it is words, not only a gradient.
+	for (const appearance of ["Dark", "Light"] as const) {
+		await page.getByRole("button", { name: /^Appearance:/ }).click();
+		await page.getByRole("menuitemradio", { name: appearance }).click();
+		await expect(legend).toContainText("First marked");
+		await expect(legend).toContainText("Most recently marked");
+	}
+
+	// Other fill modes keep the plain selected marker instead.
+	await modes.selectOption("hierarchical");
+	await expect(legend).toContainText("Selected");
+	await expect(legend).not.toContainText("First marked");
+});
+
 test("respects reduced motion", async ({ page }) => {
 	await page.emulateMedia({ reducedMotion: "reduce" });
 	const duration = await page

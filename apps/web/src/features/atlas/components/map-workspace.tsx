@@ -12,12 +12,14 @@ import { type PointerEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
 	createChronologyContext,
 	resolveEntityColor,
+	selectionOrderLegend,
 } from "@/features/atlas/colors";
 import { type LoadedPreset, projectionIdSchema } from "@/features/atlas/domain";
 import type { GeometryBundle } from "@/features/atlas/geometry";
 import { projectionLabel } from "@/features/atlas/projection-registry";
 import { createProjectionLayout } from "@/features/atlas/projections";
 import {
+	countSelectable,
 	createSelectionPolicy,
 	isSelectable,
 } from "@/features/atlas/selection-policy";
@@ -336,7 +338,11 @@ export function MapWorkspace(props: MapWorkspaceProps) {
 	const setProjection = useAtlasStore(
 		({ setProjection: updateProjection }) => updateProjection,
 	);
-	const selectedCount = Object.keys(progress.selected).length;
+	const selectedCount = countSelectable(
+		createSelectionPolicy(manifest),
+		progress.selected,
+	);
+	const fillMode = progress.fillMode;
 	const projection = manifest.projections.includes(progress.projection)
 		? progress.projection
 		: manifest.defaultProjection;
@@ -383,10 +389,19 @@ export function MapWorkspace(props: MapWorkspaceProps) {
 					<span className="inline-flex items-center gap-1.5">
 						<i className="legend-swatch bg-map-unselected" /> Unselected
 					</span>
-					<span className="inline-flex items-center gap-1.5">
-						<Check className="size-3.5 text-primary" aria-hidden="true" />
-						Selected
-					</span>
+					{fillMode === "chronology" ? (
+						// Direction stated in words, so the gradient is not the only way to read it.
+						<span className="inline-flex items-center gap-1.5">
+							{selectionOrderLegend.earliest}
+							<i className="legend-scale" aria-hidden="true" />
+							{selectionOrderLegend.latest}
+						</span>
+					) : (
+						<span className="inline-flex items-center gap-1.5">
+							<Check className="size-3.5 text-primary" aria-hidden="true" />
+							Selected
+						</span>
+					)}
 					<span className="inline-flex items-center gap-1.5">
 						<i className="legend-focus" /> Focused
 					</span>

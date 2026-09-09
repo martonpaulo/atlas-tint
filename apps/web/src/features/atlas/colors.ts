@@ -25,6 +25,26 @@ export function stableHash(value: string) {
  */
 export const defaultCustomColor = "#b86b45";
 
+/**
+ * What each fill mode is called in the interface.
+ *
+ * `chronology` stays the persisted value — renaming it would need a migration for no user
+ * benefit — but it is shown as "Selection order", which is what it actually encodes. It was
+ * labelled "Visit chronology" while ignoring `visitDate` entirely.
+ */
+export const fillModeLabels: Record<FillMode, string> = {
+	hierarchical: "Hierarchical palette",
+	accent: "Single accent",
+	chronology: "Selection order",
+	custom: "Custom per region",
+};
+
+/** The endpoints of the selection-order scale, stated in words rather than only in colour. */
+export const selectionOrderLegend = {
+	earliest: "First marked",
+	latest: "Most recently marked",
+};
+
 export function isValidCustomColor(value: string) {
 	return /^#[\da-f]{6}$/i.test(value);
 }

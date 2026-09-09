@@ -257,7 +257,7 @@ describe("DataActions destructive confirmation", () => {
 		expect(row(/World . Custom colors/)).toHaveTextContent("1");
 		expect(row(/World . Color mode/)).toHaveTextContent("Single accent");
 		expect(row(/World . Projection/)).toHaveTextContent("Robinson");
-		expect(row(/Brazil . Color mode/)).toHaveTextContent("Visit chronology");
+		expect(row(/Brazil . Color mode/)).toHaveTextContent("Selection order");
 		expect(row(/Spain . Projection/)).toHaveTextContent("Natural Earth");
 		expect(screen.getByText(/settings would change/)).toBeInTheDocument();
 	});

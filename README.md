@@ -19,7 +19,7 @@ The durable product boundary and non-goals are recorded in [`docs/product.md`](d
 - See count, manifest-derived total, percentage, and progress immediately.
 - Switch presets without mixing or losing their progress.
 - Change supported projections without losing selections.
-- Use hierarchical, single-accent, visit-chronology, or per-entity custom colors.
+- Use hierarchical, single-accent, selection-order, or per-entity custom colors.
 - Persist versioned progress locally and merge concurrent edits made in several tabs.
 - Export geometry-free JSON and preview a validated import before atomic replacement.
 - Reset one preset or all progress through confirmation dialogs.
@@ -193,7 +193,7 @@ The interface follows one visual grammar: 8 px control corners, 12 px major surf
 ## Known limitations
 
 - AtlasTint is desktop-only and deliberately provides no compressed mobile workspace.
-- Visit dates are already supported by the persisted model but do not yet have an editing UI.
+- Visit dates are already supported by the persisted model but do not yet have an editing UI, and they deliberately have no visual effect: the temporal fill mode is **Selection order**, which ranks the regions currently selected from *First marked* to *Most recently marked*. Deselecting closes the visual gap without renumbering stored history.
 - JSON import replaces compatible local progress as one atomic operation rather than merging individual selections.
 - The catalog currently ships three presets; there is no end-user preset installation UI.
 - Political and administrative boundaries reflect the documented source versions and inclusion policies, not a claim that every boundary is universally uncontested.
