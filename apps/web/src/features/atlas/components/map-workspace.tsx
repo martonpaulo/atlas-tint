@@ -17,7 +17,11 @@ import {
 import { type LoadedPreset, projectionIdSchema } from "@/features/atlas/domain";
 import type { GeometryBundle } from "@/features/atlas/geometry";
 import { projectionLabel } from "@/features/atlas/projection-registry";
-import { createProjectionLayout } from "@/features/atlas/projections";
+import {
+	createProjectionLayout,
+	zoomExtent,
+	zoomTranslateExtent,
+} from "@/features/atlas/projections";
 import {
 	countSelectable,
 	createSelectionPolicy,
@@ -89,15 +93,10 @@ function MapCanvas({
 		const svgElement = svgRef.current;
 		if (!svgElement) return;
 		const behavior = zoom<SVGSVGElement, unknown>()
-			.scaleExtent([1, 8])
-			.extent([
-				[0, 0],
-				[960, 640],
-			])
-			.translateExtent([
-				[-120, -80],
-				[1080, 720],
-			])
+			// Every one of these comes from the policy the projection fitting used.
+			.scaleExtent([...layout.policy.zoom.scaleExtent])
+			.extent(zoomExtent())
+			.translateExtent(zoomTranslateExtent())
 			.on("zoom", (event: D3ZoomEvent<SVGSVGElement, unknown>) => {
 				zoomGroupRef.current?.setAttribute(
 					"transform",
@@ -110,7 +109,7 @@ function MapCanvas({
 		return () => {
 			svgSelection.on(".zoom", null);
 		};
-	}, [geometry, projection]);
+	}, [geometry, projection, layout]);
 
 	const zoomBy = (factor: number) => {
 		if (!svgRef.current || !zoomBehaviorRef.current) return;

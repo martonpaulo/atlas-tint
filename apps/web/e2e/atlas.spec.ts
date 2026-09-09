@@ -274,6 +274,35 @@ test("merges independent selections made in two tabs of one browser", async ({
 	await third.close();
 });
 
+test("keeps zoom bounded and resets it when the projection changes", async ({
+	page,
+}) => {
+	const group = page.locator('[data-testid="atlas-map"] > g').last();
+	const scale = async () =>
+		Number(
+			/scale\(([\d.]+)\)/.exec(
+				(await group.getAttribute("transform")) ?? "",
+			)?.[1] ?? "1",
+		);
+
+	// Zoom well past the configured maximum through the control.
+	const zoomIn = page.getByRole("button", { name: "Zoom in" });
+	for (let step = 0; step < 12; step += 1) await zoomIn.click();
+	expect(await scale()).toBeLessThanOrEqual(8);
+	expect(await scale()).toBeGreaterThan(1);
+
+	// Zooming out is bounded the same way.
+	const zoomOut = page.getByRole("button", { name: "Zoom out" });
+	for (let step = 0; step < 12; step += 1) await zoomOut.click();
+	expect(await scale()).toBe(1);
+
+	// A projection change resets the transform deterministically.
+	for (let step = 0; step < 3; step += 1) await zoomIn.click();
+	expect(await scale()).toBeGreaterThan(1);
+	await page.getByLabel("Projection").selectOption("robinson");
+	await expect.poll(scale).toBe(1);
+});
+
 test("keeps a selection made just before the viewport becomes unsupported", async ({
 	page,
 }) => {
