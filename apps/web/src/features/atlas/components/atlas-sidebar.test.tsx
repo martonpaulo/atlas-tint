@@ -3,9 +3,9 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { AtlasSidebar } from "@/features/atlas/components/atlas-sidebar";
+import { createDefaultState } from "@/features/atlas/persistence-schema";
 import { spainPreset } from "@/features/atlas/presets/spain";
 import { worldPreset } from "@/features/atlas/presets/world";
-import { createDefaultState } from "@/features/atlas/persistence-schema";
 import { useAtlasStore } from "@/features/atlas/store";
 
 beforeEach(() => {

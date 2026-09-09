@@ -5,12 +5,12 @@ import {
 	isValidCustomColor,
 	stableHash,
 } from "@/features/atlas/colors";
+import { createEmptyProgress } from "@/features/atlas/persistence-schema";
 import { brazilPreset } from "@/features/atlas/presets/brazil";
 import {
 	calculatePercentage,
 	formatPercentage,
 } from "@/features/atlas/progress";
-import { createEmptyProgress } from "@/features/atlas/persistence-schema";
 
 describe("progress and deterministic colors", () => {
 	it("calculates and formats bounded percentages", () => {

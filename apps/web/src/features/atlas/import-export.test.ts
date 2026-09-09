@@ -5,10 +5,10 @@ import {
 	serializeAtlasExport,
 	validateImportText,
 } from "@/features/atlas/import-export";
+import { createDefaultState } from "@/features/atlas/persistence-schema";
 import { brazilPreset } from "@/features/atlas/presets/brazil";
 import { spainPreset } from "@/features/atlas/presets/spain";
 import { worldPreset } from "@/features/atlas/presets/world";
-import { createDefaultState } from "@/features/atlas/persistence-schema";
 
 const manifests = {
 	world: worldPreset.manifest,

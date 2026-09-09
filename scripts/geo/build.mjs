@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
 import * as shapefile from "shapefile";
-import { feature as topologyFeature, mesh } from "topojson-client";
+import { mesh, feature as topologyFeature } from "topojson-client";
 import { topology } from "topojson-server";
 import {
 	presimplify,
