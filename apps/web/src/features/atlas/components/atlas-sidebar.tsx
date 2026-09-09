@@ -273,6 +273,51 @@ export function AtlasSidebar({
 	// biome-ignore lint/correctness/useExhaustiveDependencies: these values intentionally reset keyboard navigation when the result set changes.
 	useEffect(() => setActiveEntityId(undefined), [query, filter, manifest.id]);
 
+	/**
+	 * Announced only once typing settles, so a nine-character query produces one message rather
+	 * than nine. Kept apart from the selection announcement so neither overwrites the other.
+	 */
+	const [resultAnnouncement, setResultAnnouncement] = useState("");
+	useEffect(() => {
+		const filterName = filter === "all" ? "All regions" : "Selected regions";
+		const settle = setTimeout(
+			() =>
+				setResultAnnouncement(
+					`${filterName}: ${entities.length} ${entities.length === 1 ? "result" : "results"}${query ? ` for ${query}` : ""}.`,
+				),
+			400,
+		);
+		return () => clearTimeout(settle);
+	}, [entities.length, filter, query]);
+
+	/**
+	 * Why the list is empty, and what would actually fix it.
+	 *
+	 * One generic "No regions found. Try another name, alias, code, or filter." could not name
+	 * the recovery action, and an empty Selected view is not a failed search.
+	 */
+	const emptyState = (() => {
+		const clearSearch = { label: "Clear search", run: () => setQuery("") };
+		const showAll = { label: "Show all", run: () => setFilter("all") };
+		if (filter === "selected" && query)
+			return {
+				title: "No selected regions match the query",
+				description: `Nothing you have selected matches “${query}”.`,
+				actions: [clearSearch, showAll],
+			};
+		if (filter === "selected")
+			return {
+				title: "No selected regions",
+				description: "Choose All to find and mark a region.",
+				actions: [showAll],
+			};
+		return {
+			title: "No regions match the query",
+			description: `Nothing matches “${query}”. Try another name, alias, or code.`,
+			actions: [clearSearch],
+		};
+	})();
+
 	const activeIndex = entities.findIndex(({ id }) => id === activeEntityId);
 	// Exactly one row is reachable with Tab, so Tab and Shift+Tab step over the whole
 	// result set instead of walking hundreds of region controls.
@@ -417,7 +462,7 @@ export function AtlasSidebar({
 								variant="ghost"
 								size="icon-xs"
 								className="absolute top-1/2 right-1.5 -translate-y-1/2"
-								aria-label="Clear search"
+								aria-label="Clear search box"
 								onClick={clearSearch}
 							>
 								<X />
@@ -437,15 +482,20 @@ export function AtlasSidebar({
 								<button
 									key={value}
 									type="button"
-									className="rounded-sm px-2.5 py-1.5 font-medium text-[11px] text-muted-foreground capitalize outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-sidebar-ring data-[active=true]:bg-background data-[active=true]:text-foreground data-[active=true]:shadow-xs"
-									data-active={filter === value}
+									// A two-state toggle group: exactly one is pressed, and native
+									// button keyboard behaviour is preserved.
+									aria-pressed={filter === value}
+									className="rounded-sm px-2.5 py-1.5 font-medium text-[11px] text-muted-foreground capitalize outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-sidebar-ring aria-pressed:bg-background aria-pressed:text-foreground aria-pressed:shadow-xs"
 									onClick={() => setFilter(value)}
 								>
 									{value}
 								</button>
 							))}
 						</fieldset>
-						<span className="text-[11px] text-muted-foreground tabular-nums">
+						<span
+							className="text-[11px] text-muted-foreground tabular-nums"
+							aria-hidden="true"
+						>
 							{entities.length} shown
 						</span>
 					</div>
@@ -470,6 +520,10 @@ export function AtlasSidebar({
 					) : null}
 				</section>
 			</div>
+
+			<p className="sr-only" aria-live="polite" aria-atomic="true">
+				{resultAnnouncement}
+			</p>
 
 			<div className="min-h-0 flex-1 overflow-hidden px-2">
 				{entities.length > 0 ? (
@@ -513,10 +567,21 @@ export function AtlasSidebar({
 					</ul>
 				) : (
 					<div className="px-4 py-10 text-center">
-						<p className="font-medium text-sm">No regions found</p>
+						<p className="font-medium text-sm">{emptyState.title}</p>
 						<p className="mt-1 text-muted-foreground text-xs leading-5">
-							Try another name, alias, code, or filter.
+							{emptyState.description}
 						</p>
+						<div className="mt-4 flex flex-wrap justify-center gap-2">
+							{emptyState.actions.map((action) => (
+								<Button
+									key={action.label}
+									variant="outline"
+									onClick={action.run}
+								>
+									{action.label}
+								</Button>
+							))}
+						</div>
 					</div>
 				)}
 			</div>
