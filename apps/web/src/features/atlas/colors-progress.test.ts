@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
 	chronologyFill,
 	createChronologyContext,
+	emptyChronologyContext,
 	getSelectedFill,
 	isValidCustomColor,
 	stableHash,
@@ -34,11 +35,19 @@ describe("progress and deterministic colors", () => {
 			({ id }) => id === "br-am",
 		);
 		if (!acre || !amazonas) throw new Error("Brazil fixtures missing");
-		const first = getSelectedFill(acre, "hierarchical", progress);
-		expect(getSelectedFill(acre, "hierarchical", progress)).toBe(first);
-		expect(getSelectedFill(amazonas, "hierarchical", progress)).toContain(
-			"146",
-		);
+		// The palette now comes from the preset, not from a table inside the colour engine.
+		const hues = brazilPreset.groupHues;
+		const fill = (entity: typeof acre) =>
+			getSelectedFill(
+				entity,
+				"hierarchical",
+				progress,
+				emptyChronologyContext,
+				hues,
+			);
+		const first = fill(acre);
+		expect(fill(acre)).toBe(first);
+		expect(fill(amazonas)).toContain("146");
 		expect(stableHash("br-ac")).toBe(stableHash("br-ac"));
 	});
 

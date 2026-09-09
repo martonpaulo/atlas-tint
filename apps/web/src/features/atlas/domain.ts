@@ -6,13 +6,21 @@ export const presetIdSchema = z
 	.regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 export type PresetId = z.infer<typeof presetIdSchema>;
 
-export const projectionIdSchema = z.enum([
+/**
+ * The projection vocabulary. `projection-registry.ts` is typed against it and must supply a
+ * label and a factory for every entry, so a new projection cannot compile without both.
+ *
+ * The IDs live here rather than in the registry so that this schema module — which persistence
+ * and the store import eagerly — does not pull D3 into the initial bundle.
+ */
+export const projectionIds = [
 	"equal-earth",
 	"natural-earth",
 	"robinson",
 	"mercator",
-]);
-export type ProjectionId = z.infer<typeof projectionIdSchema>;
+] as const;
+export const projectionIdSchema = z.enum(projectionIds);
+export type ProjectionId = (typeof projectionIds)[number];
 
 export const fillModeSchema = z.enum([
 	"hierarchical",
@@ -66,6 +74,14 @@ export interface LoadedPreset {
 	geometryUrl: string;
 	attribution: string;
 	fit: "sphere" | "entities";
+	/**
+	 * The hue used for each entity group in the hierarchical palette.
+	 *
+	 * Preset-specific colour policy belongs with the preset. Keeping a table of every current
+	 * group in the shared colour engine meant a new preset rendered every group in the same
+	 * fallback hue, silently, and adding one required editing product-core code.
+	 */
+	groupHues: Readonly<Record<string, number>>;
 	insets: ReadonlyArray<{
 		key: string;
 		label: string;

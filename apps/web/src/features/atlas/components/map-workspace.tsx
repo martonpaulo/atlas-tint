@@ -15,6 +15,7 @@ import {
 } from "@/features/atlas/colors";
 import { type LoadedPreset, projectionIdSchema } from "@/features/atlas/domain";
 import type { GeometryBundle } from "@/features/atlas/geometry";
+import { projectionLabel } from "@/features/atlas/projection-registry";
 import { createProjectionLayout } from "@/features/atlas/projections";
 import {
 	createSelectionPolicy,
@@ -28,13 +29,6 @@ interface MapWorkspaceProps {
 	focusedEntityId?: string;
 	onFocusEntity: (id: string | undefined) => void;
 }
-
-const projectionLabels = {
-	"equal-earth": "Equal Earth",
-	"natural-earth": "Natural Earth",
-	robinson: "Robinson",
-	mercator: "Mercator",
-} as const;
 
 function MapCanvas({
 	preset,
@@ -372,7 +366,7 @@ export function MapWorkspace(props: MapWorkspaceProps) {
 						>
 							{manifest.projections.map((id) => (
 								<option key={id} value={id}>
-									{projectionLabels[id]}
+									{projectionLabel(id)}
 								</option>
 							))}
 						</select>

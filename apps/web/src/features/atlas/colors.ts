@@ -4,38 +4,8 @@ import type {
 	SelectionMetadata,
 } from "@/features/atlas/persistence-schema";
 
-const groupHues: Record<string, number> = {
-	Africa: 39,
-	Asia: 102,
-	Europe: 226,
-	"North America": 184,
-	"South America": 146,
-	Oceania: 286,
-	"br-north": 146,
-	"br-northeast": 58,
-	"br-central-west": 88,
-	"br-southeast": 218,
-	"br-south": 292,
-	"es-andalusia": 46,
-	"es-aragon": 73,
-	"es-asturias": 203,
-	"es-balearic-islands": 178,
-	"es-basque-country": 155,
-	"es-canary-islands": 25,
-	"es-cantabria": 189,
-	"es-castile-and-leon": 91,
-	"es-castile-la-mancha": 61,
-	"es-catalonia": 12,
-	"es-extremadura": 123,
-	"es-galicia": 211,
-	"es-la-rioja": 335,
-	"es-madrid": 283,
-	"es-murcia": 355,
-	"es-navarre": 166,
-	"es-valencian-community": 31,
-	"es-ceuta": 242,
-	"es-melilla": 264,
-};
+/** The single-accent hue, and the last resort if a preset somehow renders an unmapped group. */
+export const accentHue = 39;
 
 export function stableHash(value: string) {
 	let hash = 2_166_136_261;
@@ -111,13 +81,17 @@ export function getSelectedFill(
 	mode: FillMode,
 	progress: PresetProgress,
 	chronology: ChronologyContext = emptyChronologyContext,
+	/** Supplied by the loaded preset; validated at load time, so every group has a hue. */
+	groupHues: Readonly<Record<string, number>> = {},
 ) {
 	if (mode === "custom") {
 		const custom = progress.customColors[entity.id];
 		if (custom && isValidCustomColor(custom)) return custom;
 	}
 	if (mode === "chronology") return chronologyFill(entity.id, chronology);
-	const hue = mode === "accent" ? 39 : (groupHues[entity.groupId] ?? 39);
+	// `accent` is one deliberate hue for every group; `hierarchical` uses the preset's own.
+	const hue =
+		mode === "accent" ? accentHue : (groupHues[entity.groupId] ?? accentHue);
 	const lightness = deterministicLightness(entity.id);
 	return `oklch(${(lightness / 100).toFixed(3)} 0.12 ${hue})`;
 }

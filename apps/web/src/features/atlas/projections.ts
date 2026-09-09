@@ -1,12 +1,4 @@
-import {
-	type GeoPermissibleObjects,
-	type GeoProjection,
-	geoEqualEarth,
-	geoMercator,
-	geoNaturalEarth1,
-	geoPath,
-} from "d3-geo";
-import { geoRobinson } from "d3-geo-projection";
+import { type GeoPermissibleObjects, geoMercator, geoPath } from "d3-geo";
 import type { FeatureCollection, Geometry } from "geojson";
 
 import type { LoadedPreset, ProjectionId } from "@/features/atlas/domain";
@@ -15,22 +7,10 @@ import type {
 	GeometryBundle,
 	ParentFeature,
 } from "@/features/atlas/geometry";
+import { createProjection } from "@/features/atlas/projection-registry";
 
 const VIEWBOX_WIDTH = 960;
 const VIEWBOX_HEIGHT = 640;
-
-function projectionFor(id: ProjectionId): GeoProjection {
-	switch (id) {
-		case "equal-earth":
-			return geoEqualEarth();
-		case "natural-earth":
-			return geoNaturalEarth1();
-		case "robinson":
-			return geoRobinson();
-		case "mercator":
-			return geoMercator();
-	}
-}
 
 function featureCollection<T extends EntityFeature | ParentFeature>(
 	features: T[],
@@ -57,7 +37,7 @@ export function createProjectionLayout(
 	const mainEntities = bundle.entities.features.filter(
 		({ properties }) => !properties.inset || !insetKeys.has(properties.inset),
 	);
-	const mainProjection = projectionFor(projectionId);
+	const mainProjection = createProjection(projectionId);
 	const reservedInlineStart = preset.insets.reduce(
 		(maximum, inset) =>
 			inset.x + inset.width < VIEWBOX_WIDTH / 2

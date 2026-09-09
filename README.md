@@ -93,15 +93,19 @@ The manifest, never the raw source feature count, defines selectable entities an
 
 ## Preset model and adding another preset
 
-A preset registration declares its stable ID, display label, default projection, and lazy loader. The loaded preset supplies a validated manifest, geometry URL, attribution, fit policy, and optional inset definitions. The map engine does not branch on current preset IDs.
+A preset registration declares its stable ID, display label, default projection, and lazy loader. That much is eager, so persistence defaults and the preset selector exist before any map is downloaded. The lazily loaded preset supplies a validated manifest, a content-versioned geometry URL, attribution, fit policy, its own group palette, and optional inset definitions. The map engine does not branch on current preset IDs.
+
+`loadPreset` checks the loaded module against its registration and refuses a preset whose manifest names a different stable ID, whose default projection disagrees with the catalog or is not among its own supported projections, or whose palette does not cover exactly the groups it renders. A missing hue is an error, not a silent fallback.
+
+Projection IDs live in `domain.ts` and `projection-registry.ts` is typed against them, so a new projection cannot compile without both a display label and a D3 factory.
 
 To add or replace a preset:
 
 1. Define a curated manifest with application-owned stable IDs, names, aliases, codes, groups, parent relationships, totals, and projection support.
 2. Add a deterministic source adapter to the geographic build pipeline. Verify the upstream archive checksum and normalize the source coordinate system before topology generation.
-3. Generate the entity and parent TopoJSON collections and run all manifest-to-geometry invariants.
-4. Create a lazy preset module that declares geometry, attribution, fit behavior, and any insets.
-5. Add one registration to the preset catalog. Persistence defaults, selection UI, import previews, and loading derive from that catalog.
+3. Generate the entity and parent TopoJSON collections and run all manifest-to-geometry invariants. The build records a digest of each artifact, and the browser requests geometry by that digest.
+4. Create a lazy preset module that declares geometry, attribution, fit behavior, a hue for every group it renders, and any insets.
+5. Add one registration to the preset catalog. Persistence defaults, selection UI, import previews, and loading derive from that catalog, and the contract check runs on load.
 6. Add focused manifest, search, selection, rendering, and critical-journey coverage for the new policy.
 
 Persisted preset data is a record keyed by stable preset ID rather than a fixed object with World, Brazil, and Spain fields. Unknown saved preset records remain non-fatal, while an unavailable active preset safely falls back to the catalog default.
