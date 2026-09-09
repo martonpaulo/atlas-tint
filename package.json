@@ -19,6 +19,7 @@
 		"test": "pnpm --filter web test",
 		"test:e2e": "pnpm --filter web test:e2e",
 		"geo:build": "node scripts/geo/build.mjs",
+		"screenshots": "node scripts/screenshots/capture.mjs",
 		"geo:check": "node scripts/geo/check.mjs",
 		"validate": "pnpm format && pnpm lint && pnpm check-types && pnpm test && pnpm geo:check && pnpm test:e2e && pnpm build"
 	},
@@ -28,6 +29,7 @@
 	"devDependencies": {
 		"@atlas-tint/config": "workspace:*",
 		"@biomejs/biome": "^2.5.12",
+		"@playwright/test": "^1.62.1",
 		"@types/node": "catalog:",
 		"d3-geo": "^3.1.1",
 		"shapefile": "^0.6.6",
