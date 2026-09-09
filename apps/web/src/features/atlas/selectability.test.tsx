@@ -10,7 +10,7 @@ import {
 } from "@/features/atlas/persistence-schema";
 import { createSelectionPolicy } from "@/features/atlas/selection-policy";
 import { useAtlasStore } from "@/features/atlas/store";
-import { mixedManifest } from "@/test/mixed-preset";
+import { mixedManifest, mixedPreset } from "@/test/mixed-preset";
 
 const policy = createSelectionPolicy(mixedManifest);
 
@@ -28,7 +28,7 @@ describe("selectability is enforced everywhere", () => {
 	it("renders a visible non-selectable region but does not let it be toggled", async () => {
 		const user = userEvent.setup();
 		render(
-			<AtlasSidebar manifest={mixedManifest} onFocusEntity={() => undefined} />,
+			<AtlasSidebar preset={mixedPreset} onFocusEntity={() => undefined} />,
 		);
 
 		const available = screen.getByRole("button", { name: /^MX-A/ });
@@ -48,7 +48,7 @@ describe("selectability is enforced everywhere", () => {
 
 	it("counts progress from the manifest total, not from what is stored", () => {
 		render(
-			<AtlasSidebar manifest={mixedManifest} onFocusEntity={() => undefined} />,
+			<AtlasSidebar preset={mixedPreset} onFocusEntity={() => undefined} />,
 		);
 		expect(screen.getByRole("progressbar")).toHaveAttribute("max", "2");
 
@@ -77,7 +77,7 @@ describe("selectability is enforced everywhere", () => {
 	it("restricts a parent group to its selectable children", async () => {
 		const user = userEvent.setup();
 		render(
-			<AtlasSidebar manifest={mixedManifest} onFocusEntity={() => undefined} />,
+			<AtlasSidebar preset={mixedPreset} onFocusEntity={() => undefined} />,
 		);
 		await user.click(screen.getByText("Select groups"));
 

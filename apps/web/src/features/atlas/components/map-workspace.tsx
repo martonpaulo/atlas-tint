@@ -11,7 +11,7 @@ import { type PointerEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import {
 	createChronologyContext,
-	getSelectedFill,
+	resolveEntityColor,
 } from "@/features/atlas/colors";
 import { type LoadedPreset, projectionIdSchema } from "@/features/atlas/domain";
 import type { GeometryBundle } from "@/features/atlas/geometry";
@@ -223,12 +223,13 @@ function MapCanvas({
 									style={{
 										fill: selectable
 											? selected
-												? getSelectedFill(
+												? resolveEntityColor(
 														entity,
 														progress.fillMode,
 														progress,
 														chronology,
-													)
+														preset.groupHues,
+													).value
 												: "var(--map-fill-unselected)"
 											: // A hatch, not merely another colour, so unavailable geography reads as
 												// unavailable without depending on colour perception.

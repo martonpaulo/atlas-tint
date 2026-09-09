@@ -24,10 +24,7 @@ describe("AtlasSidebar", () => {
 	it("selects from search with the keyboard and updates progress", async () => {
 		const user = userEvent.setup();
 		render(
-			<AtlasSidebar
-				manifest={worldPreset.manifest}
-				onFocusEntity={() => undefined}
-			/>,
+			<AtlasSidebar preset={worldPreset} onFocusEntity={() => undefined} />,
 		);
 		const search = screen.getByRole("searchbox");
 		await user.type(search, "france{Enter}");
@@ -40,10 +37,7 @@ describe("AtlasSidebar", () => {
 	it("selects from the accessible list", async () => {
 		const user = userEvent.setup();
 		render(
-			<AtlasSidebar
-				manifest={worldPreset.manifest}
-				onFocusEntity={() => undefined}
-			/>,
+			<AtlasSidebar preset={worldPreset} onFocusEntity={() => undefined} />,
 		);
 		await user.click(screen.getByRole("button", { name: /^Spain/ }));
 		expect(
@@ -58,10 +52,7 @@ describe("AtlasSidebar", () => {
 			data: { ...state.data, activePresetId: "spain" },
 		}));
 		render(
-			<AtlasSidebar
-				manifest={spainPreset.manifest}
-				onFocusEntity={() => undefined}
-			/>,
+			<AtlasSidebar preset={spainPreset} onFocusEntity={() => undefined} />,
 		);
 		await user.click(screen.getByText("Select groups"));
 		const group = screen.getByRole("checkbox", {
@@ -83,10 +74,7 @@ describe("AtlasSidebar", () => {
 		};
 		useAtlasStore.setState({ data: state });
 		render(
-			<AtlasSidebar
-				manifest={worldPreset.manifest}
-				onFocusEntity={() => undefined}
-			/>,
+			<AtlasSidebar preset={worldPreset} onFocusEntity={() => undefined} />,
 		);
 		await user.click(screen.getByText("Style & data"));
 		await user.click(screen.getByRole("button", { name: "Reset preset" }));
@@ -100,12 +88,7 @@ describe("AtlasSidebar", () => {
 
 describe("AtlasSidebar keyboard navigation", () => {
 	const renderWorld = (onFocusEntity = () => undefined) =>
-		render(
-			<AtlasSidebar
-				manifest={worldPreset.manifest}
-				onFocusEntity={onFocusEntity}
-			/>,
-		);
+		render(<AtlasSidebar preset={worldPreset} onFocusEntity={onFocusEntity} />);
 
 	it("moves real DOM focus into the results and back to the search box", async () => {
 		const user = userEvent.setup();
@@ -154,7 +137,7 @@ describe("AtlasSidebar keyboard navigation", () => {
 	it("reports Locate as pressed once the map actually focuses the region", () => {
 		render(
 			<AtlasSidebar
-				manifest={worldPreset.manifest}
+				preset={worldPreset}
 				focusedEntityId="world-fr"
 				onFocusEntity={() => undefined}
 			/>,

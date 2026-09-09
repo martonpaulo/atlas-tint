@@ -16,6 +16,15 @@ export function stableHash(value: string) {
 	return hash >>> 0;
 }
 
+/**
+ * The starting point when a region is given a custom colour for the first time.
+ *
+ * Deliberately a documented constant rather than an approximation of the inherited OKLCH value:
+ * the picker cannot represent that colour faithfully, and pretending otherwise is what made the
+ * control disagree with the map in the first place.
+ */
+export const defaultCustomColor = "#b86b45";
+
 export function isValidCustomColor(value: string) {
 	return /^#[\da-f]{6}$/i.test(value);
 }
@@ -76,6 +85,36 @@ export function chronologyFill(entityId: string, context: ChronologyContext) {
 	return `oklch(${lightness.toFixed(3)} 0.12 39)`;
 }
 
+/**
+ * The current colour of a selected entity, and where it came from.
+ *
+ * The picker and the map used to decide separately: the map fell through to the hierarchical
+ * hue when no custom colour was stored, while the input showed a fixed `#b86b45` it had made
+ * up. France rendered `oklch(0.650 0.12 226)` while its control claimed a brown. One decision,
+ * consumed by both, and inheritance stated rather than faked.
+ */
+export type ResolvedColor =
+	| { source: "custom"; value: string }
+	| { source: "inherited"; value: string };
+
+export function resolveEntityColor(
+	entity: EntityManifest,
+	mode: FillMode,
+	progress: PresetProgress,
+	chronology: ChronologyContext = emptyChronologyContext,
+	groupHues: Readonly<Record<string, number>> = {},
+): ResolvedColor {
+	if (mode === "custom") {
+		const custom = progress.customColors[entity.id];
+		if (custom && isValidCustomColor(custom))
+			return { source: "custom", value: custom };
+	}
+	return {
+		source: "inherited",
+		value: getSelectedFill(entity, mode, progress, chronology, groupHues),
+	};
+}
+
 export function getSelectedFill(
 	entity: EntityManifest,
 	mode: FillMode,
@@ -87,6 +126,7 @@ export function getSelectedFill(
 	if (mode === "custom") {
 		const custom = progress.customColors[entity.id];
 		if (custom && isValidCustomColor(custom)) return custom;
+		// No custom colour yet: the region keeps its hierarchical colour, and the control says so.
 	}
 	if (mode === "chronology") return chronologyFill(entity.id, chronology);
 	// `accent` is one deliberate hue for every group; `hierarchical` uses the preset's own.

@@ -1,5 +1,6 @@
 import {
 	type EntityManifest,
+	type LoadedPreset,
 	type PresetManifest,
 	presetManifestSchema,
 } from "@/features/atlas/domain";
@@ -51,3 +52,13 @@ export const mixedManifest: PresetManifest = presetManifestSchema.parse({
 		},
 	],
 });
+
+/** The same fixture as a loaded preset, for anything that renders rather than validates. */
+export const mixedPreset: LoadedPreset = {
+	manifest: mixedManifest,
+	geometryUrl: "maps/mixed.topo.json",
+	attribution: "Synthetic fixture",
+	groupHues: { "group-a": 300 },
+	fit: "entities",
+	insets: [],
+};

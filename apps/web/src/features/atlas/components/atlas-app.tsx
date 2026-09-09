@@ -120,7 +120,7 @@ export function AtlasApp() {
 			{loadState.status === "ready" ? (
 				<div className="grid min-h-0 grid-cols-[clamp(310px,24vw,336px)_minmax(0,1fr)]">
 					<AtlasSidebar
-						manifest={loadState.preset.manifest}
+						preset={loadState.preset}
 						focusedEntityId={focusedEntityId}
 						onFocusEntity={setFocusedEntityId}
 					/>

@@ -6,6 +6,7 @@ import {
 	LocateFixed,
 	Search,
 	SlidersHorizontal,
+	Undo2,
 	X,
 } from "lucide-react";
 import {
@@ -16,12 +17,18 @@ import {
 	useState,
 } from "react";
 
+import {
+	createChronologyContext,
+	defaultCustomColor,
+	type ResolvedColor,
+	resolveEntityColor,
+} from "@/features/atlas/colors";
 import { DataActions } from "@/features/atlas/components/data-actions";
 import {
 	type EntityManifest,
 	fillModeSchema,
+	type LoadedPreset,
 	type ParentManifest,
-	type PresetManifest,
 } from "@/features/atlas/domain";
 import type { SelectionMetadata } from "@/features/atlas/persistence-schema";
 import { formatPercentage } from "@/features/atlas/progress";
@@ -36,7 +43,7 @@ import {
 import { useAtlasStore } from "@/features/atlas/store";
 
 interface AtlasSidebarProps {
-	manifest: PresetManifest;
+	preset: LoadedPreset;
 	focusedEntityId?: string;
 	onFocusEntity: (id: string | undefined) => void;
 }
@@ -88,7 +95,7 @@ function EntityRow({
 	mapFocused,
 	tabbable,
 	customMode,
-	customColor,
+	resolvedColor,
 	registerRow,
 	onToggle,
 	onLocate,
@@ -105,11 +112,12 @@ function EntityRow({
 	mapFocused: boolean;
 	tabbable: boolean;
 	customMode: boolean;
-	customColor?: string;
+	/** The colour this region actually renders in, and whether it is inherited or chosen. */
+	resolvedColor?: ResolvedColor;
 	registerRow: (id: string, element: HTMLButtonElement | null) => void;
 	onToggle: () => void;
 	onLocate: () => void;
-	onColor: (value: string) => void;
+	onColor: (value: string | undefined) => void;
 	onKeyDown: (event: KeyboardEvent<HTMLElement>) => void;
 }) {
 	const tabIndex = tabbable ? 0 : -1;
@@ -158,16 +166,48 @@ function EntityRow({
 				</span>
 			</button>
 			<div className="flex items-center gap-1 pr-1.5">
-				{customMode && selected && selectable ? (
-					<input
-						type="color"
-						aria-label={`Custom color for ${entity.name}`}
-						className="size-7 cursor-pointer rounded-md border-0 bg-transparent p-0"
-						value={customColor ?? "#b86b45"}
-						tabIndex={tabIndex}
-						onChange={(event) => onColor(event.target.value)}
-						onKeyDown={onKeyDown}
-					/>
+				{customMode && selected && selectable && resolvedColor ? (
+					resolvedColor.source === "custom" ? (
+						<>
+							<input
+								type="color"
+								aria-label={`Custom color for ${entity.name}`}
+								className="size-7 cursor-pointer rounded-md border-0 bg-transparent p-0"
+								value={resolvedColor.value}
+								tabIndex={tabIndex}
+								onChange={(event) => onColor(event.target.value)}
+								onKeyDown={onKeyDown}
+							/>
+							<Button
+								variant="ghost"
+								size="icon-xs"
+								aria-label={`Use the inherited color for ${entity.name}`}
+								tabIndex={tabIndex}
+								onClick={() => onColor(undefined)}
+								onKeyDown={onKeyDown}
+							>
+								<Undo2 />
+							</Button>
+						</>
+					) : (
+						// A native colour input cannot encode the inherited OKLCH value, so say it
+						// is inherited and show the colour actually rendered, rather than invent a
+						// hex the map does not use.
+						<Button
+							variant="ghost"
+							size="icon-xs"
+							aria-label={`Set a custom color for ${entity.name}, currently inherited`}
+							tabIndex={tabIndex}
+							onClick={() => onColor(defaultCustomColor)}
+							onKeyDown={onKeyDown}
+						>
+							<span
+								className="size-3.5 rounded-full border border-sidebar-border border-dashed"
+								style={{ background: resolvedColor.value }}
+								aria-hidden="true"
+							/>
+						</Button>
+					)
 				) : null}
 				<Button
 					variant="ghost"
@@ -188,10 +228,11 @@ function EntityRow({
 }
 
 export function AtlasSidebar({
-	manifest,
+	preset,
 	focusedEntityId,
 	onFocusEntity,
 }: AtlasSidebarProps) {
+	const { manifest, groupHues } = preset;
 	const progress = useAtlasStore(({ data }) => data.presets[manifest.id]);
 	const toggleEntity = useAtlasStore(({ toggleEntity: toggle }) => toggle);
 	const setParent = useAtlasStore(
@@ -204,6 +245,10 @@ export function AtlasSidebar({
 		({ setCustomColor: updateColor }) => updateColor,
 	);
 	const policy = createSelectionPolicy(manifest);
+	const chronology = useMemo(
+		() => createChronologyContext(progress.selected),
+		[progress.selected],
+	);
 	const [query, setQuery] = useState("");
 	const [filter, setFilter] = useState<"all" | "selected">("all");
 	// Roving focus is keyed by stable entity ID, never by index: sorting, filtering, and
@@ -443,7 +488,17 @@ export function AtlasSidebar({
 								mapFocused={focusedEntityId === entity.id}
 								tabbable={tabbableId === entity.id}
 								customMode={progress.fillMode === "custom"}
-								customColor={progress.customColors[entity.id]}
+								resolvedColor={
+									progress.selected[entity.id] !== undefined
+										? resolveEntityColor(
+												entity,
+												progress.fillMode,
+												progress,
+												chronology,
+												groupHues,
+											)
+										: undefined
+								}
 								registerRow={registerRow}
 								onToggle={() => toggleEntity(policy, entity.id, entity.name)}
 								onLocate={() =>

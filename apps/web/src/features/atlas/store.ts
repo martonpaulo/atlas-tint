@@ -1,5 +1,5 @@
 import { create } from "zustand";
-
+import { isValidCustomColor } from "@/features/atlas/colors";
 import type {
 	FillMode,
 	ParentManifest,
@@ -64,10 +64,11 @@ interface AtlasStore {
 		shouldSelect: boolean,
 	) => void;
 	setFillMode: (presetId: PresetId, mode: FillMode) => void;
+	/** `undefined` clears the custom colour, so the region returns to its inherited one. */
 	setCustomColor: (
 		policy: SelectionPolicy,
 		entityId: string,
-		color: string,
+		color: string | undefined,
 	) => void;
 	setProjection: (presetId: PresetId, projection: ProjectionId) => void;
 	setThemePreference: (theme: ThemePreference) => void;
@@ -335,16 +336,22 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 		},
 		setCustomColor(policy, entityId, color) {
 			if (!isSelectable(policy, entityId)) return;
+			if (color !== undefined && !isValidCustomColor(color)) return;
 			const presetId = policy.presetId;
 			const data = get().data;
 			const progress = data.presets[presetId];
+			const { [entityId]: _cleared, ...remainingColors } =
+				progress.customColors;
 			commit({
 				...data,
 				presets: {
 					...data.presets,
 					[presetId]: {
 						...progress,
-						customColors: { ...progress.customColors, [entityId]: color },
+						customColors:
+							color === undefined
+								? remainingColors
+								: { ...progress.customColors, [entityId]: color },
 						stamps: {
 							...progress.stamps,
 							customColors: {
