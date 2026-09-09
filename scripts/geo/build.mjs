@@ -61,6 +61,25 @@ async function sha256(path) {
 	return createHash("sha256").update(contents).digest("hex");
 }
 
+/**
+ * A checksum mismatch has two very different causes, and the fix differs completely, so say
+ * which one happened: a download that is not even an archive is a transport problem to retry,
+ * while a well-formed archive means the upstream republished and the new publication needs a
+ * reviewed boundary diff before its checksum is adopted.
+ */
+async function describeChecksumMismatch(path, source, checksum) {
+	const header = (await readFile(path)).subarray(0, 4);
+	const isZip = header.equals(Buffer.from([0x50, 0x4b, 0x03, 0x04]));
+	const cause = isZip
+		? "the archive is a well-formed zip, so the upstream has most likely republished; review the new publication's boundary diff before adopting its checksum"
+		: "the response is not a zip archive, so the download was truncated or the endpoint returned an error page; retry before touching the pin";
+	return [
+		`Checksum mismatch for ${source.filename}: expected ${source.sha256}, received ${checksum}.`,
+		`Source: ${source.version}.`,
+		cause,
+	].join("\n");
+}
+
 async function obtainSource(source, tempDirectory) {
 	const configuredCache = process.env.ATLAS_GEO_CACHE_DIR;
 	const destination = join(tempDirectory, source.filename);
@@ -88,8 +107,14 @@ async function obtainSource(source, tempDirectory) {
 	const checksum = await sha256(destination);
 	if (checksum !== source.sha256) {
 		throw new Error(
-			`Checksum mismatch for ${source.filename}: expected ${source.sha256}, received ${checksum}`,
+			await describeChecksumMismatch(destination, source, checksum),
 		);
+	}
+	// Seed the documented offline cache, so a source whose endpoint only ever serves its latest
+	// publication stays rebuildable from the exact bytes this build verified.
+	if (cachedPath) {
+		await mkdir(configuredCache, { recursive: true });
+		await writeFile(cachedPath, await readFile(destination));
 	}
 	return destination;
 }
