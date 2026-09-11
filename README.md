@@ -20,10 +20,11 @@ not fixed product types: state, import/export, the selector, loading, and render
 **preset registrations and string stable IDs**, so a future Australia- or Japan-only catalog needs no
 rewrite of the product core. The durable product boundary and non-goals are recorded in
 [`docs/product.md`](docs/product.md).
-
 <br />
 
 ---
+
+<br />
 
 ## 🌱 Quick Start
 
@@ -74,6 +75,9 @@ One optional **local** variable exists, for reproducible geographic builds:
 | Variable | Where | Purpose |
 | --- | --- | --- |
 | `ATLAS_GEO_CACHE_DIR` | Local, `pnpm geo:build` only | Absolute path to a directory holding the verified `world.zip`, `brazil.zip` and `spain.zip` archives, so the pipeline builds offline or repeatedly without re-downloading |
+<br />
+
+---
 
 <br />
 
@@ -256,6 +260,9 @@ The interface follows one visual grammar: 8 px control corners, 12 px major surf
 ## Discoverability
 
 The deployed page carries its metadata statically in `index.html` rather than injecting it from the router, because social scrapers and most crawlers read the HTML without executing JavaScript. That covers the canonical URL, the complete `og:` and `twitter:` sets with the image's type and dimensions and alt text, `theme-color` for each color scheme, and `WebApplication` structured data. `sitemap.xml` points at the same canonical URL, which is the custom domain in `apps/web/public/CNAME` — the address that answers 200.
+<br />
+
+---
 
 <br />
 
@@ -269,7 +276,7 @@ The deployed page carries its metadata statically in `index.html` rather than in
 
 <br />
 
-## License
+## License and attribution
 
 [MIT](LICENSE) © 2026 Marton Paulo.
 
