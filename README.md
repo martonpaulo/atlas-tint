@@ -1,5 +1,7 @@
 # AtlasTint
 
+<img src="apps/web/public/social-card.jpg" width="100%" alt="AtlasTint: an interactive atlas for marking the places you have been and tracking your progress">
+
 [![CI](https://github.com/martonpaulo/atlas-tint/actions/workflows/ci.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/ci.yml)
 [![Deploy GitHub Pages](https://github.com/martonpaulo/atlas-tint/actions/workflows/pages.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/pages.yml)
 
@@ -10,13 +12,6 @@ AtlasTint is a desktop-first, local-first interactive SVG atlas for marking geog
 The current production experience covers the registered World, Brazil, and Spain presets. These are catalog entries, not fixed product types: application state, import/export, the selector, loading, and rendering work from preset registrations and string stable IDs, so a future Australia- or Japan-only catalog does not require rewriting the product core.
 
 The durable product boundary and non-goals are recorded in [`docs/product.md`](docs/product.md).
-
-<p align="center">
-  <img src="docs/screenshots/world.webp" width="720" alt="AtlasTint showing the World preset: a list of sovereign states on the left, and a world map on the right with Brazil, Canada, Portugal, Japan and Australia colored in.">
-</p>
-<p align="center">
-  <img src="docs/screenshots/spain.webp" width="720" alt="AtlasTint showing the Spain preset: provinces listed by name and code on the left, and a map of Spain with Madrid, Barcelona, Valencia, Las Palmas and Ceuta colored in, including the Canary Islands, Ceuta and Melilla insets.">
-</p>
 
 ## Product behavior
 
@@ -67,7 +62,7 @@ pnpm build
 
 Focused commands are available for normal development. `pnpm test` runs Vitest unit and component tests; `pnpm test:e2e` runs the critical Playwright journeys.
 
-`pnpm screenshots` captures the real application window for documentation, and `pnpm social-card` renders the 1200 × 630 social preview from the running application. The capture method and the rules it enforces are recorded in [`docs/screenshots.md`](docs/screenshots.md).
+`pnpm social-card` renders the 1200 × 630 social preview that opens this README and the deployed page's link previews.
 
 ## Deployment
 
