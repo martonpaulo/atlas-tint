@@ -19,7 +19,6 @@
 		"test": "pnpm --filter web test",
 		"test:e2e": "pnpm --filter web test:e2e",
 		"geo:build": "node scripts/geo/build.mjs",
-		"screenshots": "node scripts/screenshots/capture.mjs",
 		"social-card": "node design/social-card/make-world.mjs && playwright screenshot --viewport-size=\"1200,630\" \"file://$PWD/design/social-card/social-card.html\" artifacts/social-card/card.png && magick artifacts/social-card/card.png -strip -quality 92 -sampling-factor 4:4:4 -interlace Plane apps/web/public/social-card.jpg",
 		"geo:check": "node --test scripts/geo/world-source.test.mjs && node scripts/geo/check.mjs",
 		"validate": "pnpm format && pnpm lint && pnpm check-types && pnpm test && pnpm geo:check && pnpm test:e2e && pnpm build"

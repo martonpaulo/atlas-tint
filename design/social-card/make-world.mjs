@@ -1,6 +1,6 @@
 // Draws the social card's world map from the app's own shipped geometry
 // (apps/web/public/maps/world.topo.json), with the projection the app uses by
-// default (Equal Earth) and the same five marked states as the README capture.
+// default (Equal Earth) and five marked states.
 //   node design/social-card/make-world.mjs   (needs ImageMagick)
 import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
