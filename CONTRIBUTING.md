@@ -55,4 +55,4 @@ pnpm validate
 Be respectful and assume good faith. Behaviour that makes the project unpleasant for others is not
 welcome, whatever its technical merit.
 
-AtlasTint source code is licensed under the terms in [`LICENSE`](LICENSE). Only submit work you have the right to contribute, and preserve the independent geographic attribution requirements in [`ATTRIBUTIONS.md`](ATTRIBUTIONS.md).
+AtlasTint source code is licensed under the terms in [`LICENSE`](LICENSE). Only submit work you have the right to contribute, and preserve the independent geographic attribution requirements in [`NOTICE.md`](NOTICE.md).

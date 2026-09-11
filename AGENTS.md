@@ -702,7 +702,7 @@ Rules for any executor working from a clone of this repository, including cloud 
 - Branch as `<type>/<agent>/issue-<n>/<short-slug>`; commit with Conventional Commits, subject ending in `(#<n>)`.
 - Never push to `main` and never merge: open a pull request and stop. Merge belongs to the owner or the orchestration workflow recorded in `.ao/worker-rules.md`.
 - Start the PR body with one `Closes #<n>` line per resolved issue, then the problem, implementation, tests with results, and residual risk.
-- Do not touch: `.ao/**`, `.github/workflows/**`, `docs/product.md`, `LICENSE`, or `ATTRIBUTIONS.md`.
+- Do not touch: `.ao/**`, `.github/workflows/**`, `docs/product.md`, `LICENSE`, or `NOTICE.md`.
 - `AGENTS.md` is protected by section, not as a file. `## Project identity and policy` is governance and never changes under an executor. Other sections change only when the accepted implementation makes a recorded project pattern untrue.
 - When a required product decision is absent from the issue, publish the exact question, apply `status: needs-decision` with `in-progress`, verify both labels, and stop instead of guessing.
 
