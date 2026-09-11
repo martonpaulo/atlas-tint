@@ -45,7 +45,7 @@ pnpm validate
 - Commit and pull request subjects follow [Conventional Commits](https://www.conventionalcommits.org/),
   one concern each, ending with the issue numbers they close: `feat(map): add the Spain insets (#41)`.
 - A pull request that closes issues starts its body with one `Closes #<n>` line per issue, naming the
-  same set as the title. `.github/workflows/pr-conventions.yml` checks exactly this.
+  same set as the title.
 - Add a regression test for changed durable behavior when practical.
 - Explain geographic inclusion-policy changes explicitly.
 - Include screenshots only when they materially help review; do not include personal progress exports.

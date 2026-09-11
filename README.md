@@ -6,7 +6,7 @@
 
 A desktop-first, local-first interactive SVG atlas for marking geographic regions, tracking progress, and building deterministic personal maps.
 
-[![CI](https://github.com/martonpaulo/atlas-tint/actions/workflows/ci.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/ci.yml) [![Deploy GitHub Pages](https://github.com/martonpaulo/atlas-tint/actions/workflows/pages.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/pages.yml) [![React 19.2](https://img.shields.io/badge/React-19.2-149eca)](https://react.dev/) [![Vite 8.2](https://img.shields.io/badge/Vite-8.2-646cff)](https://vite.dev/) [![TypeScript 6](https://img.shields.io/badge/TypeScript-6-3178c6)](https://www.typescriptlang.org/)
+[![Validate](https://github.com/martonpaulo/atlas-tint/actions/workflows/validate.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/validate.yml) [![Deploy](https://github.com/martonpaulo/atlas-tint/actions/workflows/deploy.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/deploy.yml) [![React 19.2](https://img.shields.io/badge/React-19.2-149eca)](https://react.dev/) [![Vite 8.2](https://img.shields.io/badge/Vite-8.2-646cff)](https://vite.dev/) [![TypeScript 6](https://img.shields.io/badge/TypeScript-6-3178c6)](https://www.typescriptlang.org/)
 
 </div>
 
