@@ -12,7 +12,11 @@ import {
 	persistenceStatusLabel,
 } from "@/features/atlas/components/persistence-notice";
 import type { LoadedPreset } from "@/features/atlas/domain";
-import { type GeometryBundle, loadGeometry } from "@/features/atlas/geometry";
+import {
+	discardGeometry,
+	type GeometryBundle,
+	loadGeometry,
+} from "@/features/atlas/geometry";
 import {
 	isAvailablePresetId,
 	presetCatalog,
@@ -64,6 +68,7 @@ export function AtlasApp() {
 				// Refuse a partial map rather than silently changing what is selectable.
 				const validation = validatePresetBundle(preset.manifest, geometry);
 				if (!validation.ok) {
+					discardGeometry(preset.geometryUrl);
 					setLoadState({
 						status: "error",
 						message: validation.message,

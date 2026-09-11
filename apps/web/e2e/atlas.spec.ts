@@ -607,3 +607,31 @@ test("shared controls follow motion roles and respect reduced motion", async ({
 		"1e-05s",
 	);
 });
+
+test("retries a decoded map that failed manifest compatibility", async ({
+	page,
+}) => {
+	let requests = 0;
+	await page.route("**/maps/world.topo.json*", async (route) => {
+		requests += 1;
+		if (requests === 1) {
+			await route.fulfill({
+				json: {
+					type: "Topology",
+					arcs: [],
+					objects: {
+						entities: { type: "GeometryCollection", geometries: [] },
+						parents: { type: "GeometryCollection", geometries: [] },
+					},
+				},
+			});
+		} else await route.continue();
+	});
+	await page.reload();
+	await expect(
+		page.getByRole("heading", { name: "The map did not load" }),
+	).toBeVisible();
+	await page.getByRole("button", { name: "Try again" }).click();
+	await expect(page.getByTestId("atlas-map")).toBeVisible();
+	expect(requests).toBe(2);
+});

@@ -86,12 +86,35 @@ export function parseGeometryTopology(value: unknown): GeometryBundle {
 	};
 }
 
+// Keep the current map and one recent map; URLs include the generated asset version.
+const geometryCacheCapacity = 2;
+const geometryCache = new Map<string, GeometryBundle>();
+
+/** A decoded asset can still disagree with the independently loaded manifest. */
+export function discardGeometry(url: string) {
+	geometryCache.delete(url);
+}
+
 export async function loadGeometry(url: string, signal?: AbortSignal) {
+	signal?.throwIfAborted();
+	const cached = geometryCache.get(url);
+	if (cached) {
+		geometryCache.delete(url);
+		geometryCache.set(url, cached);
+		return cached;
+	}
 	const response = await fetch(url, { signal });
 	if (!response.ok)
 		throw new Error(`Map asset request failed with status ${response.status}.`);
 	const value: unknown = await response.json();
-	return parseGeometryTopology(value);
+	const bundle = parseGeometryTopology(value);
+	signal?.throwIfAborted();
+	geometryCache.set(url, bundle);
+	if (geometryCache.size > geometryCacheCapacity) {
+		const oldest = geometryCache.keys().next().value;
+		if (oldest !== undefined) geometryCache.delete(oldest);
+	}
+	return bundle;
 }
 
 export function findEntityFeature(bundle: GeometryBundle, entityId: string) {
