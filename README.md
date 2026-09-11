@@ -28,51 +28,50 @@ rewrite of the product core. The durable product boundary and non-goals are reco
 <br />
 
 ## 🌱 Quick Start
+Requires **Node.js 24**, **pnpm 11.4**, Git, and a Chromium-based desktop browser for the Playwright suite.
+
 ```bash
+git clone https://github.com/martonpaulo/atlas-tint.git
+cd atlas-tint
 pnpm install
 pnpm dev:web
 ```
 
-Then open [http://localhost:3001](http://localhost:3001).
+[http://localhost:3001](http://localhost:3001)
 
-Prerequisites: a current **Node.js LTS** release, **pnpm 11**, Git, and a Chromium-based desktop
-browser for Playwright. AtlasTint deliberately requires at least **1024 × 700 CSS pixels**: below
-either threshold it does not mount the workspace, and it recovers automatically when the viewport
-becomes supported.
+AtlasTint deliberately requires at least **1024 × 700 CSS pixels**: below either threshold it does not mount the workspace, and it recovers automatically when the viewport becomes supported.
 
 <br />
 
 ## 🛠 Commands
 | Command | What it does |
 | --- | --- |
-| `pnpm dev:web` | Development server for the web app on port 3001 |
-| `pnpm validate` | The complete gate: format, lint, types, tests, geo checks, e2e, build |
-| `pnpm format` / `pnpm format:fix` | Biome formatting |
-| `pnpm lint` | Biome lint |
-| `pnpm check` / `pnpm check:fix` | Biome lint and format together |
-| `pnpm check-types` | TypeScript across every workspace |
-| `pnpm test` | Vitest unit and component tests |
-| `pnpm test:e2e` | The critical Playwright journeys |
-| `pnpm geo:build` | Regenerates the geographic artifacts from the documented upstream sources |
-| `pnpm geo:check` | Manifest-to-geometry invariants and source checks |
-| `pnpm build` | Production build of every workspace, plus the style check |
-| `pnpm social-card` | Renders the 1200 × 630 social preview into `apps/web/public/social-card.jpg` |
+| `pnpm validate` | Run the complete gate before a commit: `format`, `lint`, `check-types`, `test`, `geo:check`, `test:e2e`, `build` |
+| `pnpm dev:web` | Start the development server for the web app on port 3001 |
+| `pnpm dev` | Start the development task of every workspace |
+| `pnpm build` | Build every workspace for production, plus the style check |
+| `pnpm format` | Check Biome formatting, changing nothing |
+| `pnpm format:fix` | Apply Biome formatting to disk |
+| `pnpm lint` | Run the Biome lint rules |
+| `pnpm check` | Run the Biome lint and format checks together |
+| `pnpm check:fix` | Apply every safe Biome lint and format fix to disk |
+| `pnpm check-types` | Run TypeScript across every workspace |
+| `pnpm test` | Run the Vitest unit and component tests |
+| `pnpm test:e2e` | Run the critical Playwright journeys |
+| `pnpm geo:build` | Regenerate the geographic artifacts from the documented upstream sources |
+| `pnpm geo:check` | Run the manifest-to-geometry invariants and the source checks |
+| `pnpm social-card` | Render the 1200 × 630 social preview into `apps/web/public/social-card.jpg` |
 
-`pnpm validate` runs `format`, `lint`, `check-types`, `test`, `geo:check`, `test:e2e` and `build`, in
-that order. Focused commands are available for normal development.
+Focused commands are available for normal development; only `pnpm validate` is the gate.
 
 <br />
 
 ## 🔐 Secrets and variables
-AtlasTint reads **no secret**. It has no account, no backend, no analytics and no API key, and CI
-publishes to GitHub Pages with the workflow's own token; nothing is stored in the repository's
-Actions secrets.
+AtlasTint reads no secret at all: it has no account, no backend, no analytics and no API key, and CI publishes to GitHub Pages with the workflow's own token.
 
-One optional **local** variable exists, for reproducible geographic builds:
-
-| Variable | Where | Purpose |
+| Name | Where | What for |
 | --- | --- | --- |
-| `ATLAS_GEO_CACHE_DIR` | Local, `pnpm geo:build` only | Absolute path to a directory holding the verified `world.zip`, `brazil.zip` and `spain.zip` archives, so the pipeline builds offline or repeatedly without re-downloading |
+| `ATLAS_GEO_CACHE_DIR` | Local shell, `pnpm geo:build` only | Optional. Absolute path to a directory holding the verified `world.zip`, `brazil.zip` and `spain.zip` archives, so the pipeline builds offline or repeatedly without re-downloading |
 
 ---
 
@@ -276,4 +275,6 @@ The deployed page carries its metadata statically in `index.html` rather than in
 
 [MIT](LICENSE) © 2026 Marton Paulo.
 
-Geographic source rights and attribution requirements are independent and must be preserved; they are recorded in [NOTICE.md](NOTICE.md).
+Geographic source rights and attribution requirements are independent of this licence and must be preserved.
+
+Source versions, checksums and attribution are recorded in [NOTICE.md](NOTICE.md).
