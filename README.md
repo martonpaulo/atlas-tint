@@ -1,17 +1,81 @@
-# AtlasTint
+<div align="center">
 
 <img src="apps/web/public/social-card.jpg" width="100%" alt="AtlasTint: an interactive atlas for marking the places you have been and tracking your progress">
 
-[![CI](https://github.com/martonpaulo/atlas-tint/actions/workflows/ci.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/ci.yml)
-[![Deploy GitHub Pages](https://github.com/martonpaulo/atlas-tint/actions/workflows/pages.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/pages.yml)
+# AtlasTint
 
-[Open AtlasTint](https://atlastint.martonpaulo.com/) · [Report a bug](https://github.com/martonpaulo/atlas-tint/issues/new/choose)
+A desktop-first, local-first interactive SVG atlas for marking geographic regions, tracking progress, and building deterministic personal maps.
 
-AtlasTint is a desktop-first, local-first interactive SVG atlas for marking geographic regions, tracking progress, and building deterministic personal maps.
+[![CI](https://github.com/martonpaulo/atlas-tint/actions/workflows/ci.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/ci.yml) [![Deploy GitHub Pages](https://github.com/martonpaulo/atlas-tint/actions/workflows/pages.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/pages.yml) [![React 19.2](https://img.shields.io/badge/React-19.2-149eca)](https://react.dev/) [![Vite 8.2](https://img.shields.io/badge/Vite-8.2-646cff)](https://vite.dev/) [![TypeScript 6](https://img.shields.io/badge/TypeScript-6-3178c6)](https://www.typescriptlang.org/)
 
-The current production experience covers the registered World, Brazil, and Spain presets. These are catalog entries, not fixed product types: application state, import/export, the selector, loading, and rendering work from preset registrations and string stable IDs, so a future Australia- or Japan-only catalog does not require rewriting the product core.
+</div>
 
-The durable product boundary and non-goals are recorded in [`docs/product.md`](docs/product.md).
+AtlasTint marks geographic regions on an interactive SVG map, keeps the progress **entirely on your
+own device**, and renders it deterministically: every selectable entity has an **application-owned
+stable ID**, every color is derived rather than stored by accident, and geometry never enters
+application state or browser storage.
+
+The production catalog covers the **World, Brazil, and Spain** presets. These are catalog entries,
+not fixed product types: state, import/export, the selector, loading, and rendering all work from
+**preset registrations and string stable IDs**, so a future Australia- or Japan-only catalog needs no
+rewrite of the product core. The durable product boundary and non-goals are recorded in
+[`docs/product.md`](docs/product.md).
+
+<br />
+
+---
+
+## 🌱 Quick Start
+
+```bash
+pnpm install
+pnpm dev:web
+```
+
+Then open `http://localhost:3001`.
+
+Prerequisites: a current **Node.js LTS** release, **pnpm 11**, Git, and a Chromium-based desktop
+browser for Playwright. AtlasTint deliberately requires at least **1024 × 700 CSS pixels**: below
+either threshold it does not mount the workspace, and it recovers automatically when the viewport
+becomes supported.
+
+<br />
+
+## 🛠 Commands
+
+| Command | What it does |
+| --- | --- |
+| `pnpm dev:web` | Development server for the web app on port 3001 |
+| `pnpm validate` | The complete gate: format, lint, types, tests, geo checks, e2e, build |
+| `pnpm format` / `pnpm format:fix` | Biome formatting |
+| `pnpm lint` | Biome lint |
+| `pnpm check` / `pnpm check:fix` | Biome lint and format together |
+| `pnpm check-types` | TypeScript across every workspace |
+| `pnpm test` | Vitest unit and component tests |
+| `pnpm test:e2e` | The critical Playwright journeys |
+| `pnpm geo:build` | Regenerates the geographic artifacts from the documented upstream sources |
+| `pnpm geo:check` | Manifest-to-geometry invariants and source checks |
+| `pnpm build` | Production build of every workspace, plus the style check |
+| `pnpm social-card` | Renders the 1200 × 630 social preview into `apps/web/public/social-card.jpg` |
+
+`pnpm validate` runs `format`, `lint`, `check-types`, `test`, `geo:check`, `test:e2e` and `build`, in
+that order. Focused commands are available for normal development.
+
+<br />
+
+## 🔐 Secrets and variables
+
+AtlasTint reads **no secret**. It has no account, no backend, no analytics and no API key, and CI
+publishes to GitHub Pages with the workflow's own token; nothing is stored in the repository's
+Actions secrets.
+
+One optional **local** variable exists, for reproducible geographic builds:
+
+| Variable | Where | Purpose |
+| --- | --- | --- |
+| `ATLAS_GEO_CACHE_DIR` | Local, `pnpm geo:build` only | Absolute path to a directory holding the verified `world.zip`, `brazil.zip` and `spain.zip` archives, so the pipeline builds offline or repeatedly without re-downloading |
+
+<br />
 
 ## Product behavior
 
@@ -27,50 +91,27 @@ The durable product boundary and non-goals are recorded in [`docs/product.md`](d
 - Reset one preset or all progress through confirmation dialogs.
 - Use light, dark, or system appearance, stored in the same versioned record as everything else.
 
-AtlasTint intentionally requires at least 1024 × 700 CSS pixels. Below either threshold it does not mount the workspace and automatically recovers when the viewport becomes supported.
-
-## Setup
-
-Requirements: a current Node.js LTS release, pnpm 11, Git, and a Chromium-based desktop browser for Playwright.
-
-```bash
-pnpm install
-pnpm dev:web
-```
-
-Vite serves the web app on `http://localhost:3001` by default.
-
-## Validation
-
-Run the complete validation gate with:
-
-```bash
-pnpm validate
-```
-
-The gate runs, in order:
-
-```bash
-pnpm format
-pnpm lint
-pnpm check-types
-pnpm test
-pnpm geo:check
-pnpm test:e2e
-pnpm build
-```
-
-Focused commands are available for normal development. `pnpm test` runs Vitest unit and component tests; `pnpm test:e2e` runs the critical Playwright journeys.
-
-`pnpm social-card` renders the 1200 × 630 social preview that opens this README and the deployed page's link previews.
+<br />
 
 ## Deployment
 
-Every push to `main` runs the quality pipeline and publishes the production build to GitHub Pages. The site is served from the root of `atlastint.martonpaulo.com`, so Vite builds with the default base path `/` and routing, the favicon, and lazy-loaded map geometry resolve the same way at the hosted URL and at local development URLs.
+Every push to `main` runs the quality pipeline and publishes the production build to GitHub Pages.
+The site is served from the root of the custom domain recorded in `apps/web/public/CNAME`, so Vite
+builds with the default base path `/` and routing, the favicon, and lazy-loaded map geometry resolve
+the same way hosted and locally.
 
-CI spends effort in proportion to what changed. Formatting, lint, types, unit and component tests, geographic invariants, and the production build run on every push and pull request, because they observe everything. The Playwright suite downloads a browser and takes about a minute, so it runs only when something it can observe changed — application or package source, the geographic pipeline, dependency or tooling configuration, or the CI workflow itself. A documentation-only change skips it, says so in the run summary, and still reports a passing gate. When there is no comparable base to diff against, everything runs.
+CI spends effort in proportion to what changed. Formatting, lint, types, unit and component tests,
+geographic invariants, and the production build run on every push and pull request, because they
+observe everything. The Playwright suite downloads a browser and takes about a minute, so it runs
+only when something it can observe changed — application or package source, the geographic pipeline,
+dependency or tooling configuration, or the CI workflow itself. A documentation-only change skips it,
+says so in the run summary, and still reports a passing gate. When there is no comparable base to
+diff against, everything runs.
 
-Dependency update proposals are grouped weekly for npm packages and GitHub Actions. Security reports use GitHub's private vulnerability-reporting channel.
+Dependency update proposals are grouped weekly for npm packages and GitHub Actions. Security reports
+use GitHub's private vulnerability-reporting channel, described in [`SECURITY.md`](SECURITY.md).
+
+<br />
 
 ## Current preset policies
 
@@ -97,6 +138,8 @@ The manifest, never the raw source feature count, defines selectable entities an
 - Provincial and autonomous-community borders have separate visual weights.
 - The Canary Islands, Ceuta, and Melilla use labeled, geometry-preserving insets; the Balearic Islands remain legible in their true main-map position.
 
+<br />
+
 ## Preset model and adding another preset
 
 A preset registration declares its stable ID, display label, default projection, and lazy loader. That much is eager, so persistence defaults and the preset selector exist before any map is downloaded. The lazily loaded preset supplies a validated manifest, a content-versioned geometry URL, attribution, fit policy, its own group palette, and optional inset definitions. The map engine does not branch on current preset IDs.
@@ -116,6 +159,8 @@ To add or replace a preset:
 
 Persisted preset data is a record keyed by stable preset ID rather than a fixed object with World, Brazil, and Spain fields. Unknown saved preset records remain non-fatal, while an unavailable active preset safely falls back to the catalog default.
 
+<br />
+
 ## Stable geographic identity
 
 Every selectable entity has an application-owned stable ID and an explicit geometry mapping. Display names, translations, array positions, path order, colors, and unnormalized upstream labels are never durable IDs.
@@ -132,6 +177,8 @@ The build pipeline validates:
 - configured totals against manifests;
 - decoded geometry with invalid globe-sized winding, and every World polygon retaining positive area;
 - deterministic source checksums and output metadata.
+
+<br />
 
 ## Geographic data and regeneration
 
@@ -152,6 +199,8 @@ pnpm geo:check
 ```
 
 The pipeline verifies SHA-256 checksums before reading source files, accounts for source coverage, keeps only mapped properties, combines multi-part entities, extracts parent boundary meshes from shared child arcs, and quantizes shared arcs. World retains all polygons of the already generalized 1:50m source without additional vertex removal: the former simplification collapsed small states and islands. Brazil and Spain retain their conservative simplification, with repair limited to simplification-induced invalid winding. The output is deterministic TopoJSON plus transformation and coverage metadata. Heavy geometry work never runs in the browser.
+
+<br />
 
 ## Persistence and imports
 
@@ -179,6 +228,8 @@ AtlasTint deploys continuously and has no user-visible product version; workspac
 
 An imported file is untrusted input, so it is bounded before it is read: at most 1 MiB, 32 preset records, 2,000 selections and 2,000 custom colours per preset, and 128-character keys. These are defensive headroom rather than supported product totals — a complete export of all 274 catalog entities, every one selected and coloured, is about 30 KB. A file over any bound is rejected whole; nothing is silently truncated.
 
+<br />
+
 ## Architecture
 
 The implementation keeps these concerns independent:
@@ -192,13 +243,23 @@ The implementation keeps these concerns independent:
 
 React owns the SVG DOM. D3 calculates projections, paths, centroids, and bounded zoom transforms. Geometry and projected paths never enter Zustand or browser storage. Pointer movement updates the tooltip through a ref instead of rerendering the application.
 
+<br />
+
 ## Accessibility and visual system
 
 The searchable entity list is the primary keyboard and screen-reader surface. The SVG has a useful title and description, but hundreds of pointer-only paths are excluded from the accessibility tree and tab order. Selection changes use a restrained live region; progress exposes native values; group states use native checkboxes and indeterminate state.
 
 The interface follows one visual grammar: 8 px control corners, 12 px major surfaces and dialogs, and circles only for status or map markers. Low-frequency style and data controls remain collapsed so search, progress, the entity list, and the map dominate the workspace. Motion tokens collapse under `prefers-reduced-motion`.
 
-## Known limitations
+<br />
+
+## Discoverability
+
+The deployed page carries its metadata statically in `index.html` rather than injecting it from the router, because social scrapers and most crawlers read the HTML without executing JavaScript. That covers the canonical URL, the complete `og:` and `twitter:` sets with the image's type and dimensions and alt text, `theme-color` for each color scheme, and `WebApplication` structured data. `sitemap.xml` points at the same canonical URL, which is the custom domain in `apps/web/public/CNAME` — the address that answers 200.
+
+<br />
+
+## Limitations
 
 - AtlasTint is desktop-only and deliberately provides no compressed mobile workspace.
 - Visit dates are already supported by the persisted model but do not yet have an editing UI, and they deliberately have no visual effect: the temporal fill mode is **Selection order**, which ranks the regions currently selected from *First marked* to *Most recently marked*. Deselecting closes the visual gap without renumbering stored history.
@@ -206,10 +267,10 @@ The interface follows one visual grammar: 8 px control corners, 12 px major surf
 - The catalog currently ships three presets; there is no end-user preset installation UI.
 - Political and administrative boundaries reflect the documented source versions and inclusion policies, not a claim that every boundary is universally uncontested.
 
-## Discoverability
-
-The deployed page carries its metadata statically in `index.html` rather than injecting it from the router, because social scrapers and most crawlers read the HTML without executing JavaScript. That covers the canonical URL, the complete `og:` and `twitter:` sets with the image's type and dimensions and alt text, `theme-color` for each color scheme, and `WebApplication` structured data. `sitemap.xml` points at the same canonical URL. GitHub Pages serves this repository at the `atlastint.martonpaulo.com` custom domain (`apps/web/public/CNAME`), so the canonical is `https://atlastint.martonpaulo.com/` — the address that answers 200.
+<br />
 
 ## License
 
-AtlasTint source code is available under the [`MIT License`](LICENSE). Geographic source rights and attribution requirements are independent and must be preserved; see [`ATTRIBUTIONS.md`](ATTRIBUTIONS.md).
+[MIT](LICENSE) © 2026 Marton Paulo.
+
+Geographic source rights and attribution requirements are independent and must be preserved; they are recorded in [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
