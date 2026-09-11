@@ -1,33 +1,58 @@
 <!doctype html>
-<!-- AtlasTint social card. Source of truth for apps/web/public/social-card.png, served at
-     https://atlastint.martonpaulo.com/social-card.png (1200x630). Never edit the PNG.
-     Render with `pnpm social-card` (Playwright screenshot, then an 8-bit PNG).
-     Layout, safe area and rules: the social card standard (skill-deck#261). Fonts: Inter, OFL (fonts/OFL.txt). -->
+<!-- AtlasTint social card. Source of truth for apps/web/public/social-card.jpg, served at
+     https://atlastint.martonpaulo.com/social-card.jpg (1200x630). Never edit the PNG.
+     Render on a Mac (the drawn interface uses the system font): pnpm social-card
+     System, grid and contrast rules: the social card standard (skill-deck#261).
+     Fonts: Gabarito and Figtree (OFL, fonts/*-OFL.txt), the typefaces of martonpaulo.com. -->
 <meta charset="utf-8">
+<title>AtlasTint social card</title>
 <style>
-  @font-face { font-family: "Inter Display"; font-weight: 700; src: url(fonts/Inter_28pt-Bold.ttf); }
-  @font-face { font-family: "Inter"; font-weight: 400; src: url(fonts/Inter_18pt-Regular.ttf); }
-  @font-face { font-family: "Inter"; font-weight: 500; src: url(fonts/Inter_24pt-Medium.ttf); }
-  @font-face { font-family: "Inter"; font-weight: 600; src: url(fonts/Inter_24pt-SemiBold.ttf); }
-  html, body { margin: 0; }
-  .card {
-    position: relative; width: 1200px; height: 630px; overflow: hidden;
-    background:
-      radial-gradient(820px 560px at 84% 44%, rgba(169, 84, 50, .20), transparent 64%),
-      radial-gradient(600px 380px at 0% 100%, rgba(169, 84, 50, .08), transparent 70%),
-      linear-gradient(160deg, #fffaf3 0%, #f3e7d8 100%);
-    color: #2a1d15; font-family: "Inter", sans-serif;
-  }
-  .copy { position: absolute; left: 96px; top: 50%; transform: translateY(-54%); width: 470px; }
-  .icon { width: 104px; height: 104px; display: block; margin-bottom: 30px;
-          filter: drop-shadow(0 16px 26px rgba(169, 84, 50, .30)); }
-  .eyebrow { margin: 0 0 18px; font-weight: 600; font-size: 22px; letter-spacing: .12em;
-             text-transform: uppercase; color: #9a4726; }
-  h1 { margin: 0; font: 700 84px/1 "Inter Display", sans-serif; letter-spacing: -0.035em; }
-  .promise { margin: 22px 0 0; font-weight: 500; font-size: 38px; line-height: 1.18;
-             letter-spacing: -0.015em; color: #5a4636; text-wrap: balance; }
-  .domain { position: absolute; left: 96px; bottom: 62px; font-size: 24px; color: #8a7462; }
-  .shot { position: absolute; left: 600px; top: 96px; width: 820px; }
+@font-face { font-family: "Gabarito"; font-weight: 700; src: url(fonts/gabarito-latin-700-normal.woff2); }
+@font-face { font-family: "Figtree"; font-weight: 400; src: url(fonts/figtree-latin-400-normal.woff2); }
+@font-face { font-family: "Figtree"; font-weight: 500; src: url(fonts/figtree-latin-500-normal.woff2); }
+@font-face { font-family: "Figtree"; font-weight: 600; src: url(fonts/figtree-latin-600-normal.woff2); }
+@font-face { font-family: "Figtree"; font-weight: 700; src: url(fonts/figtree-latin-700-normal.woff2); }
+html, body { margin: 0; }
+.card { position: relative; width: 1200px; height: 630px; overflow: hidden; font-family: "Figtree", sans-serif;
+        color: var(--ink); background: var(--gradient); }
+.card::before { content: ""; position: absolute; inset: 0; background: var(--glow, none); }
+/* One grid for every card: the copy block is centred vertically in a 440px column at x=96;
+   the product visual always starts at x=600, a fixed gutter. */
+.copy { position: absolute; left: 96px; top: 50%; transform: translateY(-50%); width: 440px; z-index: 2; }
+.icon { width: 104px; height: 104px; display: block; margin-bottom: 30px; filter: drop-shadow(0 16px 26px rgba(0,0,0,.22)); }
+.eyebrow { display: inline-block; margin: 0 0 20px; padding: 8px 16px; border-radius: 999px;
+           background: var(--pill-bg); border: 1px solid var(--pill-line);
+           font-weight: 700; font-size: 19px; letter-spacing: .1em; text-transform: uppercase; }
+h1 { margin: 0; font: 700 88px/1 "Gabarito", sans-serif; letter-spacing: -0.03em; }
+.promise { margin: 20px 0 0; font-weight: 500; font-size: 38px; line-height: 1.2; letter-spacing: -0.01em;
+           color: var(--ink-soft); text-wrap: balance; }
+.domain { margin: 34px 0 0; font-size: 24px; font-weight: 500; color: var(--ink-soft); }
+/* The drawn interface: the system font, the way the real app renders. */
+.ui { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif; color: #1f2937; }
+.win { position: absolute; background: #fff; border-radius: 22px;
+       box-shadow: 0 40px 80px rgba(15,23,42,.30), 0 8px 20px rgba(15,23,42,.12); }
+.bar { height: 11px; border-radius: 6px; background: #e5e7eb; }
+
+.card { --gradient: linear-gradient(135deg,#6e3a26 0%,#7f4430 40%,#8f4d36 65%,#b8704f 100%); --glow: radial-gradient(640px 520px at 94% 55%,rgba(245,200,160,.28),transparent 65%); --ink: #fff; --ink-soft: rgba(255,255,255,.92);
+        --pill-bg: rgba(255,255,255,.14); --pill-line: rgba(255,255,255,.38); }
+.app{left:600px;top:50%;transform:translateY(-50%);width:880px;height:500px;border-radius:14px;background:#fbf7f1;overflow:hidden}
+.top{height:30px;display:flex;align-items:center;padding:0 14px;background:#f3ede5}
+.tl{display:flex;gap:8px}.tl i{width:12px;height:12px;border-radius:50%;background:#ff5f57}.tl i:nth-child(2){background:#febc2e}.tl i:nth-child(3){background:#28c840}
+.head{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid #eee6db}
+.mark{width:28px;height:28px}.word{font:600 19px ui-serif, "New York", Georgia, serif;color:#2a1d15}
+.select{margin-left:10px;border:1px solid #ddd3c6;border-radius:8px;padding:4px 12px;font-size:13px;color:#3a2c22;background:#fff}.select em{font-style:normal;color:#8a7462;margin-left:18px}
+.body{display:flex;height:calc(100% - 83px)}
+aside{width:250px;border-right:1px solid #eee6db;padding:14px;box-sizing:border-box}
+.rh{display:flex;justify-content:space-between;font-size:13px;color:#3a2c22}.rh span{color:#8a7462;font-size:12px}
+.prog{height:4px;border-radius:2px;background:#eee6db;margin:8px 0 12px}.prog i{display:block;width:3%;height:100%;background:#a95432;border-radius:2px}
+.search{border:1px solid #ddd3c6;border-radius:8px;padding:7px 10px;font-size:12px;color:#9a8878;background:#fff}
+.tabs{display:flex;gap:6px;margin:10px 0 6px;font-size:12px;color:#6b5a4c}.tabs span{padding:3px 8px;border-radius:6px}.tabs .on{background:#efe8de;color:#2a1d15}
+.rrow{display:flex;align-items:center;gap:10px;padding:8px 2px;border-bottom:1px solid #f1ebe3}
+.cb{width:15px;height:15px;border-radius:50%;border:1.5px solid #cfc4b6;flex:none}.rt{display:flex;flex-direction:column}
+section{flex:1;padding:14px 18px}
+section h3{margin:0 0 8px;font:600 20px ui-serif, "New York", Georgia, serif;color:#2a1d15}
+.map{margin-top:14px;border:1px solid #eee6db;border-radius:10px;background:#fdfbf8;padding:14px;height:270px;box-sizing:border-box}
+.map img{width:100%;height:100%;object-fit:contain}
 </style>
 <div class="card">
   <div class="copy">
@@ -35,7 +60,25 @@
     <p class="eyebrow">Free in your browser</p>
     <h1>AtlasTint</h1>
     <p class="promise">Color and track the regions of the world</p>
+    <p class="domain">atlastint.martonpaulo.com</p>
   </div>
-  <img class="shot" src="../../docs/screenshots/world.webp" alt="">
-  <div class="domain">atlastint.martonpaulo.com</div>
+  <div class="win app ui">
+    <div class="top"><span class="tl"><i></i><i></i><i></i></span></div>
+    <div class="head"><img class="mark" src="../../apps/web/public/favicon.svg" alt=""><span class="word">AtlasTint</span><span class="select">World <em>⌄</em></span></div>
+    <div class="body">
+      <aside>
+        <div class="rh"><b>Regions</b><span>5 / 195 · 2.6%</span></div>
+        <div class="prog"><i></i></div>
+        <div class="search">⌕&nbsp; Search regions</div>
+        <div class="tabs"><span class="on">All</span><span>Selected</span></div>
+        <div class="rrow"><span class="cb"></span><span class="rt"><span class="bar" style="width:70px;height:9px;background:#d6cdc2"></span><span class="bar" style="width:56px;height:7px;margin-top:6px;background:#e8e1d8"></span></span></div><div class="rrow"><span class="cb"></span><span class="rt"><span class="bar" style="width:64px;height:9px;background:#d6cdc2"></span><span class="bar" style="width:52px;height:7px;margin-top:6px;background:#e8e1d8"></span></span></div><div class="rrow"><span class="cb"></span><span class="rt"><span class="bar" style="width:58px;height:9px;background:#d6cdc2"></span><span class="bar" style="width:50px;height:7px;margin-top:6px;background:#e8e1d8"></span></span></div><div class="rrow"><span class="cb"></span><span class="rt"><span class="bar" style="width:76px;height:9px;background:#d6cdc2"></span><span class="bar" style="width:58px;height:7px;margin-top:6px;background:#e8e1d8"></span></span></div><div class="rrow"><span class="cb"></span><span class="rt"><span class="bar" style="width:92px;height:9px;background:#d6cdc2"></span><span class="bar" style="width:60px;height:7px;margin-top:6px;background:#e8e1d8"></span></span></div><div class="rrow"><span class="cb"></span><span class="rt"><span class="bar" style="width:66px;height:9px;background:#d6cdc2"></span><span class="bar" style="width:54px;height:7px;margin-top:6px;background:#e8e1d8"></span></span></div><div class="rrow"><span class="cb"></span><span class="rt"><span class="bar" style="width:74px;height:9px;background:#d6cdc2"></span><span class="bar" style="width:50px;height:7px;margin-top:6px;background:#e8e1d8"></span></span></div>
+      </aside>
+      <section>
+        <h3>World sovereign states</h3>
+        <span class="bar" style="display:block;width:78%;height:9px;background:#e3dbd0"></span>
+        <span class="bar" style="display:block;width:40%;height:9px;margin-top:7px;background:#e3dbd0"></span>
+        <div class="map"><img src="world.png" alt=""></div>
+      </section>
+    </div>
+  </div>
 </div>
