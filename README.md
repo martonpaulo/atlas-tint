@@ -32,7 +32,7 @@ pnpm install
 pnpm dev:web
 ```
 
-Then open `http://localhost:3001`.
+Then open [http://localhost:3001](http://localhost:3001).
 
 Prerequisites: a current **Node.js LTS** release, **pnpm 11**, Git, and a Chromium-based desktop
 browser for Playwright. AtlasTint deliberately requires at least **1024 × 700 CSS pixels**: below
