@@ -27,8 +27,7 @@ rewrite of the product core. The durable product boundary and non-goals are reco
 
 <br />
 
-## Quick Start
-
+## 🌱 Quick Start
 ```bash
 pnpm install
 pnpm dev:web
@@ -43,8 +42,7 @@ becomes supported.
 
 <br />
 
-## Commands
-
+## 🛠 Commands
 | Command | What it does |
 | --- | --- |
 | `pnpm dev:web` | Development server for the web app on port 3001 |
@@ -65,8 +63,7 @@ that order. Focused commands are available for normal development.
 
 <br />
 
-## Secrets and variables
-
+## 🔐 Secrets and variables
 AtlasTint reads **no secret**. It has no account, no backend, no analytics and no API key, and CI
 publishes to GitHub Pages with the workflow's own token; nothing is stored in the repository's
 Actions secrets.
