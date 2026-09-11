@@ -383,8 +383,8 @@ Components must not call `localStorage` directly. Use a persistence adapter with
 Import and export requirements:
 
 - JSON only for the initial implementation
-- schema version
-- application version
+- independent export and persistence schema versions
+- no user-visible application release version
 - export timestamp
 - validated preset progress
 - preview before destructive replacement

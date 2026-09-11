@@ -3,7 +3,6 @@ import { z } from "zod";
 import { type PresetManifest, presetIdSchema } from "@/features/atlas/domain";
 import { formatByteLimit, importLimits } from "@/features/atlas/import-limits";
 import {
-	CURRENT_SCHEMA_VERSION,
 	migratePersistedState,
 	type PersistedState,
 	persistedStateSchema,
@@ -13,7 +12,7 @@ import {
 	selectionMetadataSchema,
 } from "@/features/atlas/persistence-schema";
 
-export const APPLICATION_VERSION = "1.0.0";
+export const EXPORT_SCHEMA_VERSION = 3;
 
 const boundedKey = z.string().min(1).max(importLimits.maxKeyLength);
 
@@ -60,8 +59,7 @@ const boundedStateSchema = persistedStateSchema.extend({
 
 export const atlasExportSchema = z.object({
 	format: z.literal("atlas-tint-progress"),
-	schemaVersion: z.literal(CURRENT_SCHEMA_VERSION),
-	applicationVersion: z.string().min(1),
+	schemaVersion: z.literal(EXPORT_SCHEMA_VERSION),
 	exportedAt: z.iso.datetime(),
 	state: boundedStateSchema,
 });
@@ -73,19 +71,29 @@ export const atlasExportSchema = z.object({
  * progress, so the state is migrated through the same path as stored data and only then
  * bounded. Refusing it would make an upgrade destroy a user's backup.
  */
-const importEnvelopeSchema = z.object({
+const importEnvelopeFields = {
 	format: z.literal("atlas-tint-progress"),
-	schemaVersion: z.union([z.literal(1), z.literal(CURRENT_SCHEMA_VERSION)]),
-	applicationVersion: z.string().min(1),
 	exportedAt: z.iso.datetime(),
 	state: z.unknown(),
-});
+};
+const legacyEnvelopeFields = {
+	...importEnvelopeFields,
+	applicationVersion: z.string().min(1),
+};
+const importEnvelopeSchema = z.discriminatedUnion("schemaVersion", [
+	z.object({ ...legacyEnvelopeFields, schemaVersion: z.literal(1) }),
+	z.object({ ...legacyEnvelopeFields, schemaVersion: z.literal(2) }),
+	z.object({
+		...importEnvelopeFields,
+		schemaVersion: z.literal(EXPORT_SCHEMA_VERSION),
+	}),
+]);
 export type AtlasExport = z.infer<typeof atlasExportSchema>;
 
 export interface ImportPreview {
 	state: PersistedState;
 	exportedAt: string;
-	applicationVersion: string;
+	exportSchemaVersion: number;
 	presets: ReadonlyArray<{
 		id: string;
 		name: string;
@@ -105,8 +113,7 @@ export function createAtlasExport(
 ): AtlasExport {
 	return {
 		format: "atlas-tint-progress",
-		schemaVersion: CURRENT_SCHEMA_VERSION,
-		applicationVersion: APPLICATION_VERSION,
+		schemaVersion: EXPORT_SCHEMA_VERSION,
 		exportedAt: now.toISOString(),
 		state: persistedStateSchema.parse(state),
 	};
@@ -153,7 +160,7 @@ export function validateImportText(
 		return {
 			ok: false,
 			message:
-				"Invalid AtlasTint export: the progress it contains is not a supported shape.",
+				"Invalid AtlasTint export at state: the progress it contains is not a supported shape.",
 		};
 	}
 
@@ -176,7 +183,7 @@ export function validateImportText(
 		preview: {
 			state,
 			exportedAt: envelope.data.exportedAt,
-			applicationVersion: envelope.data.applicationVersion,
+			exportSchemaVersion: envelope.data.schemaVersion,
 			presets: Object.entries(manifests).map(([id, manifest]) => ({
 				id,
 				name: manifest.shortName,

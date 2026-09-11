@@ -1,0 +1,36 @@
+{
+	"format": "atlas-tint-progress",
+	"schemaVersion": 1,
+	"applicationVersion": "1.0.0",
+	"exportedAt": "2026-09-01T00:00:00.000Z",
+	"state": {
+		"schemaVersion": 1,
+		"activePresetId": "world",
+		"themePreference": "system",
+		"presets": {
+			"world": {
+				"selected": {
+					"world-ml": {
+						"selectedAt": "2026-09-01T00:00:00.000Z",
+						"order": 1
+					}
+				},
+				"fillMode": "hierarchical",
+				"customColors": {},
+				"projection": "equal-earth"
+			},
+			"brazil": {
+				"selected": {},
+				"fillMode": "hierarchical",
+				"customColors": {},
+				"projection": "mercator"
+			},
+			"spain": {
+				"selected": {},
+				"fillMode": "hierarchical",
+				"customColors": {},
+				"projection": "mercator"
+			}
+		}
+	}
+}

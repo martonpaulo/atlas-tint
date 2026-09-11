@@ -279,8 +279,8 @@ export function DataActions({
 										: `${changedCount} of ${differences.length} settings would change.`}
 								</p>
 								<p className="mt-1">
-									Exported {new Date(preview.exportedAt).toLocaleString()} with
-									AtlasTint {preview.applicationVersion}.
+									Exported {new Date(preview.exportedAt).toLocaleString()}.
+									Compatible export schema {preview.exportSchemaVersion}.
 								</p>
 								{unknownCount > 0 ? (
 									<p className="mt-1 text-warning-foreground">

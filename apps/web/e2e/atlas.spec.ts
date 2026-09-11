@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 import { expect, type Page, test } from "@playwright/test";
 
 async function openCleanAtlas(page: Page) {
@@ -153,6 +155,9 @@ test("exports, previews, and reimports progress atomically", async ({
 	const exportPath = await download.path();
 	if (!exportPath)
 		throw new Error("Downloaded export did not have a local path");
+	const payload = JSON.parse(await readFile(exportPath, "utf8"));
+	expect(payload.schemaVersion).toBe(3);
+	expect(payload).not.toHaveProperty("applicationVersion");
 
 	await page.getByRole("button", { name: "Reset preset" }).click();
 	await page
@@ -635,3 +640,30 @@ test("retries a decoded map that failed manifest compatibility", async ({
 	await expect(page.getByTestId("atlas-map")).toBeVisible();
 	expect(requests).toBe(2);
 });
+
+for (const schemaVersion of [1, 2]) {
+	test(`imports legacy envelope ${schemaVersion} without release-version copy`, async ({
+		page,
+	}) => {
+		await openStyleAndData(page);
+		await page
+			.getByLabel("Import progress JSON")
+			.setInputFiles(
+				fileURLToPath(
+					new URL(
+						`../src/features/atlas/fixtures/export-v${schemaVersion}.json`,
+						import.meta.url,
+					),
+				),
+			);
+		const dialog = page.getByRole("dialog");
+		await expect(dialog).toBeVisible();
+		await expect(dialog).not.toContainText("AtlasTint 1.0.0");
+		await page.getByRole("button", { name: "Replace local data" }).click();
+		await expect(page.getByRole("progressbar")).toHaveAttribute("value", "1");
+		await expect(page.getByRole("button", { name: /^Mali/ })).toHaveAttribute(
+			"aria-pressed",
+			"true",
+		);
+	});
+}

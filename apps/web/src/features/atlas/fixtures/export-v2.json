@@ -1,0 +1,86 @@
+{
+	"format": "atlas-tint-progress",
+	"schemaVersion": 2,
+	"applicationVersion": "1.0.0",
+	"exportedAt": "2026-09-01T00:00:00.000Z",
+	"state": {
+		"schemaVersion": 2,
+		"activePresetId": "world",
+		"themePreference": "system",
+		"presets": {
+			"world": {
+				"selected": {
+					"world-ml": {
+						"selectedAt": "2026-09-01T00:00:00.000Z",
+						"order": 1,
+						"stamp": {
+							"counter": 1,
+							"actor": "fixture"
+						}
+					}
+				},
+				"removed": {},
+				"fillMode": "hierarchical",
+				"customColors": {},
+				"projection": "equal-earth",
+				"stamps": {
+					"fillMode": {
+						"counter": 0,
+						"actor": "fixture"
+					},
+					"projection": {
+						"counter": 0,
+						"actor": "fixture"
+					},
+					"customColors": {}
+				}
+			},
+			"brazil": {
+				"selected": {},
+				"removed": {},
+				"fillMode": "hierarchical",
+				"customColors": {},
+				"projection": "mercator",
+				"stamps": {
+					"fillMode": {
+						"counter": 0,
+						"actor": "fixture"
+					},
+					"projection": {
+						"counter": 0,
+						"actor": "fixture"
+					},
+					"customColors": {}
+				}
+			},
+			"spain": {
+				"selected": {},
+				"removed": {},
+				"fillMode": "hierarchical",
+				"customColors": {},
+				"projection": "mercator",
+				"stamps": {
+					"fillMode": {
+						"counter": 0,
+						"actor": "fixture"
+					},
+					"projection": {
+						"counter": 0,
+						"actor": "fixture"
+					},
+					"customColors": {}
+				}
+			}
+		},
+		"stamps": {
+			"activePresetId": {
+				"counter": 0,
+				"actor": "fixture"
+			},
+			"themePreference": {
+				"counter": 0,
+				"actor": "fixture"
+			}
+		}
+	}
+}

@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import legacyV1 from "@/features/atlas/fixtures/export-v1.json";
+import legacyV2 from "@/features/atlas/fixtures/export-v2.json";
 
 import {
 	createAtlasExport,
@@ -7,7 +9,6 @@ import {
 } from "@/features/atlas/import-export";
 import { importLimits } from "@/features/atlas/import-limits";
 import {
-	CURRENT_SCHEMA_VERSION,
 	createDefaultState,
 	createEmptyProgress,
 	ORIGIN_STAMP,
@@ -24,13 +25,45 @@ const manifests = {
 };
 
 describe("import and export", () => {
+	it.each([legacyV1, legacyV2])(
+		"imports historical export schema $schemaVersion",
+		(payload) => {
+			const result = validateImportText(JSON.stringify(payload), manifests);
+			expect(result.ok).toBe(true);
+			if (result.ok) {
+				expect(
+					result.preview.state.presets.world.selected["world-ml"].order,
+				).toBe(1);
+				expect(result.preview).not.toHaveProperty("applicationVersion");
+			}
+		},
+	);
+
+	it("rejects a future export schema with its field path", () => {
+		const result = validateImportText(
+			JSON.stringify({ ...legacyV2, schemaVersion: 99 }),
+			manifests,
+		);
+		expect(result.ok).toBe(false);
+		if (!result.ok) expect(result.message).toContain("schemaVersion");
+	});
+
+	it("rejects a future progress schema independently of the envelope", () => {
+		const payload = {
+			...legacyV2,
+			state: { ...legacyV2.state, schemaVersion: 99 },
+		};
+		const result = validateImportText(JSON.stringify(payload), manifests);
+		expect(result.ok).toBe(false);
+		if (!result.ok) expect(result.message).toContain("at state");
+	});
 	it("creates a geometry-free, versioned export", () => {
 		const exported = createAtlasExport(
 			createDefaultState(),
 			new Date("2026-07-24T12:00:00.000Z"),
 		);
-		expect(exported.schemaVersion).toBe(CURRENT_SCHEMA_VERSION);
-		expect(exported.applicationVersion).toBe("1.0.0");
+		expect(exported.schemaVersion).toBe(3);
+		expect(exported).not.toHaveProperty("applicationVersion");
 		expect(JSON.stringify(exported)).not.toContain("coordinates");
 	});
 

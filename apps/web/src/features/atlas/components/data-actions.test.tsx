@@ -7,8 +7,9 @@ import {
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-
 import { DataActions } from "@/features/atlas/components/data-actions";
+import legacyV1 from "@/features/atlas/fixtures/export-v1.json";
+import legacyV2 from "@/features/atlas/fixtures/export-v2.json";
 import { serializeAtlasExport } from "@/features/atlas/import-export";
 import { importLimits } from "@/features/atlas/import-limits";
 import {
@@ -295,4 +296,30 @@ describe("DataActions destructive confirmation", () => {
 		await waitFor(() => expect(trigger).toHaveFocus());
 		expect(useAtlasStore.getState().data.presets.world.selected).toEqual({});
 	});
+});
+
+describe("historical import previews", () => {
+	it.each([legacyV1, legacyV2])(
+		"does not present schema $schemaVersion metadata as a product release",
+		async (payload) => {
+			const user = userEvent.setup();
+			const { input } = renderActions();
+			await user.upload(
+				input,
+				new File([JSON.stringify(payload)], "legacy.json", {
+					type: "application/json",
+				}),
+			);
+			await screen.findByRole("heading", { name: /review imported progress/i });
+			expect(screen.getByRole("dialog")).not.toHaveTextContent(
+				"AtlasTint 1.0.0",
+			);
+			await user.click(
+				screen.getByRole("button", { name: "Replace local data" }),
+			);
+			expect(
+				useAtlasStore.getState().data.presets.world.selected["world-ml"].order,
+			).toBe(1);
+		},
+	);
 });
