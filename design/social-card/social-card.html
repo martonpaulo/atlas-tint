@@ -1,6 +1,6 @@
 <!doctype html>
 <!-- AtlasTint social card. Source of truth for apps/web/public/social-card.jpg, served at
-     https://atlastint.martonpaulo.com/social-card.jpg (1200x630). Never edit the PNG.
+     https://atlastint.martonpaulo.com/social-card.jpg (1200x630). Never edit the JPEG.
      Render on a Mac (the drawn interface uses the system font): pnpm social-card
      System, grid and contrast rules: the social card standard (skill-deck#261).
      Fonts: Gabarito and Figtree (OFL, fonts/*-OFL.txt), the typefaces of martonpaulo.com. -->
@@ -35,24 +35,9 @@ h1 { margin: 0; font: 700 88px/1 "Gabarito", sans-serif; letter-spacing: -0.03em
 
 .card { --gradient: linear-gradient(135deg,#6e3a26 0%,#7f4430 40%,#8f4d36 65%,#b8704f 100%); --glow: radial-gradient(640px 520px at 94% 55%,rgba(245,200,160,.28),transparent 65%); --ink: #fff; --ink-soft: rgba(255,255,255,.92);
         --pill-bg: rgba(255,255,255,.14); --pill-line: rgba(255,255,255,.38); }
-.app{left:600px;top:50%;transform:translateY(-50%);width:880px;height:500px;border-radius:14px;background:#fbf7f1;overflow:hidden}
-.top{height:30px;display:flex;align-items:center;padding:0 14px;background:#f3ede5}
-.tl{display:flex;gap:8px}.tl i{width:12px;height:12px;border-radius:50%;background:#ff5f57}.tl i:nth-child(2){background:#febc2e}.tl i:nth-child(3){background:#28c840}
-.head{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid #eee6db}
-.mark{width:28px;height:28px}.word{font:600 19px ui-serif, "New York", Georgia, serif;color:#2a1d15}
-.select{margin-left:10px;border:1px solid #ddd3c6;border-radius:8px;padding:4px 12px;font-size:13px;color:#3a2c22;background:#fff}.select em{font-style:normal;color:#8a7462;margin-left:18px}
-.body{display:flex;height:calc(100% - 83px)}
-aside{width:250px;border-right:1px solid #eee6db;padding:14px;box-sizing:border-box}
-.rh{display:flex;justify-content:space-between;font-size:13px;color:#3a2c22}.rh span{color:#8a7462;font-size:12px}
-.prog{height:4px;border-radius:2px;background:#eee6db;margin:8px 0 12px}.prog i{display:block;width:3%;height:100%;background:#a95432;border-radius:2px}
-.search{border:1px solid #ddd3c6;border-radius:8px;padding:7px 10px;font-size:12px;color:#9a8878;background:#fff}
-.tabs{display:flex;gap:6px;margin:10px 0 6px;font-size:12px;color:#6b5a4c}.tabs span{padding:3px 8px;border-radius:6px}.tabs .on{background:#efe8de;color:#2a1d15}
-.rrow{display:flex;align-items:center;gap:10px;padding:8px 2px;border-bottom:1px solid #f1ebe3}
-.cb{width:15px;height:15px;border-radius:50%;border:1.5px solid #cfc4b6;flex:none}.rt{display:flex;flex-direction:column}
-section{flex:1;padding:14px 18px}
-section h3{margin:0 0 8px;font:600 20px ui-serif, "New York", Georgia, serif;color:#2a1d15}
-.map{margin-top:14px;border:1px solid #eee6db;border-radius:10px;background:#fdfbf8;padding:14px;height:270px;box-sizing:border-box}
-.map img{width:100%;height:100%;object-fit:contain}
+.mapfree{position:absolute;left:560px;top:50%;transform:translateY(-50%);width:780px;
+ -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 16%,#000 78%,transparent 92%),linear-gradient(90deg,transparent 0,#000 6%);-webkit-mask-composite:source-in;
+ mask-image:linear-gradient(180deg,transparent 0,#000 16%,#000 78%,transparent 92%),linear-gradient(90deg,transparent 0,#000 6%);mask-composite:intersect}
 </style>
 <div class="card">
   <div class="copy">
@@ -62,23 +47,5 @@ section h3{margin:0 0 8px;font:600 20px ui-serif, "New York", Georgia, serif;col
     <p class="promise">Color and track the regions of the world</p>
     <p class="domain">atlastint.martonpaulo.com</p>
   </div>
-  <div class="win app ui">
-    <div class="top"><span class="tl"><i></i><i></i><i></i></span></div>
-    <div class="head"><img class="mark" src="../../apps/web/public/favicon.svg" alt=""><span class="word">AtlasTint</span><span class="select">World <em>⌄</em></span></div>
-    <div class="body">
-      <aside>
-        <div class="rh"><b>Regions</b><span>5 / 195 · 2.6%</span></div>
-        <div class="prog"><i></i></div>
-        <div class="search">⌕&nbsp; Search regions</div>
-        <div class="tabs"><span class="on">All</span><span>Selected</span></div>
-        <div class="rrow"><span class="cb"></span><span class="rt"><span class="bar" style="width:70px;height:9px;background:#d6cdc2"></span><span class="bar" style="width:56px;height:7px;margin-top:6px;background:#e8e1d8"></span></span></div><div class="rrow"><span class="cb"></span><span class="rt"><span class="bar" style="width:64px;height:9px;background:#d6cdc2"></span><span class="bar" style="width:52px;height:7px;margin-top:6px;background:#e8e1d8"></span></span></div><div class="rrow"><span class="cb"></span><span class="rt"><span class="bar" style="width:58px;height:9px;background:#d6cdc2"></span><span class="bar" style="width:50px;height:7px;margin-top:6px;background:#e8e1d8"></span></span></div><div class="rrow"><span class="cb"></span><span class="rt"><span class="bar" style="width:76px;height:9px;background:#d6cdc2"></span><span class="bar" style="width:58px;height:7px;margin-top:6px;background:#e8e1d8"></span></span></div><div class="rrow"><span class="cb"></span><span class="rt"><span class="bar" style="width:92px;height:9px;background:#d6cdc2"></span><span class="bar" style="width:60px;height:7px;margin-top:6px;background:#e8e1d8"></span></span></div><div class="rrow"><span class="cb"></span><span class="rt"><span class="bar" style="width:66px;height:9px;background:#d6cdc2"></span><span class="bar" style="width:54px;height:7px;margin-top:6px;background:#e8e1d8"></span></span></div><div class="rrow"><span class="cb"></span><span class="rt"><span class="bar" style="width:74px;height:9px;background:#d6cdc2"></span><span class="bar" style="width:50px;height:7px;margin-top:6px;background:#e8e1d8"></span></span></div>
-      </aside>
-      <section>
-        <h3>World sovereign states</h3>
-        <span class="bar" style="display:block;width:78%;height:9px;background:#e3dbd0"></span>
-        <span class="bar" style="display:block;width:40%;height:9px;margin-top:7px;background:#e3dbd0"></span>
-        <div class="map"><img src="world.png" alt=""></div>
-      </section>
-    </div>
-  </div>
+  <img class="mapfree" src="world.png" alt="">
 </div>
