@@ -20,7 +20,7 @@
 		"test:e2e": "pnpm --filter web test:e2e",
 		"geo:build": "node scripts/geo/build.mjs",
 		"screenshots": "node scripts/screenshots/capture.mjs",
-		"social-card": "node scripts/screenshots/social-card.mjs",
+		"social-card": "playwright screenshot --viewport-size=\"1200,630\" \"file://$PWD/design/social-card/social-card.html\" apps/web/public/social-card.png && magick apps/web/public/social-card.png -strip -colors 256 -define png:compression-level=9 PNG8:apps/web/public/social-card.png",
 		"geo:check": "node --test scripts/geo/world-source.test.mjs && node scripts/geo/check.mjs",
 		"validate": "pnpm format && pnpm lint && pnpm check-types && pnpm test && pnpm geo:check && pnpm test:e2e && pnpm build"
 	},
