@@ -1,5 +1,6 @@
 import { spawnSync } from "node:child_process";
-import { mkdir, rm } from "node:fs/promises";
+import { mkdir, mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
 import { chromium } from "@playwright/test";
@@ -31,7 +32,7 @@ const shots = [
 		title: "World sovereign states",
 		seed: {
 			preset: "world",
-			theme: "dark",
+			theme: "light",
 			marked: ["world-br", "world-pt", "world-jp", "world-au", "world-ca"],
 		},
 	},
@@ -90,9 +91,16 @@ async function capture() {
 	await rm(outputDirectory, { recursive: true, force: true });
 	await mkdir(outputDirectory, { recursive: true });
 
-	const browser = await chromium.launch({
+	// An app-mode window (--app) has a title bar and nothing else: no tab strip, no address
+	// bar, so no localhost URL ends up in a published image. That needs a persistent context,
+	// which Playwright starts as a direct child of this process, so the browser's pid is found
+	// among this process's children and never guessed from the desktop.
+	const profile = await mkdtemp(join(tmpdir(), "atlas-tint-capture-"));
+	const context = await chromium.launchPersistentContext(profile, {
 		headless: false,
+		viewport: null,
 		args: [
+			`--app=${baseUrl()}/`,
 			`--window-size=${windowSize.width},${windowSize.height}`,
 			"--window-position=80,80",
 			// No first-run bubbles, infobars, or restore prompts in the picture.
@@ -102,11 +110,9 @@ async function capture() {
 			"--hide-crash-restore-bubble",
 		],
 	});
-	const pid = browser.process()?.pid;
+	const pid = Number(run("pgrep", ["-P", String(process.pid)]).split("\n")[0]);
 	if (!pid) throw new Error("Could not determine the browser process id");
-
-	const context = await browser.newContext({ viewport: null });
-	const page = await context.newPage();
+	const page = context.pages()[0] ?? (await context.newPage());
 
 	try {
 		for (const shot of shots) {
@@ -146,12 +152,13 @@ async function capture() {
 			console.log(`captured ${shot.name} at ${scale}x`);
 		}
 	} finally {
-		await browser.close();
+		await context.close();
+		await rm(profile, { recursive: true, force: true });
 	}
 }
 
 function baseUrl() {
-	return process.env.ATLAS_SCREENSHOT_URL ?? "http://127.0.0.1:3001";
+	return process.env.ATLAS_SCREENSHOT_URL ?? "http://localhost:3001";
 }
 
 const STORAGE_KEY = "atlas-tint:state";
