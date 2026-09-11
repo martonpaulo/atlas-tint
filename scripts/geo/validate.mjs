@@ -1,3 +1,5 @@
+import { geoArea } from "d3-geo";
+
 export function normalizeSearchText(value) {
 	return value
 		.normalize("NFKD")
@@ -68,5 +70,34 @@ export function validateManifest(manifest) {
 		);
 	}
 
+	return errors;
+}
+
+export function validateWorldGeometry(features, expectedPolygonCount) {
+	const errors = [];
+	let polygonCount = 0;
+	for (const feature of features) {
+		const geometry = feature.geometry;
+		const polygons =
+			geometry?.type === "Polygon"
+				? [geometry.coordinates]
+				: geometry?.type === "MultiPolygon"
+					? geometry.coordinates
+					: [];
+		if (polygons.length === 0)
+			errors.push(`${feature.properties.id}: no World polygons`);
+		for (const coordinates of polygons) {
+			polygonCount += 1;
+			const area = geoArea({ type: "Polygon", coordinates });
+			if (!Number.isFinite(area) || area <= 0 || area >= Math.PI * 2)
+				errors.push(
+					`${feature.properties.id}: World polygon lost its renderable area`,
+				);
+		}
+	}
+	if (polygonCount !== expectedPolygonCount)
+		errors.push(
+			`World source has ${expectedPolygonCount} polygons, output has ${polygonCount}`,
+		);
 	return errors;
 }

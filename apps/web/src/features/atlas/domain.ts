@@ -75,7 +75,7 @@ export interface LoadedPreset {
 	attribution: string;
 	fit: "sphere" | "entities";
 	/**
-	 * The hue used for each entity group in the hierarchical palette.
+	 * The hue used for each selectable entity group in the hierarchical palette.
 	 *
 	 * Preset-specific colour policy belongs with the preset. Keeping a table of every current
 	 * group in the shared colour engine meant a new preset rendered every group in the same

@@ -7,7 +7,14 @@ import {
 	zoomIdentity,
 } from "d3-zoom";
 import { Check, LocateFixed, Minus, Plus, RotateCcw } from "lucide-react";
-import { type PointerEvent, useEffect, useMemo, useRef, useState } from "react";
+import {
+	type PointerEvent,
+	useEffect,
+	useLayoutEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 
 import {
 	createChronologyContext,
@@ -34,6 +41,26 @@ interface MapWorkspaceProps {
 	geometry: GeometryBundle;
 	focusedEntityId?: string;
 	onFocusEntity: (id: string | undefined) => void;
+}
+
+function positionMapTooltip(
+	frame: HTMLDivElement | null,
+	tooltip: HTMLDivElement | null,
+	pointer: { x: number; y: number },
+) {
+	if (!frame || !tooltip) return;
+	const bounds = frame.getBoundingClientRect();
+	const padding = 8;
+	const pointerGap = 12;
+	const x = Math.min(
+		Math.max(pointer.x - bounds.left + pointerGap, padding),
+		Math.max(padding, bounds.width - tooltip.offsetWidth - padding),
+	);
+	const y = Math.min(
+		Math.max(pointer.y - bounds.top + pointerGap, padding),
+		Math.max(padding, bounds.height - tooltip.offsetHeight - padding),
+	);
+	tooltip.style.transform = `translate3d(${x}px, ${y}px, 0)`;
 }
 
 function MapCanvas({
@@ -84,6 +111,16 @@ function MapCanvas({
 	const zoomGroupRef = useRef<SVGGElement>(null);
 	const mapFrameRef = useRef<HTMLDivElement>(null);
 	const tooltipRef = useRef<HTMLDivElement>(null);
+	const pointerPositionRef = useRef({ x: 0, y: 0 });
+	// Reposition after new text is laid out, even if the pointer has already stopped.
+	useLayoutEffect(() => {
+		if (hoveredEntityId === undefined) return;
+		positionMapTooltip(
+			mapFrameRef.current,
+			tooltipRef.current,
+			pointerPositionRef.current,
+		);
+	});
 	const zoomBehaviorRef = useRef<ZoomBehavior<SVGSVGElement, unknown> | null>(
 		null,
 	);
@@ -125,19 +162,12 @@ function MapCanvas({
 	};
 
 	const moveTooltip = (event: PointerEvent<SVGPathElement>) => {
-		const frame = mapFrameRef.current;
-		const tooltip = tooltipRef.current;
-		if (!frame || !tooltip) return;
-		const bounds = frame.getBoundingClientRect();
-		const x = Math.min(
-			Math.max(event.clientX - bounds.left + 12, 8),
-			Math.max(8, bounds.width - 196),
+		pointerPositionRef.current = { x: event.clientX, y: event.clientY };
+		positionMapTooltip(
+			mapFrameRef.current,
+			tooltipRef.current,
+			pointerPositionRef.current,
 		);
-		const y = Math.min(
-			Math.max(event.clientY - bounds.top + 12, 8),
-			Math.max(8, bounds.height - 66),
-		);
-		tooltip.style.transform = `translate3d(${x}px, ${y}px, 0)`;
 	};
 
 	const focusedGeometry = renderedEntities.find(
@@ -235,7 +265,13 @@ function MapCanvas({
 												// unavailable without depending on colour perception.
 												"url(#map-unavailable-hatch)",
 									}}
-									onPointerEnter={() => setHoveredEntityId(entity.id)}
+									onPointerEnter={(event) => {
+										pointerPositionRef.current = {
+											x: event.clientX,
+											y: event.clientY,
+										};
+										setHoveredEntityId(entity.id);
+									}}
 									onPointerMove={moveTooltip}
 									onPointerLeave={() => setHoveredEntityId(undefined)}
 									onClick={
@@ -320,8 +356,10 @@ function MapCanvas({
 					<>
 						<strong className="block font-medium">{hoveredEntity.name}</strong>
 						<span className="mt-0.5 block text-metadata opacity-70">
-							{hoveredEntity.groupName} · click to{" "}
-							{progress.selected[hoveredEntity.id] ? "deselect" : "select"}
+							{hoveredEntity.groupName} ·{" "}
+							{isSelectable(policy, hoveredEntity.id)
+								? `click to ${progress.selected[hoveredEntity.id] ? "deselect" : "select"}`
+								: "not included in progress"}
 						</span>
 					</>
 				) : null}
@@ -336,10 +374,8 @@ export function MapWorkspace(props: MapWorkspaceProps) {
 	const setProjection = useAtlasStore(
 		({ setProjection: updateProjection }) => updateProjection,
 	);
-	const selectedCount = countSelectable(
-		createSelectionPolicy(manifest),
-		progress.selected,
-	);
+	const policy = createSelectionPolicy(manifest);
+	const selectedCount = countSelectable(policy, progress.selected);
 	const fillMode = progress.fillMode;
 	const projection = manifest.projections.includes(progress.projection)
 		? progress.projection
@@ -404,6 +440,22 @@ export function MapWorkspace(props: MapWorkspaceProps) {
 					<span className="inline-flex items-center gap-1.5">
 						<i className="legend-focus" /> Focused
 					</span>
+					{policy.entityById.size > policy.selectableIds.size ? (
+						<span className="inline-flex items-center gap-1.5">
+							<svg
+								className="legend-swatch"
+								viewBox="0 0 12 12"
+								aria-hidden="true"
+							>
+								<rect
+									width="12"
+									height="12"
+									fill="url(#map-unavailable-hatch)"
+								/>
+							</svg>
+							Context · not counted
+						</span>
+					) : null}
 					<span className="tabular-nums">{selectedCount} marked</span>
 				</div>
 				<p className="text-right">{props.preset.attribution}</p>

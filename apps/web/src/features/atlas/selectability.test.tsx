@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { AtlasSidebar } from "@/features/atlas/components/atlas-sidebar";
 import {
@@ -25,6 +25,20 @@ const mixedProgress = () => useAtlasStore.getState().data.presets.mixed;
 beforeEach(seedMixedPreset);
 
 describe("selectability is enforced everywhere", () => {
+	it("lets keyboard users locate a non-selectable search result", async () => {
+		const user = userEvent.setup();
+		const locate = vi.fn();
+		render(<AtlasSidebar preset={mixedPreset} onFocusEntity={locate} />);
+		await user.type(screen.getByRole("searchbox"), "MX-TERRITORY");
+		await user.keyboard("{ArrowDown}");
+		expect(
+			screen.getByRole("button", { name: "Locate MX-TERRITORY on map" }),
+		).toHaveFocus();
+		await user.keyboard("{Enter}");
+		expect(locate).toHaveBeenCalledWith("mx-territory");
+		expect(mixedProgress().selected).toEqual({});
+	});
+
 	it("renders a visible non-selectable region but does not let it be toggled", async () => {
 		const user = userEvent.setup();
 		render(
@@ -36,7 +50,7 @@ describe("selectability is enforced everywhere", () => {
 		expect(unavailable).toBeInTheDocument();
 		expect(unavailable).toBeDisabled();
 		// The unavailable state is not carried by colour alone.
-		expect(unavailable).toHaveTextContent("Unavailable");
+		expect(unavailable).toHaveTextContent("Not counted");
 		expect(unavailable).not.toHaveAttribute("aria-pressed");
 
 		await user.click(unavailable);

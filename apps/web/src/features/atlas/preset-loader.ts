@@ -49,7 +49,7 @@ function contractProblems(
 }
 
 /**
- * Every group a preset can render must have a hue. A missing one used to fall back silently to
+ * Every selectable group a preset can color must have a hue. A missing one used to fall back silently to
  * the accent hue, so an incomplete preset looked finished.
  */
 function missingGroupHues(
@@ -57,15 +57,19 @@ function missingGroupHues(
 	groupHues: Readonly<Record<string, number>>,
 ) {
 	const declared = new Set(Object.keys(groupHues));
-	const rendered = new Set(manifest.entities.map(({ groupId }) => groupId));
+	const colored = new Set(
+		manifest.entities
+			.filter((entity) => entity.selectable)
+			.map(({ groupId }) => groupId),
+	);
 	const problems: string[] = [];
-	const missing = [...rendered].filter((group) => !declared.has(group)).sort();
-	const extra = [...declared].filter((group) => !rendered.has(group)).sort();
+	const missing = [...colored].filter((group) => !declared.has(group)).sort();
+	const extra = [...declared].filter((group) => !colored.has(group)).sort();
 	if (missing.length > 0)
 		problems.push(`no palette hue for ${missing.join(", ")}`);
 	if (extra.length > 0)
 		problems.push(
-			`palette hues for groups it never renders: ${extra.join(", ")}`,
+			`palette hues for groups it never colors: ${extra.join(", ")}`,
 		);
 	return problems;
 }

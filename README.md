@@ -118,15 +118,17 @@ Persisted preset data is a record keyed by stable preset ID rather than a fixed 
 
 Every selectable entity has an application-owned stable ID and an explicit geometry mapping. Display names, translations, array positions, path order, colors, and unnormalized upstream labels are never durable IDs.
 
+World progress counts only the 193 UN member states, the Holy See, and the State of Palestine. The other 45 features in the pinned Natural Earth dataset are displayed as geographic context: searchable and locatable, visibly not counted, and excluded from selection and imported progress. This includes territories and disputed areas such as Greenland, Western Sahara, Kosovo, and Taiwan, without assigning them to a different sovereign state. Every source feature has an explicit destination; the source's political classifications do not determine the progress total.
+
 The build pipeline validates:
 
 - duplicate stable IDs;
-- missing or unexpected selectable geometry;
+- missing or unexpected manifest geometry and unaccounted World source features;
 - missing parent boundary meshes or non-mesh parent output;
 - unresolved parent references;
 - ambiguous normalized aliases;
 - configured totals against manifests;
-- decoded geometry with invalid globe-sized winding;
+- decoded geometry with invalid globe-sized winding, and every World polygon retaining positive area;
 - deterministic source checksums and output metadata.
 
 ## Geographic data and regeneration
@@ -147,7 +149,7 @@ ATLAS_GEO_CACHE_DIR=/absolute/path/to/cache pnpm geo:build
 pnpm geo:check
 ```
 
-The pipeline verifies SHA-256 checksums before reading source files, keeps only mapped properties, combines multi-part entities, extracts parent boundary meshes from shared child arcs, quantizes shared arcs, simplifies conservatively, repairs only simplification-induced invalid winding, and emits deterministic TopoJSON plus transformation metadata. Heavy geometry work never runs in the browser.
+The pipeline verifies SHA-256 checksums before reading source files, accounts for source coverage, keeps only mapped properties, combines multi-part entities, extracts parent boundary meshes from shared child arcs, and quantizes shared arcs. World retains all polygons of the already generalized 1:50m source without additional vertex removal: the former simplification collapsed small states and islands. Brazil and Spain retain their conservative simplification, with repair limited to simplification-induced invalid winding. The output is deterministic TopoJSON plus transformation and coverage metadata. Heavy geometry work never runs in the browser.
 
 ## Persistence and imports
 

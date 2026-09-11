@@ -21,7 +21,7 @@
 		"geo:build": "node scripts/geo/build.mjs",
 		"screenshots": "node scripts/screenshots/capture.mjs",
 		"social-card": "node scripts/screenshots/social-card.mjs",
-		"geo:check": "node scripts/geo/check.mjs",
+		"geo:check": "node --test scripts/geo/world-source.test.mjs && node scripts/geo/check.mjs",
 		"validate": "pnpm format && pnpm lint && pnpm check-types && pnpm test && pnpm geo:check && pnpm test:e2e && pnpm build"
 	},
 	"dependencies": {

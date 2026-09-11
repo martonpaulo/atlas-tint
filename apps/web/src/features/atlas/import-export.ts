@@ -1,5 +1,4 @@
 import { z } from "zod";
-
 import { type PresetManifest, presetIdSchema } from "@/features/atlas/domain";
 import { formatByteLimit, importLimits } from "@/features/atlas/import-limits";
 import {
@@ -11,6 +10,7 @@ import {
 	sanitizeUnknownEntityIds,
 	selectionMetadataSchema,
 } from "@/features/atlas/persistence-schema";
+import { createSelectionPolicy } from "@/features/atlas/selection-policy";
 
 export const EXPORT_SCHEMA_VERSION = 3;
 
@@ -173,7 +173,7 @@ export function validateImportText(
 		const sanitized = sanitizeUnknownEntityIds(
 			state,
 			id,
-			new Set(manifest.entities.map((entity) => entity.id)),
+			createSelectionPolicy(manifest).selectableIds,
 		);
 		state = sanitized.state;
 		unknownIds[id] = sanitized.removedIds;

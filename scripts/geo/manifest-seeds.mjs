@@ -1,3 +1,5 @@
+import { worldContextEntities } from "./world-context.mjs";
+
 const splitAliases = (value = "") => value.split(";").filter(Boolean);
 
 const worldRows = `
@@ -404,11 +406,11 @@ export const manifests = {
 		name: "World sovereign states",
 		shortName: "World",
 		description:
-			"195 sovereign states: 193 UN members, the Holy See, and the State of Palestine.",
+			"195 sovereign states: 193 UN members, the Holy See, and the State of Palestine. Other regions are geographic context, not counted.",
 		primaryTotal: 195,
 		defaultProjection: "equal-earth",
 		projections: ["equal-earth", "natural-earth", "robinson", "mercator"],
-		entities: worldEntities,
+		entities: [...worldEntities, ...worldContextEntities],
 		parents: [],
 	},
 	brazil: {

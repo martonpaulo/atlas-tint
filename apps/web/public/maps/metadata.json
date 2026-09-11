@@ -1,10 +1,11 @@
 {
-	"pipelineVersion": 1,
+	"pipelineVersion": 2,
 	"coordinateSystem": "WGS84-compatible geographic longitude/latitude",
 	"transformations": [
 		"map source identifiers to application-owned stable IDs",
 		"drop unused source properties",
 		"combine multi-part entities",
+		"preserve all World 1:50m polygons without additional simplification",
 		"extract external parent boundary meshes from shared child arcs",
 		"quantize and simplify shared TopoJSON arcs conservatively",
 		"remove simplified rings only when winding collapses into a globe-sized complement"
@@ -12,6 +13,8 @@
 	"sources": {
 		"world": {
 			"filename": "world.zip",
+			"featureCount": 242,
+			"polygonCount": 1620,
 			"url": "https://naciscdn.org/naturalearth/50m/cultural/ne_50m_admin_0_countries.zip",
 			"sha256": "5fed433373581fa648920435f937d95f2d3c0200e067409c6478dcdf1b853139",
 			"version": "Natural Earth Admin 0 Countries 5.1.1, 1:50m",
@@ -36,11 +39,16 @@
 	"results": [
 		{
 			"id": "world",
-			"entities": 195,
+			"entities": 240,
 			"parents": 0,
-			"threshold": 0.000001009033984700311,
-			"manifestSha256": "925444778178c1f2ba44832c981c857b53cb6e41b2cbede6289a612b9f51b653",
-			"topologySha256": "89eadbf4566fa313409c4f902f52a152fd6cc571b9491bba5db17bf383ac2cec"
+			"threshold": 0,
+			"sourceCoverage": {
+				"sourceFeatures": 242,
+				"primaryFeatures": 197,
+				"contextFeatures": 45
+			},
+			"manifestSha256": "7d021f7598768ebbf7880ae9a736618979e7c8ef1095ffdc9e84c7f2d694296b",
+			"topologySha256": "b2b38ecfa9e0a234331f7103124301b38449ce0ead5f07eff52110572ce5a9fd"
 		},
 		{
 			"id": "brazil",

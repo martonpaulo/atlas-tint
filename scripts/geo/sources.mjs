@@ -7,6 +7,8 @@
 export const sources = {
 	world: {
 		filename: "world.zip",
+		featureCount: 242,
+		polygonCount: 1620,
 		url: "https://naciscdn.org/naturalearth/50m/cultural/ne_50m_admin_0_countries.zip",
 		sha256: "5fed433373581fa648920435f937d95f2d3c0200e067409c6478dcdf1b853139",
 		version: "Natural Earth Admin 0 Countries 5.1.1, 1:50m",

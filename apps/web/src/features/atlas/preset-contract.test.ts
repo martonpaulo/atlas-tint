@@ -70,19 +70,19 @@ describe("loaded preset contract", () => {
 		).toThrow(/not among the supported projections/);
 	});
 
-	it("rejects a palette that does not cover every rendered group", () => {
+	it("rejects a palette that does not cover every selectable group", () => {
 		expect(() =>
 			validateLoadedPreset(registration, { ...testPreset, groupHues: {} }),
 		).toThrow(/no palette hue for group-a/);
 	});
 
-	it("rejects palette policy for groups the preset never renders", () => {
+	it("rejects palette policy for groups the preset never colors", () => {
 		expect(() =>
 			validateLoadedPreset(registration, {
 				...testPreset,
 				groupHues: { "group-a": 300, "group-ghost": 12 },
 			}),
-		).toThrow(/never renders: group-ghost/);
+		).toThrow(/never colors: group-ghost/);
 	});
 
 	it("reports every problem at once, as a PresetContractError", () => {
@@ -121,10 +121,12 @@ describe("loaded preset contract", () => {
 		}
 	});
 
-	it("gives every shipped preset a hue for each group it renders", () => {
+	it("gives every shipped preset a hue for each selectable group", () => {
 		for (const preset of [worldPreset, brazilPreset, spainPreset]) {
 			const rendered = new Set(
-				preset.manifest.entities.map(({ groupId }) => groupId),
+				preset.manifest.entities
+					.filter((entity) => entity.selectable)
+					.map(({ groupId }) => groupId),
 			);
 			expect(Object.keys(preset.groupHues).sort()).toEqual(
 				[...rendered].sort(),

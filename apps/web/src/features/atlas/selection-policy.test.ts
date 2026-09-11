@@ -95,11 +95,16 @@ describe("selection policy", () => {
 		expect(createSelectionPolicy(mixedManifest)).toBe(policy);
 	});
 
-	it("leaves the shipped all-selectable presets fully selectable", () => {
+	it("preserves primary selection totals while knowing contextual land", () => {
 		for (const preset of [worldPreset, brazilPreset, spainPreset]) {
 			const shipped = createSelectionPolicy(preset.manifest);
-			expect(shipped.selectableIds.size).toBe(preset.manifest.entities.length);
+			expect(shipped.entityById.size).toBe(preset.manifest.entities.length);
 			expect(shipped.selectableIds.size).toBe(preset.manifest.primaryTotal);
+			if (preset === worldPreset) {
+				expect(isKnown(shipped, "world-gl")).toBe(true);
+				expect(isSelectable(shipped, "world-gl")).toBe(false);
+				expect(isSelectable(shipped, "world-dk")).toBe(true);
+			}
 			for (const parent of preset.manifest.parents) {
 				expect(selectableChildren(shipped, parent)).toEqual(parent.childIds);
 			}

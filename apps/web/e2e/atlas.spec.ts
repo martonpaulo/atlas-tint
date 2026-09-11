@@ -667,3 +667,91 @@ for (const schemaVersion of [1, 2]) {
 		);
 	});
 }
+
+test("renders all contextual World land without changing primary progress", async ({
+	page,
+}) => {
+	await expect(page.locator("[data-entity-id][data-unavailable]")).toHaveCount(
+		45,
+	);
+	await expect(page.getByRole("progressbar")).toHaveAttribute("max", "195");
+	for (const projection of [
+		"equal-earth",
+		"natural-earth",
+		"robinson",
+		"mercator",
+	]) {
+		await page.getByLabel("Projection").selectOption(projection);
+		for (const id of [
+			"gl",
+			"eh",
+			"xk",
+			"tw",
+			"somaliland",
+			"northern-cyprus",
+			"pr",
+			"aq",
+		]) {
+			const region = page.locator(`[data-entity-id="world-${id}"]`);
+			await expect(region).toBeVisible();
+			const bounds = await region.evaluate((element: SVGPathElement) => {
+				const { width, height } = element.getBBox();
+				return { width, height };
+			});
+			expect(bounds.width).toBeGreaterThan(0);
+			expect(bounds.height).toBeGreaterThan(0);
+		}
+	}
+	const search = page.getByRole("searchbox");
+	await search.fill("Greenland");
+	await expect(page.getByRole("button", { name: /^Greenland/ })).toBeDisabled();
+	await search.press("ArrowDown");
+	const locate = page.getByRole("button", { name: "Locate Greenland on map" });
+	await expect(locate).toBeFocused();
+	await locate.press("Enter");
+	await expect(page.locator('[data-entity-id="world-gl"]')).toHaveAttribute(
+		"data-focused",
+		"true",
+	);
+	await expect(page.getByRole("progressbar")).toHaveAttribute("value", "0");
+	await page.locator('[data-entity-id="world-gl"]').dispatchEvent("click");
+	await expect(page.getByRole("progressbar")).toHaveAttribute("value", "0");
+});
+
+test("keeps contextual hover labels inside the map frame", async ({ page }) => {
+	const point = await page
+		.locator('[data-entity-id="world-tw"]')
+		.evaluate((path: SVGPathElement) => {
+			const bounds = path.getBBox();
+			const matrix = path.getScreenCTM();
+			if (!matrix) throw new Error("Missing map transform");
+			for (let x = 1; x < 10; x += 1)
+				for (let y = 1; y < 10; y += 1) {
+					const local = new DOMPoint(
+						bounds.x + (bounds.width * x) / 10,
+						bounds.y + (bounds.height * y) / 10,
+					);
+					if (!path.isPointInFill(local)) continue;
+					const screen = local.matrixTransform(matrix);
+					if (document.elementFromPoint(screen.x, screen.y) === path)
+						return { x: screen.x, y: screen.y };
+				}
+			throw new Error("No hit-tested Taiwan interior");
+		});
+	await page.mouse.move(point.x, point.y);
+	const tooltip = page.locator('[data-visible="true"]');
+	await expect(tooltip).toContainText("not included in progress");
+	const bounds = await tooltip.evaluate((element) => {
+		const box = element.getBoundingClientRect();
+		const frame = element.parentElement?.getBoundingClientRect();
+		if (!frame) throw new Error("Tooltip has no map frame");
+		return {
+			right: box.right,
+			bottom: box.bottom,
+			frameRight: frame.right,
+			frameBottom: frame.bottom,
+		};
+	});
+	expect(bounds.right).toBeLessThanOrEqual(bounds.frameRight);
+	expect(bounds.bottom).toBeLessThanOrEqual(bounds.frameBottom);
+});

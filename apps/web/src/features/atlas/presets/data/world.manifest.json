@@ -2,7 +2,7 @@
 	"id": "world",
 	"name": "World sovereign states",
 	"shortName": "World",
-	"description": "195 sovereign states: 193 UN members, the Holy See, and the State of Palestine.",
+	"description": "195 sovereign states: 193 UN members, the Holy See, and the State of Palestine. Other regions are geographic context, not counted.",
 	"primaryTotal": 195,
 	"defaultProjection": "equal-earth",
 	"projections": [
@@ -2822,6 +2822,765 @@
 			"groupName": "Oceania",
 			"groupAliases": [],
 			"selectable": true
+		},
+		{
+			"id": "world-mp",
+			"geometryId": "MP",
+			"name": "Northern Mariana Islands",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MP"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-vi",
+			"geometryId": "VI",
+			"name": "United States Virgin Islands",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"VI"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-gu",
+			"geometryId": "GU",
+			"name": "Guam",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"GU"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-as",
+			"geometryId": "AS",
+			"name": "American Samoa",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"AS"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-pr",
+			"geometryId": "PR",
+			"name": "Puerto Rico",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"PR"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-gs",
+			"geometryId": "GS",
+			"name": "South Georgia and the Islands",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"GS"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-io",
+			"geometryId": "IO",
+			"name": "British Indian Ocean Territory",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"IO"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-sh",
+			"geometryId": "SH",
+			"name": "Saint Helena",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SH"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-pn",
+			"geometryId": "PN",
+			"name": "Pitcairn Islands",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"PN"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-ai",
+			"geometryId": "AI",
+			"name": "Anguilla",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"AI"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-fk",
+			"geometryId": "FK",
+			"name": "Falkland Islands",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"FK"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-ky",
+			"geometryId": "KY",
+			"name": "Cayman Islands",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"KY"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-bm",
+			"geometryId": "BM",
+			"name": "Bermuda",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"BM"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-vg",
+			"geometryId": "VG",
+			"name": "British Virgin Islands",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"VG"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-tc",
+			"geometryId": "TC",
+			"name": "Turks and Caicos Islands",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"TC"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-ms",
+			"geometryId": "MS",
+			"name": "Montserrat",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MS"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-je",
+			"geometryId": "JE",
+			"name": "Jersey",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"JE"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-gg",
+			"geometryId": "GG",
+			"name": "Guernsey",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"GG"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-im",
+			"geometryId": "IM",
+			"name": "Isle of Man",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"IM"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-tw",
+			"geometryId": "TW",
+			"name": "Taiwan",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"TW"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-somaliland",
+			"geometryId": "NE-SOL",
+			"name": "Somaliland",
+			"localNames": [],
+			"aliases": [],
+			"codes": [],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-nu",
+			"geometryId": "NU",
+			"name": "Niue",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"NU"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-ck",
+			"geometryId": "CK",
+			"name": "Cook Islands",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"CK"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-aw",
+			"geometryId": "AW",
+			"name": "Aruba",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"AW"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-cw",
+			"geometryId": "CW",
+			"name": "Curaçao",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"CW"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-eh",
+			"geometryId": "EH",
+			"name": "Western Sahara",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"EH"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-xk",
+			"geometryId": "XK",
+			"name": "Kosovo",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"XK"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-pm",
+			"geometryId": "PM",
+			"name": "Saint Pierre and Miquelon",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"PM"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-wf",
+			"geometryId": "WF",
+			"name": "Wallis and Futuna",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"WF"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-mf",
+			"geometryId": "MF",
+			"name": "Saint Martin",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MF"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-bl",
+			"geometryId": "BL",
+			"name": "Saint Barthelemy",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"BL"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-pf",
+			"geometryId": "PF",
+			"name": "French Polynesia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"PF"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-nc",
+			"geometryId": "NC",
+			"name": "New Caledonia",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"NC"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-tf",
+			"geometryId": "TF",
+			"name": "French Southern and Antarctic Lands",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"TF"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-ax",
+			"geometryId": "AX",
+			"name": "Aland",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"AX"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-gl",
+			"geometryId": "GL",
+			"name": "Greenland",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"GL"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-fo",
+			"geometryId": "FO",
+			"name": "Faroe Islands",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"FO"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-northern-cyprus",
+			"geometryId": "NE-CYN",
+			"name": "Northern Cyprus",
+			"localNames": [],
+			"aliases": [],
+			"codes": [],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-mo",
+			"geometryId": "MO",
+			"name": "Macao S.A.R",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"MO"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-hk",
+			"geometryId": "HK",
+			"name": "Hong Kong S.A.R.",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"HK"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-hm",
+			"geometryId": "HM",
+			"name": "Heard Island and McDonald Islands",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"HM"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-nf",
+			"geometryId": "NF",
+			"name": "Norfolk Island",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"NF"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-siachen-glacier",
+			"geometryId": "NE-KAS",
+			"name": "Siachen Glacier",
+			"localNames": [],
+			"aliases": [],
+			"codes": [],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-aq",
+			"geometryId": "AQ",
+			"name": "Antarctica",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"AQ"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
+		},
+		{
+			"id": "world-sx",
+			"geometryId": "SX",
+			"name": "Sint Maarten",
+			"localNames": [],
+			"aliases": [],
+			"codes": [
+				"SX"
+			],
+			"groupId": "world-context",
+			"groupName": "Geographic context",
+			"groupAliases": [
+				"Territories",
+				"Non-primary regions"
+			],
+			"selectable": false
 		}
 	],
 	"parents": []

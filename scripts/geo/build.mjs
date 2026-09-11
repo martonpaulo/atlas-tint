@@ -3,7 +3,6 @@ import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-
 import * as shapefile from "shapefile";
 import { mesh, feature as topologyFeature } from "topojson-client";
 import { topology } from "topojson-server";
@@ -13,7 +12,6 @@ import {
 	simplify,
 	sphericalTriangleArea,
 } from "topojson-simplify";
-
 import {
 	digest,
 	geometryVersionsPath,
@@ -29,8 +27,10 @@ import {
 	topologyPath,
 } from "./artifacts.mjs";
 import { manifests } from "./manifest-seeds.mjs";
+import { cleanSourceText as cleanText } from "./source-text.mjs";
 import { sources } from "./sources.mjs";
 import { validateManifest } from "./validate.mjs";
+import { matchWorldSource } from "./world-source.mjs";
 
 function run(command, commandArguments) {
 	const result = spawnSync(command, commandArguments, { encoding: "utf8" });
@@ -100,12 +100,6 @@ async function obtainSource(source, tempDirectory) {
 		await writeFile(cachedPath, await readFile(destination));
 	}
 	return destination;
-}
-
-function cleanText(value) {
-	return String(value ?? "")
-		.replaceAll("\0", "")
-		.trim();
 }
 
 function combineGeometries(features) {
@@ -247,19 +241,20 @@ async function buildWorld(zipPath, tempDirectory) {
 		shapeDirectory,
 	]);
 	const source = await readShape(shapeDirectory, "ne_50m_admin_0_countries");
-	const byCode = new Map();
-	for (const feature of source.features) {
-		const code = cleanText(feature.properties.ISO_A2_EH);
-		const matches = byCode.get(code) ?? [];
-		matches.push(feature);
-		byCode.set(code, matches);
-	}
-	return manifests.world.entities.map((entity) => {
-		const matches = byCode.get(entity.geometryId);
-		if (!matches)
-			throw new Error(`World geometry missing for ${entity.geometryId}`);
-		return featureForEntity(entity, matches);
-	});
+	if (source.features.length !== sources.world.featureCount)
+		throw new Error(
+			"World source feature count differs from the pinned source contract.",
+		);
+	const { matches, sourceCoverage } = matchWorldSource(
+		manifests.world,
+		source.features,
+	);
+	return {
+		entities: manifests.world.entities.map((entity) =>
+			featureForEntity(entity, matches.get(entity.id)),
+		),
+		sourceCoverage,
+	};
 }
 
 async function buildBrazil(zipPath, tempDirectory) {
@@ -281,12 +276,14 @@ async function buildBrazil(zipPath, tempDirectory) {
 			[feature],
 		]),
 	);
-	return manifests.brazil.entities.map((entity) => {
-		const matches = byCode.get(entity.geometryId);
-		if (!matches)
-			throw new Error(`Brazil geometry missing for ${entity.geometryId}`);
-		return featureForEntity(entity, matches);
-	});
+	return {
+		entities: manifests.brazil.entities.map((entity) => {
+			const matches = byCode.get(entity.geometryId);
+			if (!matches)
+				throw new Error(`Brazil geometry missing for ${entity.geometryId}`);
+			return featureForEntity(entity, matches);
+		}),
+	};
 }
 
 async function buildSpain(zipPath, tempDirectory) {
@@ -330,23 +327,28 @@ async function buildSpain(zipPath, tempDirectory) {
 			byCode.set(code, matches);
 		}
 	}
-	return manifests.spain.entities.map((entity) => {
-		const matches = byCode.get(entity.geometryId);
-		if (!matches)
-			throw new Error(`Spain geometry missing for ${entity.geometryId}`);
-		return featureForEntity(entity, matches);
-	});
+	return {
+		entities: manifests.spain.entities.map((entity) => {
+			const matches = byCode.get(entity.geometryId);
+			if (!matches)
+				throw new Error(`Spain geometry missing for ${entity.geometryId}`);
+			return featureForEntity(entity, matches);
+		}),
+	};
 }
 
 const builders = { world: buildWorld, brazil: buildBrazil, spain: buildSpain };
-const simplificationQuantiles = { world: 0.4, brazil: 0.04, spain: 0.03 };
+const simplificationQuantiles = { world: 0, brazil: 0.04, spain: 0.03 };
 
 async function buildPreset(id, zipPath, tempDirectory) {
 	const manifest = manifests[id];
 	const manifestErrors = validateManifest(manifest);
 	if (manifestErrors.length > 0)
 		throw new Error(`${id} manifest invalid:\n${manifestErrors.join("\n")}`);
-	const entityFeatures = await builders[id](zipPath, tempDirectory);
+	const { entities: entityFeatures, sourceCoverage } = await builders[id](
+		zipPath,
+		tempDirectory,
+	);
 	const parents = parentFeatures(manifest, entityFeatures);
 	const sourceTopology = topology(
 		{
@@ -355,13 +357,13 @@ async function buildPreset(id, zipPath, tempDirectory) {
 		},
 		100_000,
 	);
-	const weighted = presimplify(sourceTopology, sphericalTriangleArea);
 	const simplificationQuantile = simplificationQuantiles[id];
-	const threshold =
+	const weighted =
 		simplificationQuantile === 0
-			? 0
-			: quantile(weighted, simplificationQuantile);
-	const simplified = simplify(weighted, threshold);
+			? undefined
+			: presimplify(sourceTopology, sphericalTriangleArea);
+	const threshold = weighted ? quantile(weighted, simplificationQuantile) : 0;
+	const simplified = weighted ? simplify(weighted, threshold) : sourceTopology;
 	const renderable =
 		id === "spain" ? repairSpainSimplification(simplified) : simplified;
 	const topologyBytes = serializeTopology(renderable);
@@ -373,6 +375,7 @@ async function buildPreset(id, zipPath, tempDirectory) {
 		entities: entityFeatures.length,
 		parents: parents.length,
 		threshold,
+		...(sourceCoverage ? { sourceCoverage } : {}),
 		// Fingerprints tie the recorded metadata to the exact artifacts this run emitted, so a
 		// stale manifest or topology cannot pass as belonging to the recorded generation.
 		manifestSha256: digest(manifestBytes),
@@ -391,12 +394,13 @@ async function main() {
 			results.push(await buildPreset(id, zipPath, tempDirectory));
 		}
 		const metadata = {
-			pipelineVersion: 1,
+			pipelineVersion: 2,
 			coordinateSystem: "WGS84-compatible geographic longitude/latitude",
 			transformations: [
 				"map source identifiers to application-owned stable IDs",
 				"drop unused source properties",
 				"combine multi-part entities",
+				"preserve all World 1:50m polygons without additional simplification",
 				"extract external parent boundary meshes from shared child arcs",
 				"quantize and simplify shared TopoJSON arcs conservatively",
 				"remove simplified rings only when winding collapses into a globe-sized complement",

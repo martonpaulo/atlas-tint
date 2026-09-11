@@ -129,7 +129,9 @@ function EntityRow({
 			data-unavailable={selectable ? undefined : ""}
 		>
 			<button
-				ref={(element) => registerRow(entity.id, element)}
+				ref={
+					selectable ? (element) => registerRow(entity.id, element) : undefined
+				}
 				type="button"
 				className="focus-ring focus-ring-sidebar flex min-w-0 items-center gap-3 rounded-md px-2.5 py-2.5 text-left hover:bg-sidebar-accent disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent data-[selected=true]:font-medium"
 				data-selected={selected}
@@ -157,7 +159,7 @@ function EntityRow({
 						{entity.name}
 						{selectable ? null : (
 							<span className="ml-1.5 rounded-sm border border-sidebar-border px-1 py-px align-middle text-eyebrow text-muted-foreground">
-								Unavailable
+								Not counted
 							</span>
 						)}
 					</span>
@@ -215,6 +217,11 @@ function EntityRow({
 					size="icon-xs"
 					className="opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 data-[pressed=true]:opacity-100"
 					data-pressed={mapFocused || undefined}
+					ref={
+						selectable
+							? undefined
+							: (element) => registerRow(entity.id, element)
+					}
 					aria-label={`Locate ${entity.name} on map`}
 					aria-pressed={mapFocused}
 					tabIndex={tabIndex}

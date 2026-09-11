@@ -14,7 +14,7 @@ import {
 } from "./artifacts.mjs";
 import { manifests } from "./manifest-seeds.mjs";
 import { sources } from "./sources.mjs";
-import { validateManifest } from "./validate.mjs";
+import { validateManifest, validateWorldGeometry } from "./validate.mjs";
 
 const errors = [];
 
@@ -159,6 +159,13 @@ async function checkPreset(id) {
 		errors.push(`${id}: entities did not decode to a feature collection`);
 		return;
 	}
+	if (id === "world")
+		errors.push(
+			...validateWorldGeometry(
+				entityFeatures.features,
+				sources.world.polygonCount,
+			),
+		);
 	for (const entityFeature of entityFeatures.features) {
 		const area = geoArea(entityFeature);
 		if (!Number.isFinite(area) || area >= Math.PI * 2) {
@@ -228,6 +235,21 @@ async function checkGeneration(fingerprints) {
 		if (!recorded) {
 			errors.push(`${id}: generated metadata records no build result`);
 			continue;
+		}
+		if (id === "world") {
+			const coverage = recorded.sourceCoverage;
+			if (
+				!coverage ||
+				coverage.sourceFeatures !== sources.world.featureCount ||
+				coverage.primaryFeatures + coverage.contextFeatures !==
+					coverage.sourceFeatures ||
+				coverage.contextFeatures !==
+					manifests.world.entities.filter((e) => !e.selectable).length
+			) {
+				errors.push(
+					"World source coverage is incomplete or inconsistent with the pinned source",
+				);
+			}
 		}
 		if (recorded.manifestSha256 !== actual.manifestSha256) {
 			errors.push(

@@ -25,6 +25,28 @@ const manifests = {
 };
 
 describe("import and export", () => {
+	it("does not import contextual land as selected progress", () => {
+		const state = createDefaultState();
+		state.presets.world.selected["world-gl"] = {
+			selectedAt: "2026-09-01T00:00:00.000Z",
+			order: 1,
+			stamp: ORIGIN_STAMP,
+		};
+		state.presets.world.customColors["world-gl"] = "#112233";
+		const result = validateImportText(serializeAtlasExport(state), manifests);
+		expect(result.ok).toBe(true);
+		if (result.ok) {
+			expect(result.preview.state.presets.world.selected).not.toHaveProperty(
+				"world-gl",
+			);
+			expect(
+				result.preview.state.presets.world.customColors,
+			).not.toHaveProperty("world-gl");
+			expect(
+				result.preview.presets.find((p) => p.id === "world")?.selectedCount,
+			).toBe(0);
+		}
+	});
 	it.each([legacyV1, legacyV2])(
 		"imports historical export schema $schemaVersion",
 		(payload) => {
@@ -123,17 +145,21 @@ describe("import limits", () => {
 		let order = 0;
 		for (const [id, manifest] of Object.entries(manifests)) {
 			state.presets[id].selected = Object.fromEntries(
-				manifest.entities.map((entity) => [
-					entity.id,
-					{
-						selectedAt: "2026-07-24T12:00:00.000Z",
-						order: ++order,
-						stamp: ORIGIN_STAMP,
-					},
-				]),
+				manifest.entities
+					.filter((entity) => entity.selectable)
+					.map((entity) => [
+						entity.id,
+						{
+							selectedAt: "2026-07-24T12:00:00.000Z",
+							order: ++order,
+							stamp: ORIGIN_STAMP,
+						},
+					]),
 			);
 			state.presets[id].customColors = Object.fromEntries(
-				manifest.entities.map((entity) => [entity.id, "#b86b45"]),
+				manifest.entities
+					.filter((entity) => entity.selectable)
+					.map((entity) => [entity.id, "#b86b45"]),
 			);
 		}
 		const text = exportText(state);

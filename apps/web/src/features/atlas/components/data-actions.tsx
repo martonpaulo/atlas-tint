@@ -284,7 +284,7 @@ export function DataActions({
 								</p>
 								{unknownCount > 0 ? (
 									<p className="mt-1 text-warning-foreground">
-										{unknownCount} unknown region{" "}
+										{unknownCount} unknown or non-selectable region{" "}
 										{unknownCount === 1 ? "ID was" : "IDs were"} ignored safely.
 									</p>
 								) : null}

@@ -5,6 +5,24 @@ import { spainPreset } from "@/features/atlas/presets/spain";
 import { worldPreset } from "@/features/atlas/presets/world";
 
 describe("curated manifest invariants", () => {
+	it("keeps contextual World land visible without adding primary states", () => {
+		const context = worldPreset.manifest.entities.filter(
+			(entity) => !entity.selectable,
+		);
+		expect(context).toHaveLength(45);
+		expect(context.map((entity) => entity.name)).toEqual(
+			expect.arrayContaining([
+				"Greenland",
+				"Western Sahara",
+				"Kosovo",
+				"Taiwan",
+				"Somaliland",
+				"Northern Cyprus",
+				"Puerto Rico",
+				"Antarctica",
+			]),
+		);
+	});
 	it.each([
 		[worldPreset.manifest, 195],
 		[brazilPreset.manifest, 27],
@@ -13,10 +31,12 @@ describe("curated manifest invariants", () => {
 		expect(
 			manifest.entities.filter(({ selectable }) => selectable),
 		).toHaveLength(total);
-		expect(new Set(manifest.entities.map(({ id }) => id)).size).toBe(total);
+		expect(new Set(manifest.entities.map(({ id }) => id)).size).toBe(
+			manifest.entities.length,
+		);
 		expect(
 			new Set(manifest.entities.map(({ geometryId }) => geometryId)).size,
-		).toBe(total);
+		).toBe(manifest.entities.length);
 	});
 
 	it("represents Spain's 17 communities and two autonomous cities", () => {
