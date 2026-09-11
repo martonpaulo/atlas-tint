@@ -13,16 +13,16 @@
 - Development language: English.
 - Product copy: English (`en-US`) is the source and fallback language; add localization only through an explicit product request.
 - Browser acceptance: Chromium only; automated and manual browser checks use Chromium for Testing, never Brave.
-- Branch policy: Agents work on issue branches and deliver through pull requests; unattended AO branches carry the required session prefix.
+- Branch policy: The owner and the owner's agents commit validated work directly to `main` in focused single-concern commits (owner decision, 2026-09-11). Branches and pull requests stay available for work that benefits from review, and are required for outside contributors; unattended AO branches carry the required session prefix.
 - Commit policy: Commit completed, validated task work automatically using focused Conventional Commits.
-- Push policy: Push completed, validated issue branches automatically; never push directly to `main`.
+- Push policy: Push completed, validated work automatically: to `main` for direct work, to its branch when a pull request is used.
 - Product versioning: Continuous deployment without a user-visible product version; persistence and import schema versions remain explicit and independent.
 - Agent automation: `enabled`
 - Agent automation scope: Local Agent Orchestrator only. Remote GitHub Actions lifecycle automation is not configured or required; [issue #46](https://github.com/martonpaulo/atlas-tint/issues/46) preserves it as an optional future decision with owner-only credential prerequisites.
 - Implementation agent: `claude`
 - Review agent: `codex`
 - Orchestration agent: `codex`
-- Merge policy: squash pull requests into `main`; direct pushes to `main` are forbidden for agents.
+- Merge policy: when a pull request is used, squash it into `main`.
 - Commit subject: a commit made for an issue ends with `(#<issue number>)`.
 - Delete branches after merge: enabled.
 - Release, signing, and secret-storage policy: GitHub Pages deploys continuously from `main`; there are no tags, releases, downloadable artifacts, signing identity, or remote agent credentials required by the supported local automation.
@@ -63,7 +63,7 @@ Do not trade a higher-priority item for a lower-priority item.
 
 ## Mandatory workflow
 
-- Start issue work from current `main`, create the recorded issue branch, and deliver through a pull request. Never push directly to `main`.
+- Start from current `main`. Validated work goes straight to `main`; use the recorded issue branch and a pull request only when the work benefits from review or runs in an orchestrated lane.
 - Read this file before making changes.
 - Search before adding code. Reuse established components, tokens, schemas, map abstractions, utilities, state actions, and tests.
 - Read only the minimum relevant files or chunks before editing.
@@ -709,11 +709,10 @@ Rules for any executor working from a clone of this repository, including cloud 
 ## Git and delivery
 
 - Use focused Conventional Commits in English.
-- Use one issue branch per coherent delivery group and follow the recorded naming convention.
+- When a branch is used, use one per coherent delivery group and follow the recorded naming convention.
 - Inspect the diff before committing.
 - Remove debug code and unrelated generated changes.
-- Commit and push the issue branch after the requested scope is complete and validated, unless the user explicitly says not to push.
-- Never push directly to `main`; open a pull request with the complete closing issue set.
+- Commit and push after the requested scope is complete and validated, unless the user explicitly says not to push: to `main` for direct work, or to the branch of a pull request that carries the complete closing issue set.
 - If push is unavailable, report the exact reason without claiming success.
 
 The final report must include:
