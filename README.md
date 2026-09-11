@@ -27,7 +27,7 @@ rewrite of the product core. The durable product boundary and non-goals are reco
 
 <br />
 
-## 🌱 Quick Start
+## Quick Start
 
 ```bash
 pnpm install
@@ -43,7 +43,7 @@ becomes supported.
 
 <br />
 
-## 🛠 Commands
+## Commands
 
 | Command | What it does |
 | --- | --- |
@@ -65,7 +65,7 @@ that order. Focused commands are available for normal development.
 
 <br />
 
-## 🔐 Secrets and variables
+## Secrets and variables
 
 AtlasTint reads **no secret**. It has no account, no backend, no analytics and no API key, and CI
 publishes to GitHub Pages with the workflow's own token; nothing is stored in the repository's
@@ -186,7 +186,7 @@ The build pipeline validates:
 
 ## Geographic data and regeneration
 
-Source versions, checksums, retrieval details, and license terms are recorded in [`ATTRIBUTIONS.md`](ATTRIBUTIONS.md) and in generated map metadata.
+Source versions, checksums, retrieval details, and license terms are recorded in [`NOTICE.md`](NOTICE.md) and in generated map metadata.
 
 Regenerate from the documented upstream sources:
 
@@ -279,4 +279,4 @@ The deployed page carries its metadata statically in `index.html` rather than in
 
 [MIT](LICENSE) © 2026 Marton Paulo.
 
-Geographic source rights and attribution requirements are independent and must be preserved; they are recorded in [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
+Geographic source rights and attribution requirements are independent and must be preserved; they are recorded in [NOTICE.md](NOTICE.md).
