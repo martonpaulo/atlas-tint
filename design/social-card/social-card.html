@@ -1,0 +1,41 @@
+<!doctype html>
+<!-- AtlasTint social card. Source of truth for apps/web/public/social-card.png, served at
+     https://atlastint.martonpaulo.com/social-card.png (1200x630). Never edit the PNG.
+     Render with `pnpm social-card` (Playwright screenshot, then an 8-bit PNG).
+     Layout, safe area and rules: the social card standard (skill-deck#261). Fonts: Inter, OFL (fonts/OFL.txt). -->
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: "Inter Display"; font-weight: 700; src: url(fonts/Inter_28pt-Bold.ttf); }
+  @font-face { font-family: "Inter"; font-weight: 400; src: url(fonts/Inter_18pt-Regular.ttf); }
+  @font-face { font-family: "Inter"; font-weight: 500; src: url(fonts/Inter_24pt-Medium.ttf); }
+  @font-face { font-family: "Inter"; font-weight: 600; src: url(fonts/Inter_24pt-SemiBold.ttf); }
+  html, body { margin: 0; }
+  .card {
+    position: relative; width: 1200px; height: 630px; overflow: hidden;
+    background:
+      radial-gradient(820px 560px at 84% 44%, rgba(169, 84, 50, .20), transparent 64%),
+      radial-gradient(600px 380px at 0% 100%, rgba(169, 84, 50, .08), transparent 70%),
+      linear-gradient(160deg, #fffaf3 0%, #f3e7d8 100%);
+    color: #2a1d15; font-family: "Inter", sans-serif;
+  }
+  .copy { position: absolute; left: 96px; top: 50%; transform: translateY(-54%); width: 470px; }
+  .icon { width: 104px; height: 104px; display: block; margin-bottom: 30px;
+          filter: drop-shadow(0 16px 26px rgba(169, 84, 50, .30)); }
+  .eyebrow { margin: 0 0 18px; font-weight: 600; font-size: 22px; letter-spacing: .12em;
+             text-transform: uppercase; color: #9a4726; }
+  h1 { margin: 0; font: 700 84px/1 "Inter Display", sans-serif; letter-spacing: -0.035em; }
+  .promise { margin: 22px 0 0; font-weight: 500; font-size: 38px; line-height: 1.18;
+             letter-spacing: -0.015em; color: #5a4636; text-wrap: balance; }
+  .domain { position: absolute; left: 96px; bottom: 62px; font-size: 24px; color: #8a7462; }
+  .shot { position: absolute; left: 600px; top: 96px; width: 820px; }
+</style>
+<div class="card">
+  <div class="copy">
+    <img class="icon" src="../../apps/web/public/favicon.svg" alt="">
+    <p class="eyebrow">Free in your browser</p>
+    <h1>AtlasTint</h1>
+    <p class="promise">Color and track the regions of the world</p>
+  </div>
+  <img class="shot" src="../../docs/screenshots/world.webp" alt="">
+  <div class="domain">atlastint.martonpaulo.com</div>
+</div>

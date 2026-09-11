@@ -95,6 +95,26 @@ async function capture() {
 	// bar, so no localhost URL ends up in a published image. That needs a persistent context,
 	// which Playwright starts as a direct child of this process, so the browser's pid is found
 	// among this process's children and never guessed from the desktop.
+	// The page is seeded in Light, and the window frame (title bar, traffic lights) has to
+	// match, or a light page sits in a dark window whenever the operator's Mac runs in Dark
+	// Mode. Chromium's frame follows AppKit, so the test browser's own defaults domain gets
+	// NSRequiresAquaSystemAppearance for the length of the run and loses it afterwards. It is
+	// Playwright's browser, not the operator's: nothing outside this capture changes.
+	const browserDomain = run("/usr/libexec/PlistBuddy", [
+		"-c",
+		"Print :CFBundleIdentifier",
+		join(
+			chromium.executablePath().replace(/\/Contents\/MacOS\/.*$/, ""),
+			"Contents/Info.plist",
+		),
+	]);
+	run("defaults", [
+		"write",
+		browserDomain,
+		"NSRequiresAquaSystemAppearance",
+		"-bool",
+		"YES",
+	]);
 	const profile = await mkdtemp(join(tmpdir(), "atlas-tint-capture-"));
 	const context = await chromium.launchPersistentContext(profile, {
 		headless: false,
@@ -130,6 +150,14 @@ async function capture() {
 			await page.getByRole("heading", { name: shot.title }).waitFor();
 			await page.getByTestId("atlas-map").waitFor();
 
+			// The title bar keeps its traffic lights and loses its words: the product's name is
+			// already on the page, the card and the README, and a second copy in the chrome is
+			// noise. An empty title would make Chromium show the address instead, so the title
+			// becomes a zero-width space for the capture only; the site itself is untouched.
+			await page.evaluate(() => {
+				document.title = "\u200B";
+			});
+
 			// Let a few run loops pass, then bring the window forward again: a window captured
 			// while inactive comes out with a grey traffic light and dimmed controls.
 			await page.waitForTimeout(600);
@@ -140,10 +168,26 @@ async function capture() {
 			const target = join(outputDirectory, `${shot.name}.png`);
 			// No -o: that is the flag that removes the shadow.
 			run("screencapture", ["-x", `-l${windowId}`, target]);
+			// The capture is at display scale (2x). The README shows these at most 720 CSS px
+			// wide, so anything past twice that is pixels nobody sees: publish at half the capture,
+			// which is exactly the window's own point width (shadow included). Near-lossless keeps
+			// every pixel within a few levels, so text edges stay identical, at about half the
+			// bytes a lossless resample costs.
+			const capturedWidth = Number(
+				run("sips", ["-g", "pixelWidth", target]).match(/pixelWidth: (\d+)/)[1],
+			);
+			run("sips", [
+				"--resampleWidth",
+				String(Math.round(capturedWidth / scale)),
+				target,
+			]);
 			run("cwebp", [
-				"-lossless",
-				"-q",
-				"100",
+				"-near_lossless",
+				"60",
+				"-z",
+				"9",
+				"-metadata",
+				"none",
 				target,
 				"-o",
 				target.replace(/\.png$/, ".webp"),
@@ -154,6 +198,11 @@ async function capture() {
 	} finally {
 		await context.close();
 		await rm(profile, { recursive: true, force: true });
+		run("defaults", [
+			"delete",
+			browserDomain,
+			"NSRequiresAquaSystemAppearance",
+		]);
 	}
 }
 
