@@ -50,12 +50,12 @@ function DialogContent({
 }: DialogPrimitive.Popup.Props) {
 	return (
 		<DialogPrimitive.Portal>
-			<DialogPrimitive.Backdrop className="data-open:fade-in-0 data-closed:fade-out-0 fixed inset-0 z-50 bg-foreground/35 backdrop-blur-[1px] data-closed:animate-out data-open:animate-in" />
+			<DialogPrimitive.Backdrop className="data-open:fade-in-0 data-closed:fade-out-0 motion-surface fixed inset-0 z-50 bg-foreground/35 backdrop-blur-[1px] data-closed:animate-out data-open:animate-in" />
 			<DialogPrimitive.Viewport className="fixed inset-0 z-50 grid place-items-center overflow-y-auto p-6">
 				<DialogPrimitive.Popup
 					data-slot="dialog-content"
 					className={cn(
-						"data-open:fade-in-0 data-closed:fade-out-0 data-open:zoom-in-95 data-closed:zoom-out-95 relative w-full max-w-lg rounded-xl border border-border bg-popover p-6 text-popover-foreground shadow-xl outline-none data-closed:animate-out data-open:animate-in",
+						"data-open:fade-in-0 data-closed:fade-out-0 data-open:zoom-in-95 data-closed:zoom-out-95 motion-surface relative w-full max-w-lg rounded-xl border border-border bg-popover p-6 text-popover-foreground shadow-xl outline-none data-closed:animate-out data-open:animate-in",
 						className,
 					)}
 					{...props}

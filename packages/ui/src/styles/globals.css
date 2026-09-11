@@ -154,6 +154,20 @@
 	--radius-2xl: 16px;
 }
 
+/* Feedback is quick; existing overlay entry/exit uses the normal surface duration. */
+@utility motion-feedback {
+	--tw-duration: var(--duration-fast);
+	--tw-ease: var(--ease-standard);
+	transition-duration: var(--duration-fast);
+	transition-timing-function: var(--ease-standard);
+}
+@utility motion-surface {
+	--tw-duration: var(--duration-normal);
+	--tw-ease: var(--ease-standard);
+	animation-duration: var(--duration-normal);
+	animation-timing-function: var(--ease-standard);
+}
+
 /* Compact product roles: primary names, supporting context, field labels, and section eyebrows. */
 @utility text-list-primary {
 	font-size: 0.8125rem;
@@ -245,7 +259,7 @@
 	 * flat, and sized to its own content.
 	 */
 	.atlas-select {
-		@apply rounded-md border bg-background px-3 text-foreground transition-colors hover:border-foreground/30;
+		@apply rounded-md border bg-background px-3 text-foreground transition-colors motion-feedback hover:border-foreground/30;
 	}
 	.atlas-select[data-variant="field"] {
 		@apply h-9 w-full border-input text-xs shadow-xs;

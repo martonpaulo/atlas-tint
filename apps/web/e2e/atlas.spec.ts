@@ -574,3 +574,36 @@ test("respects reduced motion", async ({ page }) => {
 		duration.split(",").every((value) => Number.parseFloat(value) <= 0.00001),
 	).toBe(true);
 });
+
+test("shared controls follow motion roles and respect reduced motion", async ({
+	page,
+}) => {
+	await openStyleAndData(page);
+	const feedback = [
+		page.getByRole("searchbox"),
+		page.getByRole("button", { name: "Zoom in" }),
+		page.getByLabel("Projection"),
+		page.getByRole("button", { name: "Locate Algeria on map" }),
+		page.getByText("Import", { exact: true }),
+	];
+	for (const control of feedback) {
+		await expect(control).toHaveCSS("transition-duration", "0.12s");
+		await expect(control).toHaveCSS(
+			"transition-timing-function",
+			"cubic-bezier(0.2, 0, 0, 1)",
+		);
+	}
+	await page.getByRole("button", { name: /^Appearance:/ }).click();
+	await expect(page.getByRole("menu")).toHaveCSS("animation-duration", "0.18s");
+	await page.keyboard.press("Escape");
+	await expect(page.getByRole("menu")).toHaveCount(0);
+	await page.emulateMedia({ reducedMotion: "reduce" });
+	for (const control of feedback) {
+		await expect(control).toHaveCSS("transition-duration", "1e-05s");
+	}
+	await page.getByRole("button", { name: "Reset all", exact: true }).click();
+	await expect(page.getByRole("dialog")).toHaveCSS(
+		"animation-duration",
+		"1e-05s",
+	);
+});
