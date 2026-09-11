@@ -100,7 +100,7 @@ export function AtlasApp() {
 							AtlasTint
 						</p>
 					</div>
-					<label className="flex min-w-0 items-center gap-2 text-muted-foreground text-xs">
+					<label className="flex min-w-0 items-center gap-2 text-field-label text-muted-foreground">
 						<span className="sr-only">Map preset</span>
 						<select
 							className="atlas-select focus-ring"

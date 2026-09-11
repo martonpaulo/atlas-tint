@@ -153,15 +153,15 @@ function EntityRow({
 					)}
 				</span>
 				<span className="min-w-0">
-					<span className="block truncate text-[13px]">
+					<span className="block truncate text-list-primary">
 						{entity.name}
 						{selectable ? null : (
-							<span className="ml-1.5 rounded-sm border border-sidebar-border px-1 py-px align-middle font-medium text-[10px] text-muted-foreground uppercase tracking-wide">
+							<span className="ml-1.5 rounded-sm border border-sidebar-border px-1 py-px align-middle text-eyebrow text-muted-foreground">
 								Unavailable
 							</span>
 						)}
 					</span>
-					<span className="mt-0.5 block truncate text-[11px] text-muted-foreground">
+					<span className="mt-0.5 block truncate text-metadata text-muted-foreground">
 						{entity.codes.join(" · ")} · {entity.groupName}
 					</span>
 				</span>
@@ -423,7 +423,7 @@ export function AtlasSidebar({
 						<h2 id="progress-title" className="font-semibold text-sm">
 							Regions
 						</h2>
-						<p className="text-muted-foreground text-xs tabular-nums">
+						<p className="text-metadata text-muted-foreground tabular-nums">
 							<strong className="font-semibold text-foreground">
 								{selectedCount}
 							</strong>{" "}
@@ -448,7 +448,7 @@ export function AtlasSidebar({
 						/>
 						<Input
 							ref={searchRef}
-							className="h-10 pr-9 pl-9 text-[13px]"
+							className="h-10 pr-9 pl-9"
 							placeholder="Search regions"
 							value={query}
 							onChange={(event) => setQuery(event.target.value)}
@@ -486,7 +486,7 @@ export function AtlasSidebar({
 									// A two-state toggle group: exactly one is pressed, and native
 									// button keyboard behaviour is preserved.
 									aria-pressed={filter === value}
-									className="focus-ring focus-ring-sidebar rounded-sm px-2.5 py-1.5 font-medium text-[11px] text-muted-foreground capitalize hover:text-foreground aria-pressed:bg-background aria-pressed:text-foreground aria-pressed:shadow-xs"
+									className="focus-ring focus-ring-sidebar rounded-sm px-2.5 py-1.5 text-field-label text-muted-foreground capitalize hover:text-foreground aria-pressed:bg-background aria-pressed:text-foreground aria-pressed:shadow-xs"
 									onClick={() => setFilter(value)}
 								>
 									{value}
@@ -494,7 +494,7 @@ export function AtlasSidebar({
 							))}
 						</fieldset>
 						<span
-							className="text-[11px] text-muted-foreground tabular-nums"
+							className="text-metadata text-muted-foreground tabular-nums"
 							aria-hidden="true"
 						>
 							{entities.length} shown
@@ -596,7 +596,7 @@ export function AtlasSidebar({
 					<span>Style & data</span>
 				</summary>
 				<div className="border-sidebar-border border-t px-4 py-3">
-					<label className="grid gap-1.5 font-medium text-[11px] text-muted-foreground">
+					<label className="grid gap-1.5 text-field-label text-muted-foreground">
 						Color mode
 						<select
 							className="atlas-select focus-ring"

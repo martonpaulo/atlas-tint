@@ -33,9 +33,7 @@ export function ViewportGate({ children }: { children: ReactNode }) {
 				<div className="mx-auto mb-6 grid size-16 place-items-center rounded-xl border border-border bg-card text-primary shadow-sm">
 					<MonitorUp className="size-7" aria-hidden="true" />
 				</div>
-				<p className="mb-2 font-semibold text-muted-foreground text-xs uppercase tracking-[0.18em]">
-					Desktop atlas
-				</p>
+				<p className="mb-2 text-eyebrow text-muted-foreground">Desktop atlas</p>
 				<h1
 					id="viewport-title"
 					className="font-semibold font-serif text-4xl tracking-tight"

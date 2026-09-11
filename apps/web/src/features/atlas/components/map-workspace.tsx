@@ -319,7 +319,7 @@ function MapCanvas({
 				{hoveredEntity ? (
 					<>
 						<strong className="block font-medium">{hoveredEntity.name}</strong>
-						<span className="mt-0.5 block text-[10px] opacity-70">
+						<span className="mt-0.5 block text-metadata opacity-70">
 							{hoveredEntity.groupName} · click to{" "}
 							{progress.selected[hoveredEntity.id] ? "deselect" : "select"}
 						</span>
@@ -359,7 +359,7 @@ export function MapWorkspace(props: MapWorkspaceProps) {
 					</p>
 				</div>
 				{manifest.projections.length > 1 ? (
-					<label className="grid gap-1 font-semibold text-[10px] text-muted-foreground uppercase tracking-[0.12em]">
+					<label className="grid gap-1 text-field-label text-muted-foreground">
 						Projection
 						<select
 							className="atlas-select focus-ring min-w-40 normal-case tracking-normal"
@@ -382,7 +382,7 @@ export function MapWorkspace(props: MapWorkspaceProps) {
 
 			<MapCanvas {...props} />
 
-			<footer className="flex min-h-8 items-center justify-between gap-6 px-1 pt-2 text-[11px] text-muted-foreground">
+			<footer className="flex min-h-8 items-center justify-between gap-6 px-1 pt-2 text-metadata text-muted-foreground">
 				<div className="flex flex-wrap items-center gap-4">
 					<span className="sr-only">Map legend:</span>
 					<span className="inline-flex items-center gap-1.5">

@@ -154,6 +154,36 @@
 	--radius-2xl: 16px;
 }
 
+/* Compact product roles: primary names, supporting context, field labels, and section eyebrows. */
+@utility text-list-primary {
+	font-size: 0.8125rem;
+	line-height: 1.5;
+	font-weight: inherit;
+	letter-spacing: normal;
+	text-transform: none;
+}
+@utility text-metadata {
+	font-size: 0.6875rem;
+	line-height: 1.5;
+	font-weight: 400;
+	letter-spacing: normal;
+	text-transform: none;
+}
+@utility text-field-label {
+	font-size: 0.6875rem;
+	line-height: 1.5;
+	font-weight: 500;
+	letter-spacing: normal;
+	text-transform: none;
+}
+@utility text-eyebrow {
+	font-size: 0.625rem;
+	line-height: 1.5;
+	font-weight: 600;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+}
+
 @layer base {
 	* {
 		@apply border-border outline-ring/50;
@@ -207,7 +237,7 @@
 		@apply mb-2 flex items-center justify-between gap-3;
 	}
 	.section-heading {
-		@apply text-[10px] font-semibold tracking-[0.16em] text-muted-foreground uppercase;
+		@apply text-eyebrow text-muted-foreground;
 	}
 	/*
 	 * One select recipe. The two variants differ only where their context requires it: a field
@@ -339,9 +369,7 @@
 }
 .map-inset-frame text {
 	fill: var(--muted-foreground);
-	font-size: 11px;
-	font-weight: 600;
-	letter-spacing: 0.04em;
+	@apply text-field-label;
 }
 
 @media (prefers-reduced-motion: reduce) {
