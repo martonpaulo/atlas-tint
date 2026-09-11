@@ -165,7 +165,7 @@ export function AtlasApp() {
 				</div>
 			) : (
 				<main className="grid min-h-0 place-items-center bg-map-canvas p-8">
-					<section className="max-w-md rounded-xl border border-border bg-card p-8 text-center shadow-sm">
+					<section className="max-w-md rounded-xl border border-border bg-card p-8 text-center shadow-card">
 						<AlertTriangle
 							className="mx-auto size-8 text-destructive"
 							aria-hidden="true"

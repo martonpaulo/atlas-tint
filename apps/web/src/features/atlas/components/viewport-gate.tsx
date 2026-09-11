@@ -30,7 +30,7 @@ export function ViewportGate({ children }: { children: ReactNode }) {
 				className="max-w-xl text-center"
 				aria-labelledby="viewport-title"
 			>
-				<div className="mx-auto mb-6 grid size-16 place-items-center rounded-xl border border-border bg-card text-primary shadow-sm">
+				<div className="mx-auto mb-6 grid size-16 place-items-center rounded-xl border border-border bg-card text-primary shadow-card">
 					<MonitorUp className="size-7" aria-hidden="true" />
 				</div>
 				<p className="mb-2 text-eyebrow text-muted-foreground">Desktop atlas</p>

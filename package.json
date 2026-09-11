@@ -8,7 +8,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "pnpm -r dev",
-		"build": "pnpm -r build",
+		"build": "pnpm -r build && node scripts/check-styles.mjs",
 		"check-types": "pnpm -r check-types",
 		"dev:web": "pnpm --filter web dev",
 		"format": "biome format .",

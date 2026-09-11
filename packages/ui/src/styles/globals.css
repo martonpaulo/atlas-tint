@@ -51,7 +51,17 @@
 	--warning: oklch(0.67 0.13 70);
 	--warning-surface: oklch(0.94 0.055 80);
 	--warning-foreground: oklch(0.37 0.09 65);
-	--shadow-map: 0 10px 30px oklch(0.31 0.025 52 / 7%);
+	/* Surface roles retain the established depth; nested popovers sit above their parent. */
+	--atlas-shadow-field: var(--shadow-xs);
+	--atlas-shadow-card: var(--shadow-sm);
+	--atlas-shadow-floating: var(--shadow-sm);
+	--atlas-shadow-floating-group: var(--shadow-md);
+	--atlas-shadow-popover: var(--shadow-md);
+	--atlas-shadow-popover-nested: var(--shadow-lg);
+	--atlas-shadow-tooltip: var(--shadow-lg);
+	--atlas-shadow-warning: var(--shadow-lg);
+	--atlas-shadow-dialog: var(--shadow-xl);
+	--atlas-shadow-map: 0 10px 30px oklch(0.31 0.025 52 / 7%);
 	--duration-fast: 120ms;
 	--duration-normal: 180ms;
 	--ease-standard: cubic-bezier(0.2, 0, 0, 1);
@@ -101,7 +111,7 @@
 	--warning: oklch(0.75 0.12 75);
 	--warning-surface: oklch(0.3 0.05 66);
 	--warning-foreground: oklch(0.88 0.08 76);
-	--shadow-map: 0 12px 32px oklch(0.06 0.008 52 / 25%);
+	--atlas-shadow-map: 0 12px 32px oklch(0.06 0.008 52 / 25%);
 }
 
 @theme inline {
@@ -146,7 +156,16 @@
 	--color-warning: var(--warning);
 	--color-warning-surface: var(--warning-surface);
 	--color-warning-foreground: var(--warning-foreground);
-	--shadow-map: var(--shadow-map);
+	--shadow-map: var(--atlas-shadow-map);
+	--shadow-field: var(--atlas-shadow-field);
+	--shadow-card: var(--atlas-shadow-card);
+	--shadow-floating: var(--atlas-shadow-floating);
+	--shadow-floating-group: var(--atlas-shadow-floating-group);
+	--shadow-popover: var(--atlas-shadow-popover);
+	--shadow-popover-nested: var(--atlas-shadow-popover-nested);
+	--shadow-tooltip: var(--atlas-shadow-tooltip);
+	--shadow-warning: var(--atlas-shadow-warning);
+	--shadow-dialog: var(--atlas-shadow-dialog);
 	--radius-sm: 6px;
 	--radius-md: 8px;
 	--radius-lg: 10px;
@@ -262,7 +281,7 @@
 		@apply rounded-md border bg-background px-3 text-foreground transition-colors motion-feedback hover:border-foreground/30;
 	}
 	.atlas-select[data-variant="field"] {
-		@apply h-9 w-full border-input text-xs shadow-xs;
+		@apply h-9 w-full border-input text-xs shadow-field;
 	}
 	.atlas-select[data-variant="toolbar"] {
 		@apply h-8 min-w-36 border-border font-medium text-xs;

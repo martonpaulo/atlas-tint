@@ -271,7 +271,7 @@ function MapCanvas({
 				</g>
 			</svg>
 
-			<fieldset className="absolute top-3 right-3 grid gap-1 rounded-md border border-border bg-popover/95 p-1 shadow-md">
+			<fieldset className="absolute top-3 right-3 grid gap-1 rounded-md border border-border bg-popover/95 p-1 shadow-floating-group">
 				<legend className="sr-only">Map zoom controls</legend>
 				<Button
 					variant="ghost"
@@ -303,7 +303,7 @@ function MapCanvas({
 				<Button
 					variant="outline"
 					size="sm"
-					className="absolute top-3 left-3 bg-popover/95 shadow-sm"
+					className="absolute top-3 left-3 bg-popover/95 shadow-floating"
 					onClick={() => onFocusEntity(undefined)}
 				>
 					<LocateFixed data-icon="inline-start" /> Clear focus
@@ -312,7 +312,7 @@ function MapCanvas({
 
 			<div
 				ref={tooltipRef}
-				className="motion-feedback pointer-events-none absolute top-0 left-0 z-20 min-w-40 rounded-md border border-tooltip-border bg-tooltip-surface px-3 py-2 text-tooltip-foreground text-xs opacity-0 shadow-lg transition-opacity data-[visible=true]:opacity-100"
+				className="motion-feedback pointer-events-none absolute top-0 left-0 z-20 min-w-40 rounded-md border border-tooltip-border bg-tooltip-surface px-3 py-2 text-tooltip-foreground text-xs opacity-0 shadow-tooltip transition-opacity data-[visible=true]:opacity-100"
 				data-visible={hoveredEntity !== undefined}
 				aria-hidden="true"
 			>

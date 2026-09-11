@@ -486,7 +486,7 @@ export function AtlasSidebar({
 									// A two-state toggle group: exactly one is pressed, and native
 									// button keyboard behaviour is preserved.
 									aria-pressed={filter === value}
-									className="focus-ring focus-ring-sidebar rounded-sm px-2.5 py-1.5 text-field-label text-muted-foreground capitalize hover:text-foreground aria-pressed:bg-background aria-pressed:text-foreground aria-pressed:shadow-xs"
+									className="focus-ring focus-ring-sidebar rounded-sm px-2.5 py-1.5 text-field-label text-muted-foreground capitalize hover:text-foreground aria-pressed:bg-background aria-pressed:text-foreground aria-pressed:shadow-field"
 									onClick={() => setFilter(value)}
 								>
 									{value}

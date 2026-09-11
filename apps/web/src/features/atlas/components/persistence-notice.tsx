@@ -50,7 +50,7 @@ export function PersistenceNotice() {
 
 	return (
 		<div
-			className="fixed right-4 bottom-4 z-40 max-w-sm rounded-md border border-warning/40 bg-warning-surface px-4 py-3 text-warning-foreground text-xs leading-5 shadow-lg"
+			className="fixed right-4 bottom-4 z-40 max-w-sm rounded-md border border-warning/40 bg-warning-surface px-4 py-3 text-warning-foreground text-xs leading-5 shadow-warning"
 			role="status"
 		>
 			{storageNotice}
