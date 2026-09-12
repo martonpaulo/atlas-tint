@@ -65,6 +65,17 @@
 	--duration-fast: 120ms;
 	--duration-normal: 180ms;
 	--ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+	/* The standard's three weights and its measures, kept out of `@theme` so
+	   Tailwind's `--font-weight-*` and container namespaces do not mint
+	   utilities that collide with the family utilities this product gains when
+	   it takes the fleet serif. */
+	--weight-body: 400;
+	--weight-strong: 600;
+	--weight-display: 700;
+	--measure: 68ch;
+	--measure-narrow: 44ch;
+	--measure-title: 16ch;
 }
 
 .dark {
@@ -118,6 +129,15 @@
 	--font-sans:
 		ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 	--font-serif: Iowan Old Style, Baskerville, "Times New Roman", serif;
+	/*
+	 * The fleet typography standard agrees with Tailwind rather than replacing
+	 * it (skill-deck/docs/typography-standard.md): the framework keeps its own
+	 * `--text-*` ladder and the line heights paired with it, and only the
+	 * tracking the standard fixes is taken here.
+	 */
+	--tracking-display: -0.03em;
+	--tracking-body: -0.01em;
+	--tracking-eyebrow: 0.12em;
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--color-card: var(--card);
@@ -198,28 +218,37 @@
 @utility text-metadata {
 	font-size: 0.6875rem;
 	line-height: 1.5;
-	font-weight: 400;
+	font-weight: var(--weight-body);
 	letter-spacing: normal;
 	text-transform: none;
 }
 @utility text-field-label {
 	font-size: 0.6875rem;
 	line-height: 1.5;
-	font-weight: 500;
+	font-weight: var(--weight-strong);
 	letter-spacing: normal;
 	text-transform: none;
 }
 @utility text-eyebrow {
 	font-size: 0.625rem;
 	line-height: 1.5;
-	font-weight: 600;
-	letter-spacing: 0.16em;
+	font-weight: var(--weight-strong);
+	letter-spacing: var(--tracking-eyebrow);
 	text-transform: uppercase;
 }
 
 @layer base {
 	* {
 		@apply border-border outline-ring/50;
+	}
+	/* Rule 4 of the typography standard: `balance` is for headings only. */
+	h1,
+	h2,
+	h3 {
+		text-wrap: balance;
+	}
+	p {
+		text-wrap: pretty;
 	}
 	html {
 		@apply bg-background font-sans;
