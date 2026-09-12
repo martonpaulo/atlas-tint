@@ -6,6 +6,118 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * The fleet typefaces, self-hosted from Fontsource and declared here rather than
+ * through each package's own stylesheet, so the family names match the names the
+ * typography standard writes (skill-deck/docs/typography-standard.md) and only the
+ * `latin` woff2 files are emitted — the packages' CSS also references legacy woff.
+ * The paths reach into this package's own `node_modules` because a bare package
+ * specifier inside `url()` is not resolved by Vite; the files are hashed and emitted
+ * into `dist/assets` all the same.
+ *
+ * Figtree 400/600 is the interface, Gabarito 700 the display face, and Source Serif 4
+ * the product serif this atlas claims. Source Serif 4 ships as the weight-axis variable
+ * file, which carries the whole 200–900 range in one 50 KB face; the product asks it for
+ * 600 only, and Fontsource offers no narrower cut.
+ */
+@font-face {
+	font-family: "Figtree";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url("../../node_modules/@fontsource/figtree/files/figtree-latin-400-normal.woff2")
+		format("woff2");
+}
+@font-face {
+	font-family: "Figtree";
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url("../../node_modules/@fontsource/figtree/files/figtree-latin-600-normal.woff2")
+		format("woff2");
+}
+@font-face {
+	font-family: "Gabarito";
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url("../../node_modules/@fontsource/gabarito/files/gabarito-latin-700-normal.woff2")
+		format("woff2");
+}
+@font-face {
+	font-family: "Source Serif 4";
+	font-style: normal;
+	font-weight: 200 900;
+	font-display: swap;
+	src: url("../../node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-normal.woff2")
+		format("woff2");
+}
+
+/*
+ * Metric-matched fallbacks, so `font-display: swap` swaps without reflowing. The Figtree
+ * 400 and Gabarito 700 overrides are the ones martonpaulo.com already ships; the Figtree
+ * 600 and the two serif faces were measured the same way — a frequency-weighted average
+ * advance against the local face the browser would really pick, then the vertical metrics
+ * divided by that size adjustment. Times New Roman is the honest local serif: it is what
+ * the dropped `Iowan Old Style, Baskerville, "Times New Roman", serif` stack actually
+ * resolved to everywhere but macOS.
+ */
+@font-face {
+	font-family: "Figtree Fallback";
+	src: local("Arial");
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	size-adjust: 100.7176%;
+	ascent-override: 94.3231%;
+	descent-override: 24.8219%;
+	line-gap-override: 0%;
+}
+@font-face {
+	font-family: "Figtree Fallback";
+	src: local("Arial Bold"), local("Arial");
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	size-adjust: 95.1615%;
+	ascent-override: 99.8303%;
+	descent-override: 26.2711%;
+	line-gap-override: 0%;
+}
+@font-face {
+	font-family: "Gabarito Fallback";
+	src: local("Arial Bold"), local("Arial");
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	size-adjust: 93.9622%;
+	ascent-override: 100.0403%;
+	descent-override: 27.6707%;
+	line-gap-override: 0%;
+}
+@font-face {
+	font-family: "Source Serif 4 Fallback";
+	src: local("Times New Roman");
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	size-adjust: 118.9022%;
+	ascent-override: 87.1304%;
+	descent-override: 28.1744%;
+	line-gap-override: 0%;
+}
+@font-face {
+	font-family: "Source Serif 4 Fallback";
+	src: local("Times New Roman Bold"), local("Times New Roman");
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	size-adjust: 113.3929%;
+	ascent-override: 91.3638%;
+	descent-override: 29.5433%;
+	line-gap-override: 0%;
+}
+
 :root {
 	--background: oklch(0.974 0.008 76);
 	--foreground: oklch(0.235 0.018 52);
@@ -126,9 +238,23 @@
 }
 
 @theme inline {
+	/*
+	 * Families, in the fleet's spelling, each preceded by its metric-matched
+	 * fallback face. `--font-serif` is the product serif the standard reserves
+	 * for a product whose subject earns one; it is this atlas's title voice and
+	 * never its body copy.
+	 */
 	--font-sans:
-		ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-	--font-serif: Iowan Old Style, Baskerville, "Times New Roman", serif;
+		"Figtree", "Figtree Fallback", "Avenir Next", "Segoe UI", system-ui,
+		sans-serif;
+	--font-display:
+		"Gabarito", "Gabarito Fallback", "Avenir Next", "Segoe UI", system-ui,
+		sans-serif;
+	--font-serif:
+		"Source Serif 4", "Source Serif 4 Fallback", Georgia, "Times New Roman",
+		serif;
+	--font-mono:
+		ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 	/*
 	 * The fleet typography standard agrees with Tailwind rather than replacing
 	 * it (skill-deck/docs/typography-standard.md): the framework keeps its own
