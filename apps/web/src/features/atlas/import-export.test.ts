@@ -61,6 +61,20 @@ describe("import and export", () => {
 		},
 	);
 
+	it("imports an export's progress but never its dark or system appearance", () => {
+		for (const legacy of ["dark", "system"]) {
+			const file = structuredClone(legacyV2);
+			file.state.themePreference = legacy;
+			const result = validateImportText(JSON.stringify(file), manifests);
+			expect(result.ok).toBe(true);
+			if (!result.ok) continue;
+			expect(result.preview.state.themePreference).toBe("light");
+			expect(
+				Object.keys(result.preview.state.presets.world.selected).length,
+			).toBeGreaterThan(0);
+		}
+	});
+
 	it("rejects a future export schema with its field path", () => {
 		const result = validateImportText(
 			JSON.stringify({ ...legacyV2, schemaVersion: 99 }),

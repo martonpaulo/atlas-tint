@@ -9,8 +9,8 @@ import {
 } from "lucide-react";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 
-/** The theme is passed in: this package holds no opinion about where appearance is stored. */
-const Toaster = ({ theme = "system", ...props }: ToasterProps) => {
+/** Light is the only appearance (#66). */
+const Toaster = ({ theme = "light", ...props }: ToasterProps) => {
 	return (
 		<Sonner
 			theme={theme}

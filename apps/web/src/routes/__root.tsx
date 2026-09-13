@@ -1,6 +1,5 @@
 import { Toaster } from "@atlas-tint/ui/components/sonner";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
-import { AppearanceBridge, useAppearance } from "@/components/appearance";
 
 import "../index.css";
 
@@ -11,12 +10,10 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootComponent() {
-	const appearance = useAppearance();
 	return (
 		<>
-			<AppearanceBridge />
 			<Outlet />
-			<Toaster richColors theme={appearance} />
+			<Toaster richColors theme="light" />
 		</>
 	);
 }

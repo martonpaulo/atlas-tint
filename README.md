@@ -89,7 +89,7 @@ AtlasTint reads no secret at all: it has no account, no backend, no analytics an
 - Persist versioned progress locally and merge concurrent edits made in several tabs.
 - Export geometry-free JSON and preview a validated import before atomic replacement.
 - Reset one preset or all progress through confirmation dialogs.
-- Use light, dark, or system appearance, stored in the same versioned record as everything else.
+- Render one light appearance, whatever the operating system prefers.
 
 <br />
 
@@ -206,7 +206,7 @@ The pipeline verifies SHA-256 checksums before reading source files, accounts fo
 
 The authoritative local state uses storage key `atlas-tint:state` and schema version 2. It contains:
 
-- active preset and theme preference;
+- active preset, and a legacy appearance field that always reads as light;
 - a record of per-preset progress keyed by preset ID;
 - selected entity metadata with timestamp, deterministic order, and optional visit date;
 - fill mode, custom colors, and projection preference.

@@ -6,7 +6,7 @@ import type { PersistedState } from "@/features/atlas/persistence-schema";
  * What an import would actually change, category by category.
  *
  * The preview used to show selected counts only, while replacement also rewrote custom colors,
- * color modes, projections, the active preset, and the theme. A confirmation that discloses
+ * color modes, projections, and the active preset. A confirmation that discloses
  * less than the action performs is not a confirmation.
  */
 
@@ -24,12 +24,6 @@ const projectionLabels: Record<string, string> = {
 	"natural-earth": "Natural Earth",
 	robinson: "Robinson",
 	mercator: "Mercator",
-};
-
-const themeLabels: Record<string, string> = {
-	light: "Light",
-	dark: "Dark",
-	system: "System",
 };
 
 function difference(
@@ -53,12 +47,6 @@ export function summarizeImport(
 			"Active preset",
 			presetName(current.activePresetId),
 			presetName(incoming.activePresetId),
-		),
-		difference(
-			"Application",
-			"Appearance",
-			themeLabels[current.themePreference] ?? current.themePreference,
-			themeLabels[incoming.themePreference] ?? incoming.themePreference,
 		),
 	];
 

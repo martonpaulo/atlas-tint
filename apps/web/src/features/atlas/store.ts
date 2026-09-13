@@ -5,7 +5,6 @@ import type {
 	ParentManifest,
 	PresetId,
 	ProjectionId,
-	ThemePreference,
 } from "@/features/atlas/domain";
 import {
 	canPersist,
@@ -71,7 +70,6 @@ interface AtlasStore {
 		color: string | undefined,
 	) => void;
 	setProjection: (presetId: PresetId, projection: ProjectionId) => void;
-	setThemePreference: (theme: ThemePreference) => void;
 	resetPreset: (presetId: PresetId) => void;
 	resetAll: () => void;
 	replaceData: (data: PersistedState, message: string) => void;
@@ -192,9 +190,6 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 					incompatibleRecord: result.incompatibleRecord,
 					storageNotice: result.message,
 				});
-				// An appearance taken from the pre-versioned key only becomes authoritative once
-				// it is written under the versioned one, which is also what retires the old key.
-				if (result.adoptedLegacyTheme) commit(result.state);
 			}
 			if (typeof window === "undefined") return () => undefined;
 			if (detachListeners) return detachListeners;
@@ -376,14 +371,6 @@ export const useAtlasStore = create<AtlasStore>((set, get) => {
 						stamps: { ...progress.stamps, projection: clock.next() },
 					},
 				},
-			});
-		},
-		setThemePreference(themePreference) {
-			const data = get().data;
-			commit({
-				...data,
-				themePreference,
-				stamps: { ...data.stamps, themePreference: clock.next() },
 			});
 		},
 		resetPreset(presetId) {

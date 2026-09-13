@@ -30,7 +30,15 @@ export const fillModeSchema = z.enum([
 ]);
 export type FillMode = z.infer<typeof fillModeSchema>;
 
-export const themePreferenceSchema = z.enum(["light", "dark", "system"]);
+/**
+ * Light is the only appearance (#66). Records and exports written before that stored `dark` or
+ * `system`; those literals are accepted only so such files still parse, and every value reads as
+ * light. The field stays in the persisted shape so a build from before #66 can still read what
+ * this one writes.
+ */
+export const themePreferenceSchema = z
+	.enum(["light", "dark", "system"])
+	.transform(() => "light" as const);
 export type ThemePreference = z.infer<typeof themePreferenceSchema>;
 
 export const entityManifestSchema = z.object({

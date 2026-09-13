@@ -109,7 +109,7 @@ export function createDefaultState(
 	return {
 		schemaVersion: CURRENT_SCHEMA_VERSION,
 		activePresetId: defaultPresetId,
-		themePreference: "system",
+		themePreference: "light",
 		presets: Object.fromEntries(
 			presetCatalog.map(({ id, defaultProjection }) => [
 				id,
@@ -231,7 +231,7 @@ export function migratePersistedState(value: unknown): PersistedState {
 		isAvailablePresetId(legacy.data.activePresetId)
 			? legacy.data.activePresetId
 			: defaultPresetId;
-	migrated.themePreference = legacy.data.themePreference ?? "system";
+	migrated.themePreference = "light";
 	const selections = legacy.data.selections ?? {};
 	for (const { id } of presetCatalog) {
 		const legacyIds =

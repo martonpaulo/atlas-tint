@@ -152,7 +152,6 @@ describe("DataActions import limits", () => {
 /** A fixture that moves every persisted category away from its default. */
 function everyCategoryChanged(state: PersistedState) {
 	state.activePresetId = "spain";
-	state.themePreference = "dark";
 	state.presets.world.selected["world-fr"] = {
 		selectedAt: "2026-07-24T12:00:00.000Z",
 		order: 1,
@@ -236,7 +235,6 @@ describe("DataActions destructive confirmation", () => {
 			"color modes",
 			"projections",
 			"active preset",
-			"appearance preference",
 		]) {
 			expect(description).toHaveTextContent(category);
 		}
@@ -246,14 +244,13 @@ describe("DataActions destructive confirmation", () => {
 		const user = userEvent.setup();
 		await openImportPreview(user);
 
-		// Two application-wide rows plus four per preset, across three presets.
+		// One application-wide row plus four per preset, across three presets.
 		const rows = screen.getAllByRole("row").slice(1);
-		expect(rows).toHaveLength(2 + 3 * 4);
+		expect(rows).toHaveLength(1 + 3 * 4);
 
 		const row = (name: RegExp) => screen.getByRole("row", { name });
 		expect(row(/Application . Active preset/)).toHaveTextContent("World");
 		expect(row(/Application . Active preset/)).toHaveTextContent("Spain");
-		expect(row(/Application . Appearance/)).toHaveTextContent("Dark");
 		expect(row(/World . Selected regions/)).toHaveTextContent("1 / 195");
 		expect(row(/World . Custom colors/)).toHaveTextContent("1");
 		expect(row(/World . Color mode/)).toHaveTextContent("Single accent");

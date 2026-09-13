@@ -3,7 +3,6 @@ import { Skeleton } from "@atlas-tint/ui/components/skeleton";
 import { AlertTriangle, MapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { ModeToggle } from "@/components/mode-toggle";
 import { validatePresetBundle } from "@/features/atlas/bundle";
 import { AtlasSidebar } from "@/features/atlas/components/atlas-sidebar";
 import { MapWorkspace } from "@/features/atlas/components/map-workspace";
@@ -129,7 +128,6 @@ export function AtlasApp() {
 					<span className="hidden text-muted-foreground text-xs 2xl:inline">
 						{persistenceStatusLabel(persistenceMode)}
 					</span>
-					<ModeToggle />
 				</div>
 			</header>
 

@@ -13,6 +13,6 @@ Describe the user-visible outcome and the reason for the change.
 ## Product checks
 
 - [ ] Keyboard and focus behavior remain accessible
-- [ ] Light and dark themes remain legible
+- [ ] The light appearance remains legible
 - [ ] Persistent data remains backward compatible or includes a migration
 - [ ] Geographic sources and attribution are documented when data changed

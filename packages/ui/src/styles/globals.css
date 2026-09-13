@@ -4,8 +4,6 @@
 @source "../../../apps/**/*.{ts,tsx}";
 @source "../**/*.{ts,tsx}";
 
-@custom-variant dark (&:is(.dark *));
-
 /*
  * The fleet typefaces, self-hosted from Fontsource and declared here rather than
  * through each package's own stylesheet, so the family names match the names the
@@ -119,6 +117,7 @@
 }
 
 :root {
+	color-scheme: light;
 	--background: oklch(0.974 0.008 76);
 	--foreground: oklch(0.235 0.018 52);
 	--card: oklch(0.992 0.005 76);
@@ -188,53 +187,6 @@
 	--measure: 68ch;
 	--measure-narrow: 44ch;
 	--measure-title: 16ch;
-}
-
-.dark {
-	--background: oklch(0.19 0.014 54);
-	--foreground: oklch(0.935 0.014 74);
-	--card: oklch(0.225 0.016 54);
-	--card-foreground: oklch(0.925 0.018 75);
-	--popover: oklch(0.235 0.018 54);
-	--popover-foreground: oklch(0.93 0.018 75);
-	--primary: oklch(0.7 0.11 44);
-	--primary-foreground: oklch(0.2 0.02 52);
-	--secondary: oklch(0.3 0.024 56);
-	--secondary-foreground: oklch(0.92 0.018 75);
-	--muted: oklch(0.28 0.022 55);
-	--muted-foreground: oklch(0.69 0.022 69);
-	--accent: oklch(0.33 0.035 58);
-	--accent-foreground: oklch(0.94 0.018 75);
-	--destructive: oklch(0.68 0.18 25);
-	--border: oklch(0.35 0.021 57);
-	--input: oklch(0.39 0.024 57);
-	--ring: oklch(0.72 0.11 45);
-	--sidebar: oklch(0.205 0.015 54);
-	--sidebar-foreground: oklch(0.91 0.018 74);
-	--sidebar-primary: oklch(0.7 0.11 44);
-	--sidebar-primary-foreground: oklch(0.2 0.02 52);
-	--sidebar-accent: oklch(0.285 0.022 57);
-	--sidebar-accent-foreground: oklch(0.93 0.018 75);
-	--sidebar-border: oklch(0.325 0.021 57);
-	--sidebar-ring: oklch(0.72 0.11 45);
-	--surface-raised: oklch(0.215 0.015 54);
-	--map-canvas: oklch(0.165 0.011 53);
-	--map-surface: oklch(0.205 0.014 54);
-	--map-fill-unselected: oklch(0.36 0.02 57);
-	--map-fill-unavailable: oklch(0.27 0.012 55);
-	--map-unavailable-hatch: oklch(0.44 0.016 58);
-	--map-border: oklch(0.34 0.022 58);
-	--map-boundary: oklch(0.7 0.022 67 / 72%);
-	--map-parent-boundary: oklch(0.79 0.03 70 / 78%);
-	--map-hover: oklch(0.65 0.11 44);
-	--map-focus: oklch(0.78 0.13 248);
-	--tooltip-surface: oklch(0.91 0.015 75);
-	--tooltip-foreground: oklch(0.21 0.02 53);
-	--tooltip-border: oklch(0.7 0.025 68);
-	--warning: oklch(0.75 0.12 75);
-	--warning-surface: oklch(0.3 0.05 66);
-	--warning-foreground: oklch(0.88 0.08 76);
-	--atlas-shadow-map: 0 12px 32px oklch(0.06 0.008 52 / 25%);
 }
 
 @theme inline {

@@ -352,7 +352,6 @@ Persist only durable user intent:
 - custom colors
 - active preset
 - projection preference
-- theme preference
 - non-sensitive UI preferences that should survive reloads
 
 Do not persist:
@@ -457,7 +456,7 @@ Maintain one visual direction through delivery:
 - deterministic semantic palettes
 - strong type hierarchy
 - subtle depth
-- deliberate light and dark themes
+- one deliberate light appearance
 - minimal ornament
 
 Avoid:
@@ -631,7 +630,7 @@ Keep Playwright focused on critical journeys:
 - export and import valid progress
 - reject invalid import data
 - display and recover from the unsupported viewport screen
-- preserve behavior in light and dark themes
+- render light regardless of the operating-system color scheme
 
 For bug fixes, add a focused regression test when practical and ensure it would fail for the original defect.
 

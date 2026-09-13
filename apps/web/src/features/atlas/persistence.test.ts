@@ -73,7 +73,8 @@ describe("persistence", () => {
 
 		expect(migrated.schemaVersion).toBe(CURRENT_SCHEMA_VERSION);
 		expect(migrated.activePresetId).toBe("spain");
-		expect(migrated.themePreference).toBe("dark");
+		// Light is the only appearance (#66): a stored dark preference reads as light.
+		expect(migrated.themePreference).toBe("light");
 		expect(migrated.presets.world.fillMode).toBe("custom");
 		expect(migrated.presets.world.projection).toBe("robinson");
 		expect(migrated.presets.world.customColors["world-fr"]).toBe("#b86b45");
@@ -100,6 +101,33 @@ describe("persistence", () => {
 		expect(result.mode).toBe("durable");
 		expect(result.message).toMatch(/malformed/i);
 		expect(result.state).toEqual(createDefaultState());
+	});
+
+	it("reads a stored dark or system appearance as light and keeps the progress", () => {
+		for (const legacy of ["dark", "system"]) {
+			const state = createDefaultState();
+			state.presets.world.selected["world-fr"] = {
+				selectedAt: "2026-07-24T12:00:00.000Z",
+				order: 1,
+				stamp: ORIGIN_STAMP,
+			};
+			const record = JSON.parse(serializePersistedState(state));
+			record.themePreference = legacy;
+			const values = new Map([[STORAGE_KEY, JSON.stringify(record)]]);
+			const adapter = createPersistenceAdapter({
+				getItem: (key) => values.get(key) ?? null,
+				setItem: (key, value) => values.set(key, value),
+			});
+
+			const loaded = adapter.load();
+			expect(loaded.message).toBeUndefined();
+			expect(loaded.state.themePreference).toBe("light");
+			expect(loaded.state.presets.world.selected["world-fr"]).toBeDefined();
+			adapter.save(loaded.state);
+			expect(JSON.parse(values.get(STORAGE_KEY) ?? "{}").themePreference).toBe(
+				"light",
+			);
+		}
 	});
 
 	it("remains usable when storage APIs throw", () => {
@@ -195,7 +223,7 @@ describe("persistence mode guards the storage key", () => {
 
 		expect(useAtlasStore.getState().persistenceMode).toBe("future-blocked");
 		useAtlasStore.getState().toggleEntity(worldPolicy, "world-fr", "France");
-		useAtlasStore.getState().setThemePreference("dark");
+		useAtlasStore.getState().setFillMode("world", "accent");
 		vi.advanceTimersByTime(1_000);
 		window.dispatchEvent(new Event("pagehide"));
 		vi.advanceTimersByTime(1_000);

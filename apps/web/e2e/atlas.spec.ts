@@ -365,89 +365,111 @@ test("keeps the workspace usable at an effective 200% desktop zoom", async ({
 	});
 });
 
-test("supports intentional light and dark themes", async ({ page }) => {
-	// The trigger is named by the current preference, not by a generic verb.
-	await expect(
-		page.getByRole("button", { name: "Appearance: System" }),
-	).toBeVisible();
-
-	await page.getByRole("button", { name: /^Appearance:/ }).click();
-	const options = page.getByRole("menuitemradio");
-	await expect(options).toHaveCount(3);
-	await expect(
-		page.getByRole("menuitemradio", { name: "System" }),
-	).toHaveAttribute("aria-checked", "true");
-	await page.getByRole("menuitemradio", { name: "Dark" }).click();
-	await expect(page.locator("html")).toHaveClass(/dark/);
-	await expect(
-		page.getByRole("button", { name: "Appearance: Dark" }),
-	).toBeVisible();
-	const darkSurface = await page
-		.getByTestId("atlas-map")
-		.evaluate(
-			(element) =>
-				getComputedStyle(element.parentElement as HTMLElement).backgroundColor,
-		);
-	await page.getByRole("button", { name: /^Appearance:/ }).click();
-	await page.getByRole("menuitemradio", { name: "Light" }).click();
-	await expect(page.locator("html")).not.toHaveClass(/dark/);
-	const lightSurface = await page
-		.getByTestId("atlas-map")
-		.evaluate(
-			(element) =>
-				getComputedStyle(element.parentElement as HTMLElement).backgroundColor,
-		);
-	expect(lightSurface).not.toBe(darkSurface);
-
-	// Only the versioned record is written, and the preference survives a reload without flash.
-	await expect
-		.poll(() =>
-			page.evaluate(
-				() =>
-					JSON.parse(localStorage.getItem("atlas-tint:state") ?? "{}")
-						.themePreference,
-			),
-		)
-		.toBe("light");
-	expect(
-		await page.evaluate(() => localStorage.getItem("atlas-tint:theme")),
-	).toBeNull();
-
-	await page.reload();
-	await expect(page.locator("html")).toHaveClass(/light/);
-	await expect(
-		page.getByRole("button", { name: "Appearance: Light" }),
-	).toBeVisible();
-});
-
-test("adopts a pre-versioned appearance key once and then retires it", async ({
+test("renders light whatever the system or a stored appearance says", async ({
 	page,
 }) => {
+	const surface = () =>
+		page
+			.getByTestId("atlas-map")
+			.evaluate(
+				(element) =>
+					getComputedStyle(element.parentElement as HTMLElement)
+						.backgroundColor,
+			);
+	const expectLight = async (lightSurface: string) => {
+		await expect(page.getByTestId("atlas-map")).toBeVisible();
+		await expect(page.locator("html")).not.toHaveClass(/dark/);
+		await expect(page.locator("html")).toHaveCSS("color-scheme", "light");
+		expect(await surface()).toBe(lightSurface);
+	};
+	const storedAppearance = () =>
+		page.evaluate(
+			() =>
+				JSON.parse(localStorage.getItem("atlas-tint:state") ?? "{}")
+					.themePreference,
+		);
+	const lightSurface = await surface();
+
+	// First visit with the operating system in dark mode, checked before any script runs.
+	await page.emulateMedia({ colorScheme: "dark" });
+	await page.addInitScript(() => {
+		document.addEventListener("DOMContentLoaded", () => {
+			const root = document.documentElement;
+			sessionStorage.setItem(
+				"first-paint",
+				[
+					root.className,
+					document
+						.querySelector('meta[name="color-scheme"]')
+						?.getAttribute("content"),
+					matchMedia("(prefers-color-scheme: dark)").matches,
+				].join("|"),
+			);
+		});
+	});
+	await page.evaluate(() => localStorage.clear());
+	await page.reload();
+	await expectLight(lightSurface);
+	const firstPaint = await page.evaluate(() =>
+		sessionStorage.getItem("first-paint"),
+	);
+	// No class toggling, a light-only color scheme, and the dark preference really emulated.
+	expect(firstPaint).toBe("|light|true");
+
+	// A record saved while dark or system existed, and the retired next-themes key.
+	await page.locator('[data-entity-id="world-ca"]').click();
+	await expect.poll(storedAppearance).toBe("light");
 	await page.evaluate(() => {
-		localStorage.clear();
+		const state = JSON.parse(localStorage.getItem("atlas-tint:state") ?? "{}");
+		state.themePreference = "dark";
+		localStorage.setItem("atlas-tint:state", JSON.stringify(state));
 		localStorage.setItem("atlas-tint:theme", "dark");
 	});
 	await page.reload();
+	await expectLight(lightSurface);
+	await expect(page.getByRole("button", { name: /^Canada/ })).toHaveAttribute(
+		"aria-pressed",
+		"true",
+	);
+	await expect(page.getByRole("button", { name: /^Appearance/ })).toHaveCount(
+		0,
+	);
 
-	// No flash: the pre-paint script reads the legacy key too.
-	await expect(page.locator("html")).toHaveClass(/dark/);
-	await expect(
-		page.getByRole("button", { name: "Appearance: Dark" }),
-	).toBeVisible();
-
-	// One durable authority from now on.
-	await expect
-		.poll(() =>
-			page.evaluate(
-				() =>
-					JSON.parse(localStorage.getItem("atlas-tint:state") ?? "{}")
-						.themePreference,
+	// An export that carries a dark preference imports its progress, not its appearance.
+	const fixture = JSON.parse(
+		await readFile(
+			fileURLToPath(
+				new URL(
+					"../src/features/atlas/fixtures/export-v2.json",
+					import.meta.url,
+				),
 			),
-		)
-		.toBe("dark");
-	await expect
-		.poll(() => page.evaluate(() => localStorage.getItem("atlas-tint:theme")))
-		.toBeNull();
+			"utf8",
+		),
+	);
+	fixture.state.themePreference = "dark";
+	await openStyleAndData(page);
+	await page.getByLabel("Import progress JSON").setInputFiles({
+		name: "dark-export.json",
+		mimeType: "application/json",
+		buffer: Buffer.from(JSON.stringify(fixture)),
+	});
+	await page.getByRole("button", { name: "Replace local data" }).click();
+	await expect(page.getByRole("button", { name: /^Mali/ })).toHaveAttribute(
+		"aria-pressed",
+		"true",
+	);
+	await expectLight(lightSurface);
+	await expect.poll(storedAppearance).toBe("light");
+
+	// Reset all, then a reload, still in dark mode.
+	await page.getByRole("button", { name: "Reset all", exact: true }).click();
+	await page.getByRole("button", { name: "Reset everything" }).click();
+	await expect(page.getByRole("progressbar")).toHaveAttribute("value", "0");
+	await expectLight(lightSurface);
+	await page.reload();
+	await expectLight(lightSurface);
+	await expect.poll(storedAppearance).toBe("light");
 });
 
 test("opens and closes About from Style & data with the keyboard", async ({
@@ -487,14 +509,6 @@ test("names the selection-order mode and states its direction", async ({
 	const legend = page.locator("footer");
 	await expect(legend).toContainText("First marked");
 	await expect(legend).toContainText("Most recently marked");
-
-	// The direction is readable in both themes, because it is words, not only a gradient.
-	for (const appearance of ["Dark", "Light"] as const) {
-		await page.getByRole("button", { name: /^Appearance:/ }).click();
-		await page.getByRole("menuitemradio", { name: appearance }).click();
-		await expect(legend).toContainText("First marked");
-		await expect(legend).toContainText("Most recently marked");
-	}
 
 	// Other fill modes keep the plain selected marker instead.
 	await modes.selectOption("hierarchical");
@@ -620,10 +634,6 @@ test("shared controls follow motion roles and respect reduced motion", async ({
 			"cubic-bezier(0.2, 0, 0, 1)",
 		);
 	}
-	await page.getByRole("button", { name: /^Appearance:/ }).click();
-	await expect(page.getByRole("menu")).toHaveCSS("animation-duration", "0.18s");
-	await page.keyboard.press("Escape");
-	await expect(page.getByRole("menu")).toHaveCount(0);
 	await page.emulateMedia({ reducedMotion: "reduce" });
 	for (const control of feedback) {
 		await expect(control).toHaveCSS("transition-duration", "1e-05s");
