@@ -25,6 +25,17 @@ if (!rootElement) {
 	throw new Error("Root element not found");
 }
 
+// index.html paints a static copy of the unsupported-viewport screen for a phone while this bundle
+// loads. CSS hides it once #app has content; it is also removed then, so the page never holds two
+// copies of the gate's main, footer and links.
+const staticViewportNotice = document.getElementById("viewport-notice");
+if (staticViewportNotice) {
+	new MutationObserver((_records, observer) => {
+		staticViewportNotice.remove();
+		observer.disconnect();
+	}).observe(rootElement, { childList: true });
+}
+
 if (!rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement);
 	root.render(<RouterProvider router={router} />);
