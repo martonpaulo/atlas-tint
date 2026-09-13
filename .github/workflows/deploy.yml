@@ -1,7 +1,11 @@
 name: Deploy
 
+# Deploy never revalidates: it waits for Validate to pass on main (skill-deck
+# docs/fleet-conventions.md, #263) and builds exactly the commit that passed.
 on:
-  push:
+  workflow_run:
+    workflows: [Validate]
+    types: [completed]
     branches: [main]
   workflow_dispatch:
 
@@ -13,47 +17,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  changes:
-    name: Detect build-affecting changes
-    runs-on: ubuntu-latest
-    outputs:
-      deploy_needed: ${{ steps.detect.outputs.deploy_needed }}
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 2
-
-      - name: Detect deploy inputs
-        id: detect
-        env:
-          BEFORE: ${{ github.event.before }}
-          CURRENT: ${{ github.sha }}
-          EVENT_NAME: ${{ github.event_name }}
-        run: |
-          deploy_needed=true
-          if [ "$EVENT_NAME" = push ] \
-            && [ -n "$BEFORE" ] \
-            && [ "$BEFORE" != "0000000000000000000000000000000000000000" ] \
-            && git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
-            git diff --name-only "$BEFORE" "$CURRENT" > "$RUNNER_TEMP/atlas-tint-changed-files.txt"
-            if grep -Eq '^(apps/|packages/|scripts/geo/|package\.json$|pnpm-lock\.yaml$|pnpm-workspace\.yaml$|tsconfig\.json$|biome\.json$|bts\.jsonc$|\.github/workflows/pages\.yml$)' "$RUNNER_TEMP/atlas-tint-changed-files.txt"; then
-              deploy_needed=true
-            else
-              deploy_needed=false
-            fi
-          fi
-          printf 'deploy_needed=%s\n' "$deploy_needed" >> "$GITHUB_OUTPUT"
-
   build:
     name: Build site
-    needs: changes
-    if: needs.changes.outputs.deploy_needed == 'true'
+    # `branches` matches the head branch name, which a fork's pull request can also call main,
+    # so only a push run on this repository deploys.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
