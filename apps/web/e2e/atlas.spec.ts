@@ -450,6 +450,28 @@ test("adopts a pre-versioned appearance key once and then retires it", async ({
 		.toBeNull();
 });
 
+test("opens and closes About from Style & data with the keyboard", async ({
+	page,
+}) => {
+	await openStyleAndData(page);
+	const trigger = page.getByRole("button", { name: "About AtlasTint" });
+	await trigger.focus();
+	await page.keyboard.press("Enter");
+	const dialog = page.getByRole("dialog", { name: "About AtlasTint" });
+	await expect(dialog).toBeVisible();
+	await expect(page.getByRole("button", { name: "Done" })).toBeFocused();
+	await expect(
+		dialog.getByRole("link", { name: "github.com/martonpaulo/atlas-tint" }),
+	).toHaveAttribute("href", "https://github.com/martonpaulo/atlas-tint");
+	await page.keyboard.press("Escape");
+	await expect(dialog).toHaveCount(0);
+	await expect(trigger).toBeFocused();
+	// The compact corner credit stays.
+	await expect(
+		page.getByRole("link", { name: "Source", exact: true }),
+	).toBeVisible();
+});
+
 test("names the selection-order mode and states its direction", async ({
 	page,
 }) => {

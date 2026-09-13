@@ -16,7 +16,7 @@ import {
 	useRef,
 	useState,
 } from "react";
-
+import { AboutDialog } from "@/components/about-dialog";
 import {
 	createChronologyContext,
 	defaultCustomColor,
@@ -623,6 +623,9 @@ export function AtlasSidebar({
 						</select>
 					</label>
 					<DataActions presetId={manifest.id} presetName={manifest.shortName} />
+					<div className="mt-3 border-sidebar-border border-t pt-2">
+						<AboutDialog />
+					</div>
 				</div>
 			</details>
 		</aside>
