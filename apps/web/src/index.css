@@ -1,1 +1,11 @@
 @import "@atlas-tint/ui/globals.css";
+
+/* One icon for every link that leaves the site (windowhop/docs). */
+.external-icon {
+	flex: none;
+	width: 0.7em;
+	height: 0.7em;
+	margin-left: 0.35em;
+	vertical-align: baseline;
+	opacity: 0.8;
+}

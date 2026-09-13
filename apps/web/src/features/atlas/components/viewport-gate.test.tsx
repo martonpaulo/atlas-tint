@@ -24,6 +24,17 @@ describe("ViewportGate", () => {
 			screen.getByRole("heading", { name: "Give the map more room" }),
 		).toBeInTheDocument();
 		expect(screen.queryByText("Workspace mounted")).not.toBeInTheDocument();
+		// The small-window screen still credits the project, with external links only.
+		expect(
+			screen.getByText(/MIT licensed · © 2026 AtlasTint contributors\./),
+		).toBeInTheDocument();
+		expect(screen.getByRole("link", { name: "Source" })).toHaveAttribute(
+			"href",
+			"https://github.com/martonpaulo/atlas-tint",
+		);
+		expect(
+			screen.getByRole("link", { name: "martonpaulo.com" }),
+		).toHaveAttribute("href", "https://martonpaulo.com/");
 		resize(1024, 700);
 		expect(screen.getByText("Workspace mounted")).toBeInTheDocument();
 	});

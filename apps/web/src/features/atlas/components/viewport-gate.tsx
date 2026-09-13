@@ -1,6 +1,8 @@
 import { MonitorUp } from "lucide-react";
 import { type ReactNode, useSyncExternalStore } from "react";
 
+import { ScreenCredit } from "@/components/site-credit";
+
 const MINIMUM_WIDTH = 1024;
 const MINIMUM_HEIGHT = 700;
 
@@ -25,9 +27,9 @@ export function ViewportGate({ children }: { children: ReactNode }) {
 	);
 	if (supported) return children;
 	return (
-		<main className="grid min-h-svh place-items-center bg-background px-8 text-foreground">
+		<main className="grid min-h-svh grid-rows-[1fr_auto] bg-background text-foreground">
 			<section
-				className="max-w-xl text-center"
+				className="max-w-xl place-self-center px-8 py-10 text-center"
 				aria-labelledby="viewport-title"
 			>
 				<div className="mx-auto mb-6 grid size-16 place-items-center rounded-xl border border-border bg-card text-primary shadow-card">
@@ -49,6 +51,7 @@ export function ViewportGate({ children }: { children: ReactNode }) {
 					Your saved progress remains untouched.
 				</p>
 			</section>
+			<ScreenCredit />
 		</main>
 	);
 }

@@ -16,6 +16,7 @@ import {
 	useState,
 } from "react";
 
+import { InlineCredit } from "@/components/site-credit";
 import {
 	createChronologyContext,
 	resolveEntityColor,
@@ -458,7 +459,7 @@ export function MapWorkspace(props: MapWorkspaceProps) {
 					) : null}
 					<span className="tabular-nums">{selectedCount} marked</span>
 				</div>
-				<p className="text-right">{props.preset.attribution}</p>
+				<InlineCredit attribution={props.preset.attribution} />
 			</footer>
 		</main>
 	);
