@@ -40,7 +40,7 @@ jobs:
           # Anything the browser suite can observe: application and package source, the
           # geographic pipeline and its shipped assets, dependency and tooling configuration,
           # and this workflow itself.
-          pattern='^(apps/|packages/|scripts/geo/|package\.json$|pnpm-lock\.yaml$|pnpm-workspace\.yaml$|tsconfig\.json$|biome\.json$|\.github/workflows/ci\.yml$)'
+          pattern='^(apps/|packages/|scripts/geo/|package\.json$|pnpm-lock\.yaml$|pnpm-workspace\.yaml$|tsconfig\.json$|biome\.json$|\.github/workflows/validate\.yml$)'
 
           base=""
           case "$EVENT_NAME" in
