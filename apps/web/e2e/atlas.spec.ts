@@ -385,7 +385,7 @@ test("renders light whatever the system or a stored appearance says", async ({
 	const storedAppearance = () =>
 		page.evaluate(
 			() =>
-				JSON.parse(localStorage.getItem("atlas-tint:state") ?? "{}")
+				JSON.parse(localStorage.getItem("atlas-tint.state") ?? "{}")
 					.themePreference,
 		);
 	const lightSurface = await surface();
@@ -420,9 +420,9 @@ test("renders light whatever the system or a stored appearance says", async ({
 	await page.locator('[data-entity-id="world-ca"]').click();
 	await expect.poll(storedAppearance).toBe("light");
 	await page.evaluate(() => {
-		const state = JSON.parse(localStorage.getItem("atlas-tint:state") ?? "{}");
+		const state = JSON.parse(localStorage.getItem("atlas-tint.state") ?? "{}");
 		state.themePreference = "dark";
-		localStorage.setItem("atlas-tint:state", JSON.stringify(state));
+		localStorage.setItem("atlas-tint.state", JSON.stringify(state));
 		localStorage.setItem("atlas-tint:theme", "dark");
 	});
 	await page.reload();

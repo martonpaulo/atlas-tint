@@ -15,7 +15,7 @@ import {
 } from "@/features/atlas/preset-catalog";
 import { type Stamp, stampSchema } from "@/features/atlas/sync";
 
-export const STORAGE_KEY = "atlas-tint:state";
+export const STORAGE_KEY = "atlas-tint.state";
 export const CURRENT_SCHEMA_VERSION = 2;
 
 /** What a field written before stamps existed counts as. Every real stamp outranks it. */

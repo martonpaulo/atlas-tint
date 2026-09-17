@@ -204,7 +204,7 @@ The pipeline verifies SHA-256 checksums before reading source files, accounts fo
 
 ## Persistence and imports
 
-The authoritative local state uses storage key `atlas-tint:state` and schema version 2. It contains:
+The authoritative local state uses storage key `atlas-tint.state` and schema version 2. It contains:
 
 - active preset, and a legacy appearance field that always reads as light;
 - a record of per-preset progress keyed by preset ID;
