@@ -13,23 +13,18 @@
 - Development language: English.
 - Product copy: English (`en-US`) is the source and fallback language; add localization only through an explicit product request.
 - Browser acceptance: Chromium only; automated and manual browser checks use Chromium for Testing, never Brave.
-- Branch policy: The owner and the owner's agents commit validated work directly to `main` in focused single-concern commits (owner decision, 2026-09-11). Branches and pull requests stay available for work that benefits from review, and are required for outside contributors; unattended AO branches carry the required session prefix.
+- Branch policy: The owner and the owner's agents commit validated work directly to `main` in focused single-concern commits (owner decision, 2026-09-11). Branches and pull requests stay available for work that benefits from review, and are required for outside contributors.
 - Commit policy: Commit completed, validated task work automatically using focused Conventional Commits.
 - Push policy: Push completed, validated work automatically: to `main` for direct work, to its branch when a pull request is used.
 - Product versioning: Continuous deployment without a user-visible product version; persistence and import schema versions remain explicit and independent.
-- Agent automation: `enabled`
-- Agent automation scope: Local Agent Orchestrator only. Remote GitHub Actions lifecycle automation is not configured or required; [issue #46](https://github.com/martonpaulo/atlas-tint/issues/46) preserves it as an optional future decision with owner-only credential prerequisites.
-- Implementation agent: `claude`
-- Review agent: `codex`
-- Orchestration agent: `codex`
 - Merge policy: when a pull request is used, merge it into `main` with a merge commit, `gh pr merge <number> --merge --delete-branch`, so every branch commit reaches `main` (martonpaulo/skill-deck#277).
 - Commit subject: a commit made for an issue ends with `(#<issue number>)`.
 - Delete branches after merge: enabled.
-- Release, signing, and secret-storage policy: GitHub Pages deploys continuously from `main`; there are no tags, releases, downloadable artifacts, signing identity, or remote agent credentials required by the supported local automation.
+- Release, signing, and secret-storage policy: GitHub Pages deploys continuously from `main`; there are no tags, releases, downloadable artifacts, signing identity, or agent credentials.
 - Skills baseline revision: `9026cafb46c2bae55a3e7415eb475ce437ff1c1a`
 - Skills baseline applied: `2026-09-04`
 
-Treat these values as stable project decisions. Change an identifier, license, visibility, branch policy, localization strategy, landing-page contract, automation state, or distribution policy only through an explicit migration task.
+Treat these values as stable project decisions. Change an identifier, license, visibility, branch policy, localization strategy, landing-page contract, or distribution policy only through an explicit migration task.
 
 ## Instruction hierarchy and sources of truth
 
@@ -63,7 +58,7 @@ Do not trade a higher-priority item for a lower-priority item.
 
 ## Mandatory workflow
 
-- Start from current `main`. Validated work goes straight to `main`; use the recorded issue branch and a pull request only when the work benefits from review or runs in an orchestrated lane.
+- Start from current `main`. Validated work goes straight to `main`; use the recorded issue branch and a pull request only when the work benefits from review.
 - Read this file before making changes.
 - Search before adding code. Reuse established components, tokens, schemas, map abstractions, utilities, state actions, and tests.
 - Read only the minimum relevant files or chunks before editing.
@@ -692,18 +687,6 @@ Do not document an exact code tree unless it is generated or automatically verif
 - Use an approval notice for an exact external, destructive, privacy, cost, or publication boundary.
 - Use an action-needed notice when only the owner can perform the required external step.
 - Each notice names the evidence, impact, recommendation, exact requested response, and what permits work to resume. Never hide a required response in a general summary.
-
-## Agent execution
-
-Rules for any executor working from a clone of this repository, including cloud executors that read only committed files.
-
-- Run tests with `pnpm validate`; run lint with `pnpm lint`. A change is not done while either fails on the exact current head.
-- Branch as `<type>/<agent>/issue-<n>/<short-slug>`; commit with Conventional Commits, subject ending in `(#<n>)`.
-- Never push to `main` and never merge: open a pull request and stop. Merge belongs to the owner or the orchestration workflow recorded in `.ao/worker-rules.md`.
-- Start the PR body with one `Closes #<n>` line per resolved issue, then the problem, implementation, tests with results, and residual risk.
-- Do not touch: `.ao/**`, `.github/workflows/**`, `docs/product.md`, `LICENSE`, or `NOTICE.md`.
-- `AGENTS.md` is protected by section, not as a file. `## Project identity and policy` is governance and never changes under an executor. Other sections change only when the accepted implementation makes a recorded project pattern untrue.
-- When a required product decision is absent from the issue, publish the exact question, apply `status: needs-decision` with `in-progress`, verify both labels, and stop instead of guessing.
 
 ## Git and delivery
 
