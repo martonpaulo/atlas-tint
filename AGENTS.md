@@ -22,7 +22,7 @@
 - Implementation agent: `claude`
 - Review agent: `codex`
 - Orchestration agent: `codex`
-- Merge policy: when a pull request is used, squash it into `main`.
+- Merge policy: when a pull request is used, merge it into `main` with a merge commit, `gh pr merge <number> --merge --delete-branch`, so every branch commit reaches `main` (martonpaulo/skill-deck#277).
 - Commit subject: a commit made for an issue ends with `(#<issue number>)`.
 - Delete branches after merge: enabled.
 - Release, signing, and secret-storage policy: GitHub Pages deploys continuously from `main`; there are no tags, releases, downloadable artifacts, signing identity, or remote agent credentials required by the supported local automation.
