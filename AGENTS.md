@@ -2,8 +2,10 @@
 
 ## Project identity and policy
 
-- Project name: `atlas-tint`
-- Public name: `AtlasTint`
+- Display name: `AtlasTint`
+- Code name: `AtlasTint`
+- Slug: `atlas-tint`
+- Identifier name: `atlastint`
 - Benefit-first description: A local-first interactive SVG atlas for selecting, coloring, and tracking geographic regions.
 - Repository: `martonpaulo/atlas-tint` (public)
 - Public identifiers: GitHub repository `martonpaulo/atlas-tint` and Pages site `https://atlastint.martonpaulo.com/`; workspace packages are private.
