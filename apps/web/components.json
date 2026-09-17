@@ -13,8 +13,8 @@
 	"iconLibrary": "lucide",
 	"aliases": {
 		"components": "@/components",
-		"utils": "@atlas-tint/ui/lib/utils",
-		"ui": "@atlas-tint/ui/components",
+		"utils": "@atlastint/ui/lib/utils",
+		"ui": "@atlastint/ui/components",
 		"lib": "@/lib",
 		"hooks": "@/hooks"
 	},

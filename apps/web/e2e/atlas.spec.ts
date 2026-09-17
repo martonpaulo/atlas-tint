@@ -217,7 +217,7 @@ test("rejects an invalid import without changing progress", async ({
 	await page.getByLabel("Import progress JSON").setInputFiles({
 		name: "invalid.json",
 		mimeType: "application/json",
-		buffer: Buffer.from('{"format":"not-atlas-tint"}'),
+		buffer: Buffer.from('{"format":"not-atlastint"}'),
 	});
 	await expect(page.getByRole("alert")).toContainText(
 		"Invalid AtlasTint export",
@@ -385,7 +385,7 @@ test("renders light whatever the system or a stored appearance says", async ({
 	const storedAppearance = () =>
 		page.evaluate(
 			() =>
-				JSON.parse(localStorage.getItem("atlas-tint.state") ?? "{}")
+				JSON.parse(localStorage.getItem("atlastint.state") ?? "{}")
 					.themePreference,
 		);
 	const lightSurface = await surface();
@@ -420,10 +420,10 @@ test("renders light whatever the system or a stored appearance says", async ({
 	await page.locator('[data-entity-id="world-ca"]').click();
 	await expect.poll(storedAppearance).toBe("light");
 	await page.evaluate(() => {
-		const state = JSON.parse(localStorage.getItem("atlas-tint.state") ?? "{}");
+		const state = JSON.parse(localStorage.getItem("atlastint.state") ?? "{}");
 		state.themePreference = "dark";
-		localStorage.setItem("atlas-tint.state", JSON.stringify(state));
-		localStorage.setItem("atlas-tint:theme", "dark");
+		localStorage.setItem("atlastint.state", JSON.stringify(state));
+		localStorage.setItem("atlastint:theme", "dark");
 	});
 	await page.reload();
 	await expectLight(lightSurface);
@@ -483,8 +483,8 @@ test("opens and closes About from Style & data with the keyboard", async ({
 	await expect(dialog).toBeVisible();
 	await expect(page.getByRole("button", { name: "Done" })).toBeFocused();
 	await expect(
-		dialog.getByRole("link", { name: "github.com/martonpaulo/atlas-tint" }),
-	).toHaveAttribute("href", "https://github.com/martonpaulo/atlas-tint");
+		dialog.getByRole("link", { name: "github.com/martonpaulo/atlastint" }),
+	).toHaveAttribute("href", "https://github.com/martonpaulo/atlastint");
 	await page.keyboard.press("Escape");
 	await expect(dialog).toHaveCount(0);
 	await expect(trigger).toBeFocused();

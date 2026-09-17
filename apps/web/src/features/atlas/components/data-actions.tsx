@@ -1,4 +1,4 @@
-import { Button, buttonVariants } from "@atlas-tint/ui/components/button";
+import { Button, buttonVariants } from "@atlastint/ui/components/button";
 import {
 	Dialog,
 	DialogContent,
@@ -6,8 +6,8 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-} from "@atlas-tint/ui/components/dialog";
-import { cn } from "@atlas-tint/ui/lib/utils";
+} from "@atlastint/ui/components/dialog";
+import { cn } from "@atlastint/ui/lib/utils";
 import { Download, RotateCcw, Trash2, Upload } from "lucide-react";
 import { type ChangeEvent, useRef, useState } from "react";
 
@@ -67,7 +67,7 @@ export function DataActions({
 		const url = URL.createObjectURL(blob);
 		const link = document.createElement("a");
 		link.href = url;
-		link.download = `atlas-tint-progress-${new Date().toISOString().slice(0, 10)}.json`;
+		link.download = `atlastint-progress-${new Date().toISOString().slice(0, 10)}.json`;
 		link.click();
 		URL.revokeObjectURL(url);
 	};

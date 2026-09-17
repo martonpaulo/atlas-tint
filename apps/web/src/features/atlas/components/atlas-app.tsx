@@ -1,5 +1,5 @@
-import { Button } from "@atlas-tint/ui/components/button";
-import { Skeleton } from "@atlas-tint/ui/components/skeleton";
+import { Button } from "@atlastint/ui/components/button";
+import { Skeleton } from "@atlastint/ui/components/skeleton";
 import { AlertTriangle, MapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 

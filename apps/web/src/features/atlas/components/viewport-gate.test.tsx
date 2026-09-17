@@ -33,7 +33,7 @@ describe("ViewportGate", () => {
 		).toBeInTheDocument();
 		expect(screen.getByRole("link", { name: "Source" })).toHaveAttribute(
 			"href",
-			"https://github.com/martonpaulo/atlas-tint",
+			"https://github.com/martonpaulo/atlastint",
 		);
 		expect(
 			screen.getByRole("link", { name: "martonpaulo.com" }),

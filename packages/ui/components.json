@@ -12,11 +12,11 @@
 	},
 	"iconLibrary": "lucide",
 	"aliases": {
-		"components": "@atlas-tint/ui/components",
-		"utils": "@atlas-tint/ui/lib/utils",
-		"hooks": "@atlas-tint/ui/hooks",
-		"lib": "@atlas-tint/ui/lib",
-		"ui": "@atlas-tint/ui/components"
+		"components": "@atlastint/ui/components",
+		"utils": "@atlastint/ui/lib/utils",
+		"hooks": "@atlastint/ui/hooks",
+		"lib": "@atlastint/ui/lib",
+		"ui": "@atlastint/ui/components"
 	},
 	"menuColor": "default",
 	"menuAccent": "subtle",

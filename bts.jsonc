@@ -10,7 +10,7 @@
   "$schema": "https://r2.better-t-stack.dev/schema.json",
   "version": "3.37.0",
   "createdAt": "2026-07-24T20:25:56.323Z",
-  "reproducibleCommand": "pnpm create better-t-stack@latest atlas-tint --frontend tanstack-router --backend none --runtime none --database none --orm none --api none --auth none --payments none --addons biome --examples none --db-setup none --web-deploy none --server-deploy none --git --package-manager pnpm --install",
+  "reproducibleCommand": "pnpm create better-t-stack@latest atlastint --frontend tanstack-router --backend none --runtime none --database none --orm none --api none --auth none --payments none --addons biome --examples none --db-setup none --web-deploy none --server-deploy none --git --package-manager pnpm --install",
   "database": "none",
   "orm": "none",
   "backend": "none",

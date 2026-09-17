@@ -1,4 +1,4 @@
-import { Button } from "@atlas-tint/ui/components/button";
+import { Button } from "@atlastint/ui/components/button";
 import { select } from "d3-selection";
 import {
 	type D3ZoomEvent,

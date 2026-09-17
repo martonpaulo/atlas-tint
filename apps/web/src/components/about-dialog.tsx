@@ -1,4 +1,4 @@
-import { Button } from "@atlas-tint/ui/components/button";
+import { Button } from "@atlastint/ui/components/button";
 import {
 	Dialog,
 	DialogClose,
@@ -8,7 +8,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from "@atlas-tint/ui/components/dialog";
+} from "@atlastint/ui/components/dialog";
 import { Info } from "lucide-react";
 import { useRef } from "react";
 
@@ -20,7 +20,7 @@ import { useRef } from "react";
  * continuously and shows no version.
  */
 
-export const REPOSITORY_URL = "https://github.com/martonpaulo/atlas-tint";
+export const REPOSITORY_URL = "https://github.com/martonpaulo/atlastint";
 
 interface Credit {
 	name: string;
@@ -120,7 +120,7 @@ export function AboutDialog() {
 						</p>
 						<p className="mt-1 text-sm leading-6">
 							<a className={linkClass} href={REPOSITORY_URL} rel="noopener">
-								github.com/martonpaulo/atlas-tint
+								github.com/martonpaulo/atlastint
 							</a>
 						</p>
 					</section>

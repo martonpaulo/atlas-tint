@@ -1,5 +1,5 @@
-import { Button } from "@atlas-tint/ui/components/button";
-import { Input } from "@atlas-tint/ui/components/input";
+import { Button } from "@atlastint/ui/components/button";
+import { Input } from "@atlastint/ui/components/input";
 import {
 	Ban,
 	Check,

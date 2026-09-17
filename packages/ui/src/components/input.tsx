@@ -1,4 +1,4 @@
-import { cn } from "@atlas-tint/ui/lib/utils";
+import { cn } from "@atlastint/ui/lib/utils";
 import { Input as InputPrimitive } from "@base-ui/react/input";
 import type * as React from "react";
 

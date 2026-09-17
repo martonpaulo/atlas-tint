@@ -19,10 +19,10 @@ describe("AboutDialog", () => {
 		expect(dialog).toHaveTextContent(/local storage/);
 		expect(
 			within(dialog).getByRole("link", {
-				name: "github.com/martonpaulo/atlas-tint",
+				name: "github.com/martonpaulo/atlastint",
 			}),
 		).toHaveAttribute("href", REPOSITORY_URL);
-		expect(REPOSITORY_URL).toBe("https://github.com/martonpaulo/atlas-tint");
+		expect(REPOSITORY_URL).toBe("https://github.com/martonpaulo/atlastint");
 		for (const source of ["Natural Earth", "IBGE", "IGN/CNIG"])
 			expect(within(dialog).getByRole("link", { name: source })).toBeVisible();
 		for (const family of ["Source Serif 4", "Figtree", "Gabarito"])

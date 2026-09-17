@@ -11,7 +11,7 @@
 		"rootDirs": ["."],
 		"paths": {
 			"@/*": ["./src/*"],
-			"@atlas-tint/ui/*": ["../../packages/ui/src/*"]
+			"@atlastint/ui/*": ["../../packages/ui/src/*"]
 		}
 	}
 }

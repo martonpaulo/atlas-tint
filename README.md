@@ -6,7 +6,7 @@
 
 A desktop-first, local-first interactive SVG atlas for marking geographic regions, tracking progress, and building deterministic personal maps.
 
-[![Validate](https://github.com/martonpaulo/atlas-tint/actions/workflows/validate.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/validate.yml) [![Deploy](https://github.com/martonpaulo/atlas-tint/actions/workflows/deploy.yml/badge.svg)](https://github.com/martonpaulo/atlas-tint/actions/workflows/deploy.yml)
+[![Validate](https://github.com/martonpaulo/atlastint/actions/workflows/validate.yml/badge.svg)](https://github.com/martonpaulo/atlastint/actions/workflows/validate.yml) [![Deploy](https://github.com/martonpaulo/atlastint/actions/workflows/deploy.yml/badge.svg)](https://github.com/martonpaulo/atlastint/actions/workflows/deploy.yml)
 
 [![React 19.2](https://img.shields.io/badge/React-19.2-149eca)](https://react.dev/) [![Vite 8.2](https://img.shields.io/badge/Vite-8.2-646cff)](https://vite.dev/) [![TypeScript 6](https://img.shields.io/badge/TypeScript-6-3178c6)](https://www.typescriptlang.org/)
 
@@ -31,8 +31,8 @@ rewrite of the product core. The durable product boundary and non-goals are reco
 Requires **Node.js 24**, **pnpm 11.4**, Git, and a Chromium-based desktop browser for the Playwright suite.
 
 ```bash
-git clone https://github.com/martonpaulo/atlas-tint.git
-cd atlas-tint
+git clone https://github.com/martonpaulo/atlastint.git
+cd atlastint
 pnpm install
 pnpm dev:web
 ```
@@ -204,7 +204,7 @@ The pipeline verifies SHA-256 checksums before reading source files, accounts fo
 
 ## Persistence and imports
 
-The authoritative local state uses storage key `atlas-tint.state` and schema version 2. It contains:
+The authoritative local state uses storage key `atlastint.state` and schema version 2. It contains:
 
 - active preset, and a legacy appearance field that always reads as light;
 - a record of per-preset progress keyed by preset ID;

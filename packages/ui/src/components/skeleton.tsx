@@ -1,4 +1,4 @@
-import { cn } from "@atlas-tint/ui/lib/utils";
+import { cn } from "@atlastint/ui/lib/utils";
 
 function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
 	return (

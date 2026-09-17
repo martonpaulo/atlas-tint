@@ -6,7 +6,7 @@ Security fixes target the latest commit on `main` while AtlasTint is in its init
 
 ## Reporting a vulnerability
 
-Do not disclose a suspected vulnerability in a public issue. Use [GitHub private vulnerability reporting](https://github.com/martonpaulo/atlas-tint/security/advisories/new) and include:
+Do not disclose a suspected vulnerability in a public issue. Use [GitHub private vulnerability reporting](https://github.com/martonpaulo/atlastint/security/advisories/new) and include:
 
 - the affected behavior and realistic impact;
 - reproducible steps or a minimal proof of concept;

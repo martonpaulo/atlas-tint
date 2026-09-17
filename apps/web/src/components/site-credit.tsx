@@ -3,7 +3,7 @@
  * LICENSE. The year is literal so the credit never depends on the reader's clock.
  */
 
-const SOURCE_URL = "https://github.com/martonpaulo/atlas-tint";
+const SOURCE_URL = "https://github.com/martonpaulo/atlastint";
 const AUTHOR_URL = "https://martonpaulo.com/";
 
 /** The fleet's mark for a link that leaves the site, copied from windowhop/docs. */

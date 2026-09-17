@@ -20,7 +20,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			"@": fileURLToPath(new URL("./src", import.meta.url)),
-			"@atlas-tint/ui": fileURLToPath(
+			"@atlastint/ui": fileURLToPath(
 				new URL("../../packages/ui/src", import.meta.url),
 			),
 		},

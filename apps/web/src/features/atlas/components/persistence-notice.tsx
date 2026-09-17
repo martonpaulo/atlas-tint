@@ -1,4 +1,4 @@
-import { Button } from "@atlas-tint/ui/components/button";
+import { Button } from "@atlastint/ui/components/button";
 import {
 	Dialog,
 	DialogContent,
@@ -6,7 +6,7 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-} from "@atlas-tint/ui/components/dialog";
+} from "@atlastint/ui/components/dialog";
 import { useState } from "react";
 
 import type { PersistenceMode } from "@/features/atlas/persistence-adapter";
@@ -30,7 +30,7 @@ function downloadIncompatibleRecord(record: string) {
 	);
 	const link = document.createElement("a");
 	link.href = url;
-	link.download = `atlas-tint-saved-record-${new Date().toISOString().slice(0, 10)}.json`;
+	link.download = `atlastint-saved-record-${new Date().toISOString().slice(0, 10)}.json`;
 	link.click();
 	URL.revokeObjectURL(url);
 }

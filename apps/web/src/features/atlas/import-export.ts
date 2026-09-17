@@ -58,7 +58,7 @@ const boundedStateSchema = persistedStateSchema.extend({
 });
 
 export const atlasExportSchema = z.object({
-	format: z.literal("atlas-tint-progress"),
+	format: z.literal("atlastint-progress"),
 	schemaVersion: z.literal(EXPORT_SCHEMA_VERSION),
 	exportedAt: z.iso.datetime(),
 	state: boundedStateSchema,
@@ -72,7 +72,7 @@ export const atlasExportSchema = z.object({
  * bounded. Refusing it would make an upgrade destroy a user's backup.
  */
 const importEnvelopeFields = {
-	format: z.literal("atlas-tint-progress"),
+	format: z.literal("atlastint-progress"),
 	exportedAt: z.iso.datetime(),
 	state: z.unknown(),
 };
@@ -112,7 +112,7 @@ export function createAtlasExport(
 	now = new Date(),
 ): AtlasExport {
 	return {
-		format: "atlas-tint-progress",
+		format: "atlastint-progress",
 		schemaVersion: EXPORT_SCHEMA_VERSION,
 		exportedAt: now.toISOString(),
 		state: persistedStateSchema.parse(state),

@@ -386,7 +386,7 @@ async function buildPreset(id, zipPath, tempDirectory) {
 async function main() {
 	await mkdir(publicMapDirectory, { recursive: true });
 	await mkdir(manifestDirectory, { recursive: true });
-	const tempDirectory = await mkdtemp(join(tmpdir(), "atlas-tint-geo-"));
+	const tempDirectory = await mkdtemp(join(tmpdir(), "atlastint-geo-"));
 	try {
 		const results = [];
 		for (const id of presetIds) {

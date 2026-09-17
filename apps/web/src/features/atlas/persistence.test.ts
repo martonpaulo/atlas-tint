@@ -184,7 +184,7 @@ describe("persistence", () => {
 	});
 
 	it("uses the expected versioned storage key", () => {
-		expect(STORAGE_KEY).toBe("atlas-tint.state");
+		expect(STORAGE_KEY).toBe("atlastint.state");
 	});
 
 	it("accepts progress for presets added outside the initial catalog", () => {

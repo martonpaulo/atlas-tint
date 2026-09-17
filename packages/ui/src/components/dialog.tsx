@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@atlas-tint/ui/lib/utils";
+import { cn } from "@atlastint/ui/lib/utils";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { XIcon } from "lucide-react";
 import type * as React from "react";

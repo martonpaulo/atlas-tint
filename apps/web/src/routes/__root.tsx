@@ -1,4 +1,4 @@
-import { Toaster } from "@atlas-tint/ui/components/sonner";
+import { Toaster } from "@atlastint/ui/components/sonner";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 
 import "../index.css";

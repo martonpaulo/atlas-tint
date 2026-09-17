@@ -19,7 +19,7 @@ const preloadedFonts = [
 function preloadFontAssets(): Plugin {
 	let base = "/";
 	return {
-		name: "atlas-tint:preload-font-assets",
+		name: "atlastint:preload-font-assets",
 		apply: "build",
 		configResolved(config: ResolvedConfig) {
 			base = config.base;

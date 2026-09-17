@@ -4,7 +4,7 @@ AtlasTint favors focused, evidence-backed changes that preserve geographic ident
 
 ## Report a bug
 
-Open an [issue](https://github.com/martonpaulo/atlas-tint/issues) and include what you did, what you
+Open an [issue](https://github.com/martonpaulo/atlastint/issues) and include what you did, what you
 expected, what happened, the browser, and the viewport size — AtlasTint needs at least 1024 × 700 CSS
 pixels and says so instead of mounting below that. Name the preset and the region's stable ID when
 the map itself is wrong.
